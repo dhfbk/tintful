@@ -150,16 +150,23 @@
         </div>
       </div>
     </div>
+    <div
+      class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2 col-span-8"
+    >
+      <annotations />
+    </div>
   </div>
 </template>
 
 <script>
 import json from "../assets/test.json";
 import VueApexCharts from "vue-apexcharts";
+import annotations from "../components/annotations";
 export default {
   name: "result",
   components: {
     apexchart: VueApexCharts,
+    annotations,
   },
   data() {
     return {
@@ -214,7 +221,7 @@ export default {
           markers: {
             size: 0,
           },
-          formatter: function (seriesName, opts) {
+          formatter: function(seriesName, opts) {
             return (
               seriesName + ":  " + opts.w.globals.series[opts.seriesIndex] / 100
             );
@@ -271,7 +278,7 @@ export default {
           markers: {
             size: 4,
           },
-          formatter: function (seriesName, opts) {
+          formatter: function(seriesName, opts) {
             return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex];
           },
           itemMargin: {
