@@ -1,11 +1,6 @@
 <template>
   <div>
-    <img
-      src="../assets/logoTint.png"
-      alt="Logo Tint"
-      class="mx-auto w-1/6 my-4"
-    />
-    <div class="rounded-lg shadow-md p-4 max-w-3xl mx-auto bg-white">
+    <div class="rounded-lg shadow-md p-4 max-w-5xl mx-auto bg-white">
       <div class="m-2">
         <label
           class="block tracking-wide text-gray-900 text-md font-bold pb-2"
@@ -95,7 +90,7 @@
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 const { required } = require("vuelidate/lib/validators");
 export default {
   name: "home",
@@ -125,6 +120,7 @@ export default {
       if (!this.$v.$invalid) {
         this.loading = true;
         this.$store.state.text = this.text;
+        /*
         axios({
           url:
             "https://cors-anywhere.herokuapp.com/https://dh.fbk.eu/tint-server",
@@ -143,6 +139,9 @@ export default {
             this.serverError = true;
             this.loading = false;
           });
+          */
+        this.loading = false;
+        this.$router.push({ name: "result" });
       }
     },
     decodeEntities(string) {
@@ -156,11 +155,11 @@ export default {
   },
   watch: {
     exampleChoice() {
-      if (this.exampleChoice == "1") {
-        this.text = this.examples[0];
-      } else if (this.exampleChoice == "2") {
-        this.text = this.decodeEntities(this.examples[1]);
-      }
+      this.exampleChoice != ""
+        ? (this.text = this.decodeEntities(
+            this.examples[parseInt(this.exampleChoice) - 1]
+          ))
+        : "";
     },
   },
 };
