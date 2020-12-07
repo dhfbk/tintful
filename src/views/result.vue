@@ -36,29 +36,60 @@
               myJson.readability.contentWordSize
             }}</span>
           </div>
-          <div
-            class="flex flex-row justify-between content-center items-center w-full mt-2"
-          >
-            <p>Text length (letters only)</p>
-            <span class="px-2 py-1 bg-primary text-white rounded-full">{{
-              myJson.readability.docLenLettersOnly
-            }}</span>
-          </div>
-          <div
-            class="flex flex-row justify-between content-center items-center w-full mt-2"
-          >
-            <p>Text length (all characters)</p>
-            <span class="px-2 py-1 bg-primary text-white rounded-full">{{
-              myJson.readability.docLenWithSpaces
-            }}</span>
-          </div>
-          <div
-            class="flex flex-row justify-between content-center items-center w-full mt-2"
-          >
-            <p>Text length (no spaces)</p>
-            <span class="px-2 py-1 bg-primary text-white rounded-full">{{
-              myJson.readability.docLenWithoutSpaces
-            }}</span>
+          <transition name="slide-toggle">
+            <div
+              v-if="isOpen"
+              class="content w-full flex flex-wrap justify-center relative"
+            >
+              <div
+                class="flex flex-row justify-between content-center items-center w-full mt-2"
+              >
+                <p>Text length (letters only)</p>
+                <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                  myJson.readability.docLenLettersOnly
+                }}</span>
+              </div>
+              <div
+                class="flex flex-row justify-between content-center items-center w-full mt-2"
+              >
+                <p>Text length (all characters)</p>
+                <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                  myJson.readability.docLenWithSpaces
+                }}</span>
+              </div>
+              <div
+                class="flex flex-row justify-between content-center items-center w-full mt-2"
+              >
+                <p>Text length (no spaces)</p>
+                <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                  myJson.readability.docLenWithoutSpaces
+                }}</span>
+              </div>
+            </div>
+          </transition>
+          <div class="grid grid-cols-8 items-center mt-2">
+            <p class="font-bold text-right col-span-7">
+              {{ isOpen ? "Hide" : "Show more" }}
+            </p>
+            <button
+              class="col-span-1 bg-white ripple-light py-1 px-1 rounded focus:outline-none w-max justify-self-end hover:bg-gray-300 transition duration-100 ease-out"
+              @click.stop="isOpen = !isOpen"
+            >
+              <svg
+                class="transition duration-300 ease-out"
+                :class="{ 'transform  rotate-180': isOpen }"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24px"
+                height="24px"
+                fill="black"
+              >
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                  d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -68,7 +99,22 @@
         <div
           class="rounded-lg shadow-md p-4 mx-auto bg-white w-full mt-2 lg:mt-0"
         >
-          <h2 class="text-primary font-bold text-lg">Readability</h2>
+          <div class="flex justify-between content-center items-center">
+            <h2 class="text-primary font-bold text-lg">Readability</h2>
+            <button
+              class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition duration-100 ease-out"
+            >
+              <svg
+                class="fill-current text-primary"
+                style="width: 24px; height: 24px"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                />
+              </svg>
+            </button>
+          </div>
           <apexchart
             type="radialBar"
             height="250"
@@ -79,7 +125,22 @@
         <div
           class="rounded-lg shadow-md p-4 mx-auto bg-white w-full mt-2 lg:mt-0"
         >
-          <h2 class="text-primary font-bold text-lg">Text difficulty</h2>
+          <div class="flex justify-between content-center items-center">
+            <h2 class="text-primary font-bold text-lg">Text difficulty</h2>
+            <button
+              class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition duration-100 ease-out"
+            >
+              <svg
+                class="fill-current text-primary"
+                style="width: 24px; height: 24px"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                />
+              </svg>
+            </button>
+          </div>
           <apexchart
             type="radialBar"
             height="250"
@@ -102,6 +163,7 @@ export default {
   },
   data() {
     return {
+      isOpen: false,
       myJson: json,
       seriesReadability: [],
       seriesDifficulty: [],
@@ -109,6 +171,9 @@ export default {
         chart: {
           height: 300,
           type: "radialBar",
+        },
+        stroke: {
+          lineCap: "round",
         },
         plotOptions: {
           radialBar: {
@@ -131,9 +196,12 @@ export default {
             },
           },
         },
-        colors: ["#1ab7ea", "#0084ff", "#39539E", "#0077B5"],
+        colors: [],
         labels: [],
         legend: {
+          onItemClick: {
+            toggleDataSeries: false,
+          },
           show: true,
           floating: true,
           fontSize: "16px",
@@ -161,6 +229,9 @@ export default {
           height: 300,
           type: "radialBar",
         },
+        stroke: {
+          lineCap: "round",
+        },
         plotOptions: {
           radialBar: {
             offsetY: 0,
@@ -182,9 +253,12 @@ export default {
             },
           },
         },
-        colors: ["#1ab7ea", "#0084ff", "#39539E", "#0077B5"],
+        colors: [],
         labels: [],
         legend: {
+          onItemClick: {
+            toggleDataSeries: false,
+          },
           show: true,
           floating: true,
           fontSize: "16px",
@@ -218,7 +292,6 @@ export default {
       "Semantic richness",
       "Lexical density",
     ];
-    console.log(this.roundNumber(this.myJson.readability.measures.main, 2));
     this.seriesDifficulty = [
       this.roundNumber(this.myJson.readability.measures.main, 2),
       this.roundNumber(this.myJson.readability.measures.level1, 2),
@@ -231,6 +304,50 @@ export default {
       "Level 2",
       "Level 3",
     ];
+    var tmpCol = "";
+    var min = 0;
+    var max = 0;
+    for (let i = 0; i < this.chartOptionsReadability.labels.length; i++) {
+      if (
+        this.seriesReadability[i] / 100 ==
+        this.myJson.readability.subordinateRatio
+      ) {
+        min = this.myJson.readability.minYellowValues.subordinateRatio;
+        max = this.myJson.readability.maxYellowValues.subordinateRatio;
+      } else if (
+        this.seriesReadability[i] / 100 ==
+        this.myJson.readability.ttrValue
+      ) {
+        min = this.myJson.readability.minYellowValues.ttrValue;
+        max = this.myJson.readability.maxYellowValues.ttrValue;
+      } else {
+        min = this.myJson.readability.minYellowValues.density;
+        max = this.myJson.readability.maxYellowValues.density;
+      }
+      if (
+        this.seriesReadability[i] / 100 >= min &&
+        this.seriesReadability[i] / 100 <= max
+      ) {
+        tmpCol = "#ffbb00";
+      } else if (this.seriesReadability[i] / 100 < min) {
+        tmpCol = "#15ff00";
+      } else {
+        tmpCol = "#ff0000";
+      }
+      this.chartOptionsReadability.colors.push(tmpCol);
+    }
+    for (let i = 0; i < this.chartOptionsDifficulty.labels.length; i++) {
+      min = 40;
+      max = 80;
+      if (this.seriesDifficulty[i] >= min && this.seriesDifficulty[i] <= max) {
+        tmpCol = "#ffbb00";
+      } else if (this.seriesDifficulty[i] < min) {
+        tmpCol = "#15ff00";
+      } else {
+        tmpCol = "#ff0000";
+      }
+      this.chartOptionsDifficulty.colors.push(tmpCol);
+    }
   },
   methods: {
     roundNumber(num, scale) {
@@ -254,4 +371,27 @@ export default {
 </script>
 
 <style scoped>
+.slide-toggle-enter-active {
+  transition: max-height 0.25s !important;
+}
+
+.slide-toggle-leave-active {
+  transition: max-height 0.2s !important;
+}
+
+.slide-toggle-enter-active {
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.slide-toggle-enter,
+.slide-toggle-leave-active {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.slide-toggle-leave {
+  max-height: 200px;
+  overflow: hidden;
+}
 </style>
