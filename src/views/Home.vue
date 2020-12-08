@@ -91,11 +91,13 @@
 
 <script>
 //import axios from "axios";
+import json from "../assets/test.json";
 const { required } = require("vuelidate/lib/validators");
 export default {
   name: "home",
   data() {
     return {
+      myJson: json,
       hoverText: false,
       text: "",
       examples: [
@@ -120,6 +122,7 @@ export default {
       if (!this.$v.$invalid) {
         this.loading = true;
         this.$store.state.text = this.text;
+        this.$store.state.processedData = this.myJson;
         /*
         axios({
           url:

@@ -4,7 +4,7 @@
       <div
         v-for="sen in json.sentences"
         :key="sen.index"
-        class=" flex flex-row flex-wrap"
+        class="flex flex-row flex-wrap"
       >
         <span
           v-for="token in sen.tokens"
@@ -45,11 +45,18 @@ export default {
     };
   },
   watch: {
-    info: function() {
+    info: function () {
       if (this.info != "") {
         this.keys = Object.keys(this.info);
         this.values = Object.values(this.info);
-        console.log(this.keys, this.values);
+        var i = 0;
+        for (i = 0; i < this.keys.length; i++) {
+          if (this.keys[i] == "featuresText") {
+            break;
+          }
+        }
+        this.values[i] = this.values[i].replace(/\|/g, ", ");
+        console.log(this.values[i]);
       }
     },
   },
