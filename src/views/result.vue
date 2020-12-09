@@ -1,5 +1,6 @@
 <template>
   <div v-if="show" class="grid grid-cols-1 lg:grid-cols-8 gap-x-4">
+    <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" />
     <infoCard :jsonData="$store.state.processedData" />
     <div class="col-span-8 lg:col-span-6 w-full">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
@@ -10,6 +11,7 @@
           :series="seriesReadability"
           :id="'stats0'"
           :dividerValue="100"
+          @modal="(modal = !modal), (modalMode = 'readability')"
         />
         <statsCard
           :title="'Text difficulty'"
@@ -18,6 +20,7 @@
           :series="seriesDifficulty"
           :id="'stats1'"
           :dividerValue="1"
+          @modal="(modal = !modal), (modalMode = 'difficulty')"
         />
       </div>
     </div>
@@ -35,6 +38,7 @@ import annotations from "../components/annotations.vue";
 import statsCard from "../components/statsCard.vue";
 import infoCard from "../components/infoCard.vue";
 import rawData from "../components/rawData.vue";
+import modalInfo from "../components/modalInfo.vue";
 export default {
   name: "result",
   components: {
@@ -42,9 +46,12 @@ export default {
     statsCard,
     infoCard,
     rawData,
+    modalInfo,
   },
   data() {
     return {
+      modalMode: "",
+      modal: false,
       show: false,
       isOpen: false,
       seriesReadability: [],

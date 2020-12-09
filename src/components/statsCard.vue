@@ -5,6 +5,7 @@
     <div class="flex justify-between content-center items-center">
       <h2 class="text-primary font-bold text-lg">{{ title }}</h2>
       <button
+        @click="$emit('modal')"
         class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition duration-100 ease-out"
       >
         <svg
