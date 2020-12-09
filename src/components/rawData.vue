@@ -42,7 +42,7 @@
             class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
             :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
           >
-            Raw JSON
+            JSON data
           </div>
         </div>
         <div class="h-1 w-1/2 bg-primary" :class="tabScroll"></div>
@@ -66,7 +66,7 @@
             </svg>
           </button>
           <a id="downloadAnchorElem" style="display: none"></a>
-          <pre v-html="printableJson" class="overflow-x-auto"></pre>
+          <div class="overflow-x-auto" id="formatter"></div>
         </div>
       </div>
     </transition>
@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import JSONFormatter from "json-formatter-js";
 export default {
   name: "rawData",
   data() {
@@ -82,21 +83,14 @@ export default {
       hoverCard: false,
       selectedTab: 0,
       tabScroll: "transition transform translate-x-0",
-      printableJson: {},
+      downloadableJSON: {},
     };
-  },
-  created() {
-    this.printableJson = JSON.stringify(
-      this.$store.state.processedData,
-      undefined,
-      2
-    );
   },
   methods: {
     downloadJSON() {
       var dataStr =
         "data:text/json;charset=utf-8," +
-        encodeURIComponent(this.printableJson);
+        encodeURIComponent(this.downloadableJSON);
       var dlAnchorElem = document.getElementById("downloadAnchorElem");
       dlAnchorElem.setAttribute("href", dataStr);
       dlAnchorElem.setAttribute("download", "processed_text.json");
@@ -109,6 +103,15 @@ export default {
         this.tabScroll = "transition transform translate-x-0";
       } else {
         this.tabScroll = "transition transform translate-x-full";
+        const formatter = new JSONFormatter(this.$store.state.processedData);
+        this.downloadableJSON = JSON.stringify(
+          this.$store.state.processedData,
+          undefined,
+          2
+        );
+        setTimeout(() => {
+          document.getElementById("formatter").appendChild(formatter.render());
+        }, 1);
       }
     },
   },

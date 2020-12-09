@@ -1,17 +1,17 @@
 <template>
   <div v-if="show" class="grid grid-cols-1 lg:grid-cols-8 gap-x-4">
     <infoCard :jsonData="$store.state.processedData" />
-    <div class="lg:col-span-6 w-full">
+    <div class="col-span-8 lg:col-span-6 w-full">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
         <statsCard
           :title="'Readability'"
-          :height="250"
+          :height="300"
           :options="chartOptionsReadability"
           :series="seriesReadability"
         />
         <statsCard
           :title="'Text difficulty'"
-          :height="250"
+          :height="300"
           :options="chartOptionsDifficulty"
           :series="seriesDifficulty"
         />
@@ -81,7 +81,7 @@ export default {
             toggleDataSeries: false,
           },
           show: true,
-          floating: true,
+          floating: false,
           fontSize: "16px",
           position: "bottom",
           offsetX: 0,
@@ -138,7 +138,7 @@ export default {
             toggleDataSeries: false,
           },
           show: true,
-          floating: true,
+          floating: false,
           fontSize: "16px",
           position: "bottom",
           offsetX: 0,

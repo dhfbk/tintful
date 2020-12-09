@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-lg shadow-md p-4 mx-auto bg-white lg:col-span-2 w-full">
+  <div class="rounded-lg shadow-md p-4 mx-auto bg-white col-span-8 lg:col-span-2 w-full">
     <h2 class="text-primary font-bold text-lg">General information</h2>
     <div class="flex flex-col">
       <div

@@ -34,6 +34,18 @@ export default {
     series: Array,
     height: Number,
   },
+  mounted() {
+    setTimeout(() => {
+      document
+        .getElementsByClassName(
+          "apexcharts-legend apexcharts-align-center position-bottom"
+        )
+        .forEach((element) => {
+          element.style.setProperty("inset", "unset");
+          element.style.setProperty("margin-top", "110px");
+        });
+    }, 500);
+  },
   components: {
     apexchart: VueApexCharts,
   },
