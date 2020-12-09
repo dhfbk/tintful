@@ -5,15 +5,19 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
         <statsCard
           :title="'Readability'"
-          :height="300"
+          :height="230"
           :options="chartOptionsReadability"
           :series="seriesReadability"
+          :id="'stats0'"
+          :dividerValue="100"
         />
         <statsCard
           :title="'Text difficulty'"
-          :height="300"
+          :height="230"
           :options="chartOptionsDifficulty"
           :series="seriesDifficulty"
+          :id="'stats1'"
+          :dividerValue="1"
         />
       </div>
     </div>
@@ -47,7 +51,7 @@ export default {
       seriesDifficulty: [],
       chartOptionsReadability: {
         chart: {
-          height: 300,
+          height: 230,
           type: "radialBar",
         },
         stroke: {
@@ -59,10 +63,7 @@ export default {
             startAngle: -90,
             endAngle: 90,
             hollow: {
-              margin: 0,
-              size: "40%",
-              background: "transparent",
-              image: undefined,
+              size: "30%",
             },
             dataLabels: {
               name: {
@@ -80,7 +81,7 @@ export default {
           onItemClick: {
             toggleDataSeries: false,
           },
-          show: true,
+          show: false,
           floating: false,
           fontSize: "16px",
           position: "bottom",
@@ -104,7 +105,7 @@ export default {
       },
       chartOptionsDifficulty: {
         chart: {
-          height: 300,
+          height: 230,
           type: "radialBar",
         },
         stroke: {
@@ -116,10 +117,7 @@ export default {
             startAngle: -90,
             endAngle: 90,
             hollow: {
-              margin: 0,
-              size: "40%",
-              background: "transparent",
-              image: undefined,
+              size: "30%",
             },
             dataLabels: {
               name: {
@@ -137,7 +135,7 @@ export default {
           onItemClick: {
             toggleDataSeries: false,
           },
-          show: true,
+          show: false,
           floating: false,
           fontSize: "16px",
           position: "bottom",

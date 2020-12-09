@@ -1,5 +1,7 @@
 <template>
-  <div class="rounded-lg shadow-md p-4 mx-auto bg-white w-full mt-2 lg:mt-0">
+  <div
+    class="adjust rounded-lg shadow-md p-4 mx-auto bg-white w-full mt-2 lg:mt-0 relative"
+  >
     <div class="flex justify-between content-center items-center">
       <h2 class="text-primary font-bold text-lg">{{ title }}</h2>
       <button
@@ -21,7 +23,25 @@
       :height="height"
       :options="options"
       :series="series"
+      :id="id"
     ></apexchart>
+    <div class="flex flex-row flex-wrap justify-center">
+      <span
+        class="flex flex-row w-max content-center items-center m-1 cursor-pointer"
+        v-for="(each, n) in options.labels"
+        :key="n"
+        @mouseenter="show(n, 'enter')"
+        @mouseleave="show(n, 'exit')"
+      >
+        <span
+          class="w-4 h-4 rounded-full mr-1"
+          :style="'background-color:' + options.colors[n]"
+        ></span>
+        <span :style="'color:' + options.colors[n]"
+          >{{ each }}: {{ series[n] / dividerValue }}</span
+        >
+      </span>
+    </div>
   </div>
 </template>
 <script>
@@ -33,21 +53,44 @@ export default {
     options: Object,
     series: Array,
     height: Number,
-  },
-  mounted() {
-    setTimeout(() => {
-      document
-        .getElementsByClassName(
-          "apexcharts-legend apexcharts-align-center position-bottom"
-        )
-        .forEach((element) => {
-          element.style.setProperty("inset", "unset");
-          element.style.setProperty("margin-top", "110px");
-        });
-    }, 500);
+    id: String,
+    dividerValue: Number,
   },
   components: {
     apexchart: VueApexCharts,
+  },
+  data() {
+    return {
+      strokeColor: {},
+    };
+  },
+  methods: {
+    show(el, mode) {
+      document
+        .getElementById(this.id)
+        .getElementsByClassName("apexcharts-series apexcharts-radial-series")
+        .forEach((element) => {
+          if (element.attributes["rel"].value - 1 != el) {
+            if (mode == "enter") {
+              this.strokeColor[
+                element.attributes["rel"].value - 1
+              ] = element
+                .getElementsByTagName("path")[0]
+                .getAttribute("stroke");
+              element
+                .getElementsByTagName("path")[0]
+                .setAttribute("stroke", "lightgrey");
+            } else {
+              element
+                .getElementsByTagName("path")[0]
+                .setAttribute(
+                  "stroke",
+                  this.strokeColor[element.attributes["rel"].value - 1]
+                );
+            }
+          }
+        });
+    },
   },
 };
 </script>
