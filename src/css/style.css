@@ -32,3 +32,8 @@ body {
   opacity: 0.2;
   transition: 0s;
 }
+
+.json-formatter-row {
+  font-family: "Roboto Mono", monospace !important;
+  font-size: 14px;
+}
