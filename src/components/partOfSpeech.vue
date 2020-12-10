@@ -12,34 +12,35 @@
         </div>
       </div>
       <div class="divide-y divide-primary divide-opacity-75">
-        <div
-          v-for="sen in json.sentences"
-          :key="sen.index"
-          class="flex flex-row flex-wrap"
-        >
-          <span
-            v-for="token in sen.tokens"
-            :key="token.index"
-            @click="info = token"
-            class="flex flex-col place-items-center my-2"
-          >
+        <div v-for="sen in json.sentences" :key="sen.index" class="">
+          <!-- <div class="flex flex-row"> -->
+          <!-- <div style="min-width: 48px;" class="h-full bg-gray-100">
+              {{ sen.index }}
+            </div> -->
+          <div class="flex flex-row flex-wrap">
             <span
-              class="rounded px-1 text-sm font-light max-w-min mx-1 mb-1"
-              :style="{ background: legend[token.pos[0]] }"
-              >{{ token.pos }}
+              v-for="token in sen.tokens"
+              :key="token.index"
+              @click="info = token"
+            >
+              <singleToken
+                class="flex flex-col place-items-center my-2"
+                :token="token"
+                :color="legend[token.pos[0]]"
+              />
             </span>
-            <span class="mx-1 bg-gray-100 rounded">{{ token.word }}</span>
-          </span>
+          </div>
+          <!-- </div> -->
         </div>
       </div>
     </div>
     <div class="col-span-1">
-      <span v-if="!info" class="font-light text-lg text-center sticky top-0"
-        >Click on a tag for further information.</span
-      >
+      <div v-if="!info" class="font-bold text-lg text-center sticky top-1/2">
+        Click on a token for further information.
+      </div>
       <div class="sticky top-0" v-else>
         <div class="font-light text-lg text-center">
-          Info on "{{ info.word }}"
+          Info on the token "{{ info.word }}"
         </div>
         <div class="overflow-x-auto" id="formatter1"></div>
 
@@ -55,8 +56,12 @@
 <script>
 import json from "../assets/test.json";
 import JSONFormatter from "json-formatter-js";
+import singleToken from "../components/sigleToken.vue";
 
 export default {
+  components: {
+    singleToken,
+  },
   data() {
     return {
       json: json,
@@ -105,23 +110,29 @@ export default {
         //     .getElementById("formatter1")
         //     .removeChild(document.getElementById("formatter1").firstChild);
         // }
-        if (
-          document.getElementsByClassName(
-            "json-formatter-row json-formatter-open"
-          )[0]
-        ) {
-          document
-            .getElementsByClassName("json-formatter-row json-formatter-open")[0]
-            .remove();
-        }
-        if (
-          document.getElementsByClassName(
-            "json-formatter-row json-formatter-open"
-          )[1]
-        ) {
-          document
-            .getElementsByClassName("json-formatter-row json-formatter-open")[1]
-            .remove();
+        // if (
+        //   document.getElementsByClassName(
+        //     "json-formatter-row json-formatter-open"
+        //   )[0]
+        // ) {
+        //   document
+        //     .getElementsByClassName("json-formatter-row json-formatter-open")[0]
+        //     .remove();
+        // }
+        // if (
+        //   document.getElementsByClassName(
+        //     "json-formatter-row json-formatter-open"
+        //   )[1]
+        // ) {
+        //   document
+        //     .getElementsByClassName("json-formatter-row json-formatter-open")[1]
+        //     .remove();
+        // }
+        let node = document.getElementById("formatter1");
+        if (node != null) {
+          while (node.firstChild) {
+            node.removeChild(node.firstChild);
+          }
         }
 
         const formatter = new JSONFormatter(this.info);
