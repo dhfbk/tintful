@@ -118,9 +118,9 @@ export default {
   },
   methods: {
     process() {
+      this.loading = true;
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.loading = true;
         this.$store.state.text = this.text;
         this.$store.state.processedData = this.myJson;
         /*
@@ -145,6 +145,8 @@ export default {
           */
         this.loading = false;
         this.$router.push({ name: "result" });
+      } else {
+        this.loading = false;
       }
     },
     decodeEntities(string) {

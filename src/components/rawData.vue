@@ -119,26 +119,6 @@ export default {
 </script>
 
 <style scoped>
-pre {
-  outline: 1px solid #ccc;
-  padding: 5px;
-  margin: 5px;
-}
-.string {
-  color: green;
-}
-.number {
-  color: darkorange;
-}
-.boolean {
-  color: blue;
-}
-.null {
-  color: magenta;
-}
-.key {
-  color: red;
-}
 .slide-toggle-enter-active {
   transition: max-height 0.25s !important;
 }
