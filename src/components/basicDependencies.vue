@@ -1,13 +1,16 @@
 <template>
-  <div class="overflow-x-auto depsContainer"></div>
+  <div class="depsContainer"></div>
 </template>
- 
+
 <script>
 import { Annotator } from "poplar-annotation";
 export default {
   name: "basicDependencies",
   data() {
     return {
+      annConfig: {
+        contentEditable: false,
+      },
       obj: {
         content: "",
         labelCategories: [],
@@ -41,8 +44,8 @@ export default {
         tmp = {
           id: idLabelCat,
           text: token.pos,
-          color: "red",
-          borderColor: "blue",
+          color: this.getColor(),
+          borderColor: "gray",
         };
         this.obj.labelCategories.push(tmp);
         idLabelCat++;
@@ -72,12 +75,10 @@ export default {
           this.$store.state.processedData.sentences[0]["basic-dependencies"][i]
             .dependent - 1,
         categoryId: lbCatId,
-        startIndex:
-          this.$store.state.processedData.sentences[0]["basic-dependencies"][i]
-            .dependent - 1,
-        endIndex: this.$store.state.processedData.sentences[0][
-          "basic-dependencies"
-        ][i].dependent,
+        startIndex: this.$store.state.processedData.sentences[0].tokens[i]
+          .characterOffsetBegin,
+        endIndex: this.$store.state.processedData.sentences[0].tokens[i]
+          .characterOffsetEnd,
       };
       this.obj.labels.push(tmp);
     }
@@ -104,9 +105,11 @@ export default {
       }
     );
     setTimeout(() => {
+      console.log(JSON.stringify(this.obj));
       const annotator = new Annotator(
         this.obj,
-        document.getElementsByClassName("depsContainer")[0]
+        document.getElementsByClassName("depsContainer")[0],
+        this.annConfig
       );
       console.log(annotator);
     }, 1000);
@@ -140,13 +143,24 @@ export default {
       }
       return toRtn;
     },
+    getColor() {
+      return (
+        "hsl(" +
+        360 * Math.random() +
+        "," +
+        (25 + 80 * Math.random()) +
+        "%," +
+        (80 + 10 * Math.random()) +
+        "%)"
+      );
+    },
   },
 };
 </script>
- 
+
 <style>
-#depsContainer > svg {
-  width: 500px;
+.depsContainer > svg {
+  width: 100% !important;
 }
 /* content */
 .poplar-annotation-content {
