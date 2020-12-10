@@ -8,7 +8,7 @@
             class="h-3 w-3 rounded-full inline-block"
             :style="{ background: Object.values(legend)[x] }"
           ></div>
-          {{ i }}{{ posDesc[i] ? ": " + posDesc[i] : ": Other" }}
+          {{ nerDesc[i] }}
         </div>
       </div>
       <div class="divide-y divide-primary divide-opacity-75">
@@ -30,8 +30,9 @@
               <singleToken
                 class="flex flex-col place-items-center my-2 cursor-pointer"
                 :token="token"
-                :color="legend[token.pos[0]]"
-                :mode="'pos'"
+                :colorsNer="legend"
+                :descNer="nerDesc"
+                :mode="'ner'"
               />
             </span>
           </div>
@@ -65,6 +66,7 @@ import JSONFormatter from "json-formatter-js";
 import singleToken from "../components/singleToken.vue";
 
 export default {
+  name: "ner",
   components: {
     singleToken,
   },
@@ -73,34 +75,36 @@ export default {
       info: "",
       keys: [],
       values: [],
-      poses: [],
+      ner: {},
       legend: {},
-      posDesc: [],
+      nerDesc: [
+        "O",
+        "PER",
+        "ORG",
+        "MISC",
+        "LOC",
+        "DATE | TIME | SET | NUMBER",
+        "MONEY",
+        "PERCENT",
+      ],
     };
   },
   created() {
-    this.posDesc = this.$store.state.processedData.readability.genericPosDescription;
-    //console.log(this.posDesc);
     for (var i = 0; i < this.$store.state.processedData.sentences.length; i++) {
+      this.ner.i = {};
       for (
         var x = 0;
         x < this.$store.state.processedData.sentences[i].tokens.length;
         x++
       ) {
-        this.poses.includes(
-          this.$store.state.processedData.sentences[i].tokens[x].pos
-        )
-          ? ""
-          : this.poses.push(
-              this.$store.state.processedData.sentences[i].tokens[x].pos[0]
-            );
+        this.ner.i.x = this.$store.state.processedData.sentences[i].tokens[
+          x
+        ].ner;
       }
     }
-    this.poses.sort();
-    for (let i = 0; i < this.poses.length; i++) {
-      this.legend[this.poses[i]] = this.getColor();
+    for (let i = 0; i < this.nerDesc.length; i++) {
+      this.legend[i] = this.getColor();
     }
-    //console.log(this.legend);
   },
   methods: {
     getColor() {
@@ -170,5 +174,6 @@ export default {
   },
 };
 </script>
-
-<style></style>
+ 
+<style>
+</style>

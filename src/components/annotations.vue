@@ -25,11 +25,15 @@
     </div>
     <div class="h-1 w-1/3 bg-primary" :class="tabScroll"></div>
     <partOfSpeech v-if="selectedTab == 0" />
+    <ner v-else-if="selectedTab == 1" />
+    <basicDependencies v-else />
   </div>
 </template>
 
 <script>
-import partOfSpeech from "../components/partOfSpeech.vue";
+import partOfSpeech from "./partOfSpeech.vue";
+import basicDependencies from "./basicDependencies.vue";
+import ner from "./ner.vue";
 export default {
   data() {
     return {
@@ -39,6 +43,8 @@ export default {
   },
   components: {
     partOfSpeech,
+    ner,
+    basicDependencies,
   },
   watch: {
     selectedTab: function () {
