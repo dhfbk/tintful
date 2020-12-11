@@ -1,37 +1,46 @@
 <template>
-  <div class="mt-4">
-    <div class="font-bold text-lg">Legend</div>
-    <div :class="'grid grid-rows-' + nerDesc.length + 'grid-flow-col mb-6'">
-      <div v-for="(i, x) in Object.keys(legend)" :key="x">
-        <div
-          class="h-3 w-3 rounded-full inline-block"
-          :style="{ background: Object.values(legend)[x] }"
-        ></div>
-        {{ nerDesc[i] }}
-      </div>
-    </div>
-    <div class="divide-y divide-primary divide-opacity-75">
-      <div v-for="sen in processedData.sentences" :key="sen.index" class="">
-        <!-- <div class="flex flex-row"> -->
-        <!-- <div style="min-width: 48px;" class="h-full bg-gray-100">
+  <div class="grid grid-cols-3 gap-x-2 mt-4">
+    <div class="col-span-2">
+      <div class="divide-y divide-primary divide-opacity-75">
+        <div v-for="sen in processedData.sentences" :key="sen.index" class="">
+          <!-- <div class="flex flex-row"> -->
+          <!-- <div style="min-width: 48px;" class="h-full bg-gray-100">
               {{ sen.index }}
             </div> -->
-        <div class="flex flex-row flex-wrap">
-          <span
-            v-for="token in sen.tokens"
-            :key="token.index"
-            @click="info = token"
-          >
-            <singleToken
-              class="flex flex-col place-items-center my-2 cursor-pointer"
-              :token="token"
-              :colorsNer="legend"
-              :descNer="nerDesc"
-              :mode="'ner'"
-            />
-          </span>
+          <div class="flex flex-row flex-wrap">
+            <span
+              v-for="token in sen.tokens"
+              :key="token.index"
+              @click="info = token"
+            >
+              <singleToken
+                class="flex flex-col place-items-center my-2 cursor-pointer"
+                :token="token"
+                :color="legend[token.pos[0]]"
+                :mode="'info'"
+              />
+            </span>
+          </div>
+          <!-- </div> -->
         </div>
-        <!-- </div> -->
+      </div>
+    </div>
+    <div class="col-span-1">
+      <div v-if="!info" class="font-bold text-lg text-center sticky top-1/2">
+        Click on a token for further information.
+      </div>
+      <div class="sticky top-0" v-else>
+        <div class="font-light text-lg text-center">
+          Info on the token "
+          <span class="font-bold">{{ info.word }}</span>
+          "
+        </div>
+        <div class="overflow-x-auto" id="formatter1"></div>
+
+        <!-- <span v-for="(i, x) in keys" :key="x">
+          <span class="font-bold">{{ i }}</span
+          >: {{ values[x] }}<br
+        /></span> -->
       </div>
     </div>
   </div>
@@ -42,7 +51,7 @@ import JSONFormatter from "json-formatter-js";
 import singleToken from "../components/singleToken.vue";
 
 export default {
-  name: "ner",
+  name: "basicInfo",
   components: {
     singleToken,
   },
@@ -51,31 +60,25 @@ export default {
       info: "",
       keys: [],
       values: [],
-      ner: {},
+      poses: [],
       legend: {},
-      nerDesc: [
-        //"O",
-        "PER",
-        "ORG",
-        //"MISC",
-        "LOC",
-        //"DATE | TIME | SET | NUMBER",
-        //"MONEY",
-        //"PERCENT",
-      ],
       processedData: JSON.parse(localStorage.getItem("processedText")),
     };
   },
   created() {
+    //console.log(this.posDesc);
     for (var i = 0; i < this.processedData.sentences.length; i++) {
-      this.ner.i = {};
       for (var x = 0; x < this.processedData.sentences[i].tokens.length; x++) {
-        this.ner.i.x = this.processedData.sentences[i].tokens[x].ner;
+        this.poses.includes(this.processedData.sentences[i].tokens[x].pos)
+          ? ""
+          : this.poses.push(this.processedData.sentences[i].tokens[x].pos[0]);
       }
     }
-    for (let i = 0; i < this.nerDesc.length; i++) {
-      this.legend[i] = this.getColor();
+    this.poses.sort();
+    for (let i = 0; i < this.poses.length; i++) {
+      this.legend[this.poses[i]] = this.getColor();
     }
+    //console.log(this.legend);
   },
   methods: {
     getColor() {

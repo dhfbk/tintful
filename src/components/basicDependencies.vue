@@ -1,5 +1,7 @@
 <template>
-  <div class="depsContainer"></div>
+  <div class="overflow-x-auto">
+    <div class="depsContainer"></div>
+  </div>
 </template>
 
 <script>
@@ -18,7 +20,7 @@ export default {
         connectionCategories: [],
         connections: [],
       },
-      processedData: JSON.parse(localStorage.getItem("processedText"))
+      processedData: JSON.parse(localStorage.getItem("processedText")),
     };
   },
   created() {
@@ -28,18 +30,16 @@ export default {
     var idLabelCat = 0;
     var lbCatId = 0;
     var connCatId = 0;
-    this.processedData.sentences[0]["basic-dependencies"].forEach(
-      (el) => {
-        if (!this.check("connCat", el.dep)) {
-          tmp = {
-            id: idConnCat,
-            text: el.dep,
-          };
-          this.obj.connectionCategories.push(tmp);
-          idConnCat++;
-        }
+    this.processedData.sentences[0]["basic-dependencies"].forEach((el) => {
+      if (!this.check("connCat", el.dep)) {
+        tmp = {
+          id: idConnCat,
+          text: el.dep,
+        };
+        this.obj.connectionCategories.push(tmp);
+        idConnCat++;
       }
-    );
+    });
     this.processedData.sentences[0].tokens.forEach((token) => {
       if (!this.check("labelCat", token.pos)) {
         tmp = {
@@ -54,15 +54,13 @@ export default {
     });
     for (
       var i = 0;
-      i <
-      this.processedData.sentences[0]["basic-dependencies"].length;
+      i < this.processedData.sentences[0]["basic-dependencies"].length;
       i++
     ) {
       this.processedData.sentences[0].tokens.forEach((el) => {
         if (
           el.index ==
-          this.processedData.sentences[0]["basic-dependencies"][i]
-            .dependent
+          this.processedData.sentences[0]["basic-dependencies"][i].dependent
         ) {
           this.obj.labelCategories.forEach((label) => {
             if (label.text == el.pos) {
@@ -73,46 +71,43 @@ export default {
       });
       tmp = {
         id:
-          this.processedData.sentences[0]["basic-dependencies"][i]
-            .dependent - 1,
+          this.processedData.sentences[0]["basic-dependencies"][i].dependent -
+          1,
         categoryId: lbCatId,
         startIndex: this.processedData.sentences[0].tokens[i]
           .characterOffsetBegin,
-        endIndex: this.processedData.sentences[0].tokens[i]
-          .characterOffsetEnd,
+        endIndex: this.processedData.sentences[0].tokens[i].characterOffsetEnd,
       };
       this.obj.labels.push(tmp);
     }
     var cont = 0;
-    this.processedData.sentences[0]["basic-dependencies"].forEach(
-      (el) => {
-        cont = 0;
-        while (cont < this.obj.connectionCategories.length) {
-          if (this.obj.connectionCategories[cont].text == el.dep) {
-            connCatId = this.obj.connectionCategories[cont].id;
-            console.log(connCatId);
-            cont = this.obj.connectionCategories.length;
-          }
-          cont++;
+    this.processedData.sentences[0]["basic-dependencies"].forEach((el) => {
+      cont = 0;
+      while (cont < this.obj.connectionCategories.length) {
+        if (this.obj.connectionCategories[cont].text == el.dep) {
+          connCatId = this.obj.connectionCategories[cont].id;
+          console.log(connCatId);
+          cont = this.obj.connectionCategories.length;
         }
-        tmp = {
-          id: el.dependent - 1,
-          categoryId: connCatId,
-          fromId: el.dependent - 1,
-          toId: el.governor,
-        };
-        this.obj.connections.push(tmp);
-        connCatId++;
+        cont++;
       }
-    );
+      tmp = {
+        id: el.dependent - 1,
+        categoryId: connCatId,
+        fromId: el.dependent - 1,
+        toId: el.governor,
+      };
+      this.obj.connections.push(tmp);
+      connCatId++;
+    });
   },
-  mounted(){
+  mounted() {
     const annotator = new Annotator(
-        this.obj,
-        document.getElementsByClassName("depsContainer")[0],
-        this.annConfig
-      );
-      console.log(annotator);
+      this.obj,
+      document.getElementsByClassName("depsContainer")[0],
+      this.annConfig
+    );
+    console.log(annotator);
   },
   methods: {
     /*
@@ -161,6 +156,10 @@ export default {
 <style>
 .depsContainer > svg {
   width: 100% !important;
+}
+.depsContainer > textarea {
+  width: 97vw !important;
+  left: 1rem !important;
 }
 /* content */
 .poplar-annotation-content {

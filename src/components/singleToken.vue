@@ -11,10 +11,17 @@
     </span>
     <span class="mx-1 px-1 rounded" :class="bg">{{ token.word }}</span>
   </span>
-  <span v-else>
+  <span v-else-if="mode == 'ner'">
     <span class="mx-1 px-1 rounded" :style="{ background: nerColor }">{{
       token.word
     }}</span>
+  </span>
+  <span
+    v-else
+    @mouseenter="bg = 'bg-gray-300'"
+    @mouseleave="bg = 'bg-gray-100'"
+  >
+    <span class="mx-1 px-1 rounded" :class="bg">{{ token.word }}</span>
   </span>
 </template>
 
@@ -36,9 +43,16 @@ export default {
   created() {
     if (this.mode == "ner") {
       for (var i = 0; i < this.descNer.length; i++) {
-        if (this.descNer[i] == this.token.ner) {
+        if (
+          this.descNer[i] == this.token.ner &&
+          (this.token.ner == "PER" ||
+            this.token.ner == "ORG" ||
+            this.token.ner == "LOC")
+        ) {
           this.nerColor = this.colorsNer[i];
           break;
+        } else {
+          this.nerColor = "rgba(243, 244, 246, 1)";
         }
       }
     }
