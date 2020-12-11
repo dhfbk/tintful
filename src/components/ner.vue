@@ -13,7 +13,7 @@
       </div>
       <div class="divide-y divide-primary divide-opacity-75">
         <div
-          v-for="sen in $store.state.processedData.sentences"
+          v-for="sen in processedData.sentences"
           :key="sen.index"
           class=""
         >
@@ -87,17 +87,18 @@ export default {
         "MONEY",
         "PERCENT",
       ],
+      processedData: JSON.parse(localStorage.getItem("processedText"))
     };
   },
   created() {
-    for (var i = 0; i < this.$store.state.processedData.sentences.length; i++) {
+    for (var i = 0; i < this.processedData.sentences.length; i++) {
       this.ner.i = {};
       for (
         var x = 0;
-        x < this.$store.state.processedData.sentences[i].tokens.length;
+        x < this.processedData.sentences[i].tokens.length;
         x++
       ) {
-        this.ner.i.x = this.$store.state.processedData.sentences[i].tokens[
+        this.ner.i.x = this.processedData.sentences[i].tokens[
           x
         ].ner;
       }

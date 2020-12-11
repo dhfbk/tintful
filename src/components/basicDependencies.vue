@@ -9,7 +9,7 @@ export default {
   data() {
     return {
       annConfig: {
-        contentEditable: false,
+        contentEditable: true,
       },
       obj: {
         content: "",
@@ -18,16 +18,17 @@ export default {
         connectionCategories: [],
         connections: [],
       },
+      processedData: JSON.parse(localStorage.getItem("processedText"))
     };
   },
-  mounted() {
-    this.obj.content = this.$store.state.processedData.sentences[0].text;
+  created() {
+    this.obj.content = this.processedData.sentences[0].text;
     var tmp = {};
     var idConnCat = 0;
     var idLabelCat = 0;
     var lbCatId = 0;
     var connCatId = 0;
-    this.$store.state.processedData.sentences[0]["basic-dependencies"].forEach(
+    this.processedData.sentences[0]["basic-dependencies"].forEach(
       (el) => {
         if (!this.check("connCat", el.dep)) {
           tmp = {
@@ -39,7 +40,7 @@ export default {
         }
       }
     );
-    this.$store.state.processedData.sentences[0].tokens.forEach((token) => {
+    this.processedData.sentences[0].tokens.forEach((token) => {
       if (!this.check("labelCat", token.pos)) {
         tmp = {
           id: idLabelCat,
@@ -54,13 +55,13 @@ export default {
     for (
       var i = 0;
       i <
-      this.$store.state.processedData.sentences[0]["basic-dependencies"].length;
+      this.processedData.sentences[0]["basic-dependencies"].length;
       i++
     ) {
-      this.$store.state.processedData.sentences[0].tokens.forEach((el) => {
+      this.processedData.sentences[0].tokens.forEach((el) => {
         if (
           el.index ==
-          this.$store.state.processedData.sentences[0]["basic-dependencies"][i]
+          this.processedData.sentences[0]["basic-dependencies"][i]
             .dependent
         ) {
           this.obj.labelCategories.forEach((label) => {
@@ -72,18 +73,18 @@ export default {
       });
       tmp = {
         id:
-          this.$store.state.processedData.sentences[0]["basic-dependencies"][i]
+          this.processedData.sentences[0]["basic-dependencies"][i]
             .dependent - 1,
         categoryId: lbCatId,
-        startIndex: this.$store.state.processedData.sentences[0].tokens[i]
+        startIndex: this.processedData.sentences[0].tokens[i]
           .characterOffsetBegin,
-        endIndex: this.$store.state.processedData.sentences[0].tokens[i]
+        endIndex: this.processedData.sentences[0].tokens[i]
           .characterOffsetEnd,
       };
       this.obj.labels.push(tmp);
     }
     var cont = 0;
-    this.$store.state.processedData.sentences[0]["basic-dependencies"].forEach(
+    this.processedData.sentences[0]["basic-dependencies"].forEach(
       (el) => {
         cont = 0;
         while (cont < this.obj.connectionCategories.length) {
@@ -104,21 +105,20 @@ export default {
         connCatId++;
       }
     );
-    setTimeout(() => {
-      console.log(JSON.stringify(this.obj));
-      const annotator = new Annotator(
+  },
+  mounted(){
+    const annotator = new Annotator(
         this.obj,
         document.getElementsByClassName("depsContainer")[0],
         this.annConfig
       );
       console.log(annotator);
-    }, 1000);
   },
   methods: {
     /*
     getCategoryId(position) {
       var toRtn = 0;
-      this.$store.state.processedData.sentences[0].tokens.forEach((el) => {
+      this.processedData.sentences[0].tokens.forEach((el) => {
         if (el.index == position) {
           this.obj.labelCategories.forEach((label) => {
             if (label.text == el.pos) {

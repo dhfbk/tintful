@@ -1,7 +1,7 @@
 <template>
   <div v-if="show" class="grid grid-cols-1 lg:grid-cols-8 gap-x-4">
     <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" />
-    <infoCard :jsonData="$store.state.processedData" />
+    <infoCard :jsonData="processedData" />
     <div class="col-span-8 lg:col-span-6 w-full">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
         <statsCard
@@ -50,6 +50,7 @@ export default {
   },
   data() {
     return {
+      processedData: JSON.parse(localStorage.getItem("processedText")),
       modalMode: "",
       modal: false,
       show: false,
@@ -165,13 +166,13 @@ export default {
     };
   },
   created() {
-    if (this.$store.state.text == "") {
+    if (localStorage.getItem("text") == "") {
       this.$router.replace({ name: "home" });
     } else {
       this.seriesReadability = [
-        this.$store.state.processedData.readability.subordinateRatio * 100,
-        this.$store.state.processedData.readability.ttrValue * 100,
-        this.$store.state.processedData.readability.density * 100,
+        this.processedData.readability.subordinateRatio * 100,
+        this.processedData.readability.ttrValue * 100,
+        this.processedData.readability.density * 100,
       ];
       this.chartOptionsReadability.labels = [
         "Subordinate ratio",
@@ -180,24 +181,24 @@ export default {
       ];
       this.seriesDifficulty = [
         this.roundNumber(
-          this.$store.state.processedData.readability.measures.main,
+          this.processedData.readability.measures.main,
           2
         ),
         this.roundNumber(
-          this.$store.state.processedData.readability.measures.level1,
+          this.processedData.readability.measures.level1,
           2
         ),
         this.roundNumber(
-          this.$store.state.processedData.readability.measures.level2,
+          this.processedData.readability.measures.level2,
           2
         ),
         this.roundNumber(
-          this.$store.state.processedData.readability.measures.level3,
+          this.processedData.readability.measures.level3,
           2
         ),
       ];
       this.chartOptionsDifficulty.labels = [
-        this.$store.state.processedData.readability.labels.main,
+        this.processedData.readability.labels.main,
         "Level 1",
         "Level 2",
         "Level 3",
@@ -208,24 +209,24 @@ export default {
       for (let i = 0; i < this.chartOptionsReadability.labels.length; i++) {
         if (
           this.seriesReadability[i] / 100 ==
-          this.$store.state.processedData.readability.subordinateRatio
+          this.processedData.readability.subordinateRatio
         ) {
-          min = this.$store.state.processedData.readability.minYellowValues
+          min = this.processedData.readability.minYellowValues
             .subordinateRatio;
-          max = this.$store.state.processedData.readability.maxYellowValues
+          max = this.processedData.readability.maxYellowValues
             .subordinateRatio;
         } else if (
           this.seriesReadability[i] / 100 ==
-          this.$store.state.processedData.readability.ttrValue
+          this.processedData.readability.ttrValue
         ) {
-          min = this.$store.state.processedData.readability.minYellowValues
+          min = this.processedData.readability.minYellowValues
             .ttrValue;
-          max = this.$store.state.processedData.readability.maxYellowValues
+          max = this.processedData.readability.maxYellowValues
             .ttrValue;
         } else {
-          min = this.$store.state.processedData.readability.minYellowValues
+          min = this.processedData.readability.minYellowValues
             .density;
-          max = this.$store.state.processedData.readability.maxYellowValues
+          max = this.processedData.readability.maxYellowValues
             .density;
         }
         if (

@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="h-1 w-1/2 bg-primary" :class="tabScroll"></div>
-        <p v-if="selectedTab == 0">{{ $store.state.text }}</p>
+        <p v-if="selectedTab == 0">{{ text }}</p>
         <div v-else>
           <button
             @click="downloadJSON()"
@@ -84,6 +84,8 @@ export default {
       selectedTab: 0,
       tabScroll: "transition transform translate-x-0",
       downloadableJSON: {},
+      text: localStorage.getItem("text"),
+      processedData: JSON.parse(localStorage.getItem("processedText"))
     };
   },
   methods: {
@@ -103,9 +105,9 @@ export default {
         this.tabScroll = "transition transform translate-x-0";
       } else {
         this.tabScroll = "transition transform translate-x-full";
-        const formatter = new JSONFormatter(this.$store.state.processedData);
+        const formatter = new JSONFormatter(this.processedData);
         this.downloadableJSON = JSON.stringify(
-          this.$store.state.processedData,
+          this.processedData,
           undefined,
           2
         );

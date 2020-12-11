@@ -118,11 +118,13 @@ export default {
   },
   methods: {
     process() {
+        localStorage.setItem("text", "");
+        localStorage.setItem("processedText", "");
       this.loading = true;
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.$store.state.text = this.text;
-        this.$store.state.processedData = this.myJson;
+        localStorage.setItem("text", this.text);
+        localStorage.setItem("processedText", JSON.stringify(this.myJson));
         /*
         axios({
           url:

@@ -13,7 +13,7 @@
       </div>
       <div class="divide-y divide-primary divide-opacity-75">
         <div
-          v-for="sen in $store.state.processedData.sentences"
+          v-for="sen in processedData.sentences"
           :key="sen.index"
           class=""
         >
@@ -76,23 +76,24 @@ export default {
       poses: [],
       legend: {},
       posDesc: [],
+      processedData: JSON.parse(localStorage.getItem("processedText"))
     };
   },
   created() {
-    this.posDesc = this.$store.state.processedData.readability.genericPosDescription;
+    this.posDesc = this.processedData.readability.genericPosDescription;
     //console.log(this.posDesc);
-    for (var i = 0; i < this.$store.state.processedData.sentences.length; i++) {
+    for (var i = 0; i < this.processedData.sentences.length; i++) {
       for (
         var x = 0;
-        x < this.$store.state.processedData.sentences[i].tokens.length;
+        x < this.processedData.sentences[i].tokens.length;
         x++
       ) {
         this.poses.includes(
-          this.$store.state.processedData.sentences[i].tokens[x].pos
+          this.processedData.sentences[i].tokens[x].pos
         )
           ? ""
           : this.poses.push(
-              this.$store.state.processedData.sentences[i].tokens[x].pos[0]
+              this.processedData.sentences[i].tokens[x].pos[0]
             );
       }
     }
