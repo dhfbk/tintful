@@ -7,7 +7,7 @@
           class="h-3 w-3 rounded-full inline-block"
           :style="{ background: Object.values(legend)[x] }"
         ></div>
-        {{ nerDesc[i] }}
+        {{ i }}
       </div>
     </div>
     <div class="divide-y divide-primary divide-opacity-75">
@@ -21,14 +21,30 @@
             v-for="token in sen.tokens"
             :key="token.index"
             @click="info = token"
+            class="flex flex-col place-items-center my-2 cursor-pointer"
           >
-            <singleToken
-              class="flex flex-col place-items-center my-2 cursor-pointer"
+            <!-- <singleToken
+             
               :token="token"
               :colorsNer="legend"
               :descNer="nerDesc"
               :mode="'ner'"
-            />
+            /> -->
+            <span
+              class="mx-1 px-1 rounded"
+              :class="
+                token.ner == 'PER' || token.ner == 'ORG' || token.ner == 'LOC'
+                  ? 'text-white'
+                  : 'bg-gray-100'
+              "
+              :style="{
+                background:
+                  token.ner == 'PER' || token.ner == 'ORG' || token.ner == 'LOC'
+                    ? legend[token.ner]
+                    : '',
+              }"
+              >{{ token.word }}</span
+            >
           </span>
         </div>
         <!-- </div> -->
@@ -38,13 +54,13 @@
 </template>
 
 <script>
-import JSONFormatter from "json-formatter-js";
-import singleToken from "../components/singleToken.vue";
+//import JSONFormatter from "json-formatter-js";
+//import singleToken from "../components/singleToken.vue";
 
 export default {
   name: "ner",
   components: {
-    singleToken,
+    //singleToken,
   },
   data() {
     return {
@@ -63,6 +79,7 @@ export default {
         //"MONEY",
         //"PERCENT",
       ],
+      colors: ["ffbf00", "e83f6f", "2274a5"],
       processedData: JSON.parse(localStorage.getItem("processedText")),
     };
   },
@@ -74,22 +91,10 @@ export default {
       }
     }
     for (let i = 0; i < this.nerDesc.length; i++) {
-      this.legend[i] = this.getColor();
+      this.legend[this.nerDesc[i]] = "#" + this.colors[i];
     }
   },
-  methods: {
-    getColor() {
-      return (
-        "hsl(" +
-        360 * Math.random() +
-        "," +
-        (25 + 80 * Math.random()) +
-        "%," +
-        (80 + 10 * Math.random()) +
-        "%)"
-      );
-    },
-  },
+  methods: {},
   watch: {
     info: function() {
       if (this.info != "") {
@@ -116,20 +121,17 @@ export default {
         //     .getElementsByClassName("json-formatter-row json-formatter-open")[1]
         //     .remove();
         // }
-        let node = document.getElementById("formatter1");
-        if (node != null) {
-          while (node.firstChild) {
-            node.removeChild(node.firstChild);
-          }
-        }
-
-        const formatter = new JSONFormatter(this.info);
-
-        setTimeout(() => {
-          document.getElementById("formatter1").appendChild(formatter.render());
-          // console.log(document.getElementById("formatter1").re);
-        }, 1);
-
+        // let node = document.getElementById("formatter1");
+        // if (node != null) {
+        //   while (node.firstChild) {
+        //     node.removeChild(node.firstChild);
+        //   }
+        // }
+        // const formatter = new JSONFormatter(this.info);
+        // setTimeout(() => {
+        //   document.getElementById("formatter1").appendChild(formatter.render());
+        //   // console.log(document.getElementById("formatter1").re);
+        // }, 1);
         // this.keys = Object.keys(this.info);
         // this.values = Object.values(this.info);
         // var i = 0;

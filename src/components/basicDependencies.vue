@@ -100,6 +100,7 @@ export default {
       this.obj.connections.push(tmp);
       connCatId++;
     });
+    console.log(this.obj);
   },
   mounted() {
     const annotator = new Annotator(

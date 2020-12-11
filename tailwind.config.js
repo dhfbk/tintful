@@ -21,6 +21,7 @@ module.exports = {
       },
       translate: {
         "2full": "200%",
+        "3full": "300%",
       },
     },
   },

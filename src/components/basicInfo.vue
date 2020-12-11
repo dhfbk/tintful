@@ -11,16 +11,19 @@
             <span
               v-for="token in sen.tokens"
               :key="token.index"
-              @click="info = token"
+              @click="(info = token), (selected = token.characterOffsetBegin)"
+              class="flex flex-col place-items-center my-2 cursor-pointer"
             >
-              <singleToken
-                class="flex flex-col place-items-center my-2 cursor-pointer"
-                :token="token"
-                :color="legend[token.pos[0]]"
-                :mode="'info'"
-              />
+              <span
+                class="mx-1 px-1 bg-gray-100 rounded ripple"
+                :class="
+                  selected == token.characterOffsetBegin ? 'bg-gray-300' : ''
+                "
+                >{{ token.word }}</span
+              >
             </span>
           </div>
+          <div>info</div>
           <!-- </div> -->
         </div>
       </div>
@@ -35,64 +38,53 @@
           <span class="font-bold">{{ info.word }}</span>
           "
         </div>
-        <div class="overflow-x-auto" id="formatter1"></div>
+        <!-- <div class="overflow-x-auto" id="formatter1"></div> -->
 
-        <!-- <span v-for="(i, x) in keys" :key="x">
+        <span v-for="(i, x) in keys" :key="x">
           <span class="font-bold">{{ i }}</span
           >: {{ values[x] }}<br
-        /></span> -->
+        /></span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import JSONFormatter from "json-formatter-js";
-import singleToken from "../components/singleToken.vue";
+//import JSONFormatter from "json-formatter-js";
+//import singleToken from "../components/singleToken.vue";
 
 export default {
   name: "basicInfo",
   components: {
-    singleToken,
+    // singleToken,
   },
   data() {
     return {
       info: "",
       keys: [],
       values: [],
-      poses: [],
-      legend: {},
+      // poses: [],
+      // legend: {},
       processedData: JSON.parse(localStorage.getItem("processedText")),
+      selected: null,
     };
   },
   created() {
     //console.log(this.posDesc);
-    for (var i = 0; i < this.processedData.sentences.length; i++) {
-      for (var x = 0; x < this.processedData.sentences[i].tokens.length; x++) {
-        this.poses.includes(this.processedData.sentences[i].tokens[x].pos)
-          ? ""
-          : this.poses.push(this.processedData.sentences[i].tokens[x].pos[0]);
-      }
-    }
-    this.poses.sort();
-    for (let i = 0; i < this.poses.length; i++) {
-      this.legend[this.poses[i]] = this.getColor();
-    }
+    // for (var i = 0; i < this.processedData.sentences.length; i++) {
+    //   for (var x = 0; x < this.processedData.sentences[i].tokens.length; x++) {
+    //     this.poses.includes(this.processedData.sentences[i].tokens[x].pos)
+    //       ? ""
+    //       : this.poses.push(this.processedData.sentences[i].tokens[x].pos[0]);
+    //   }
+    // }
+    // this.poses.sort();
+    // for (let i = 0; i < this.poses.length; i++) {
+    //   this.legend[this.poses[i]] = this.getColor();
+    // }
     //console.log(this.legend);
   },
-  methods: {
-    getColor() {
-      return (
-        "hsl(" +
-        360 * Math.random() +
-        "," +
-        (25 + 80 * Math.random()) +
-        "%," +
-        (80 + 10 * Math.random()) +
-        "%)"
-      );
-    },
-  },
+  methods: {},
   watch: {
     info: function() {
       if (this.info != "") {
@@ -119,30 +111,30 @@ export default {
         //     .getElementsByClassName("json-formatter-row json-formatter-open")[1]
         //     .remove();
         // }
-        let node = document.getElementById("formatter1");
-        if (node != null) {
-          while (node.firstChild) {
-            node.removeChild(node.firstChild);
-          }
-        }
-
-        const formatter = new JSONFormatter(this.info);
-
-        setTimeout(() => {
-          document.getElementById("formatter1").appendChild(formatter.render());
-          // console.log(document.getElementById("formatter1").re);
-        }, 1);
-
-        // this.keys = Object.keys(this.info);
-        // this.values = Object.values(this.info);
-        // var i = 0;
-        // for (i = 0; i < this.keys.length; i++) {
-        //   if (this.keys[i] == "featuresText") {
-        //     break;
+        // let node = document.getElementById("formatter1");
+        // if (node != null) {
+        //   while (node.firstChild) {
+        //     node.removeChild(node.firstChild);
         //   }
         // }
-        // this.values[i] = this.values[i].replace(/\|/g, ", ");
-        // console.log(this.values[i]);
+        // const formatter = new JSONFormatter(this.info);
+        // setTimeout(() => {
+        //   document.getElementById("formatter1").appendChild(formatter.render());
+        //   // console.log(document.getElementById("formatter1").re);
+        // }, 1);
+        delete this.info.originalText;
+        delete this.info.ner;
+        delete this.info.guessed_lemma;
+        this.keys = Object.keys(this.info);
+        this.values = Object.values(this.info);
+        var i = 0;
+        for (i = 0; i < this.keys.length; i++) {
+          if (this.keys[i] == "featuresText") {
+            break;
+          }
+        }
+        this.values[i] = this.values[i].replace(/\|/g, ", ");
+        console.log(this.values[i]);
       }
     },
   },

@@ -64,7 +64,9 @@ export default {
         this.tabScroll = "transition transform translate-x-full";
       } else {
         this.tabScroll =
-          "transition transform translate-x-" + this.selectedTab + "full";
+          "transition transform translate-x-" +
+          this.selectedTab.toString() +
+          "full";
       }
     },
   },
