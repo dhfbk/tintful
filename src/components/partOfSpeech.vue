@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4">
     <div class="font-bold text-lg">Legend</div>
-    <div class="grid grid-rows-4 grid-flow-col mb-6">
+    <div class="grid grid-rows-4 grid-flow-col gap-x-1 auto-cols-auto mb-6 max-w-max">
       <div v-for="(i, x) in Object.keys(legend)" :key="x">
         <div
           class="h-3 w-3 rounded-full inline-block"

@@ -1,36 +1,40 @@
 <template>
   <div>
-    <div class="w-full grid grid-cols-4 text-center">
-      <div
-        @click="selectedTab = 0"
-        class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
-        :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
-      >
-        Basic information
-      </div>
-      <div
-        @click="selectedTab = 1"
-        class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
-        :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
-      >
-        Part of Speech
-      </div>
-      <div
-        @click="selectedTab = 2"
-        class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
-        :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
-      >
-        Named Entity Recognition
-      </div>
-      <div
-        @click="selectedTab = 3"
-        class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
-        :class="selectedTab == 3 ? 'text-primary' : 'text-gray-500'"
-      >
-        Basic Dependencies
+    <div class="overflow-x-auto">
+      <div class="w-full grid grid-cols-4 text-center min-w-max">
+        <div
+          @click="selectedTab = 0"
+          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
+        >
+          Basic information
+        </div>
+        <div
+          @click="selectedTab = 1"
+          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
+        >
+          Part of Speech
+        </div>
+        <div
+          @click="selectedTab = 2"
+          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
+        >
+          Named Entity Recognition
+        </div>
+        <div
+          @click="selectedTab = 3"
+          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          :class="selectedTab == 3 ? 'text-primary' : 'text-gray-500'"
+        >
+          Basic Dependencies
+        </div>
+        <div class="col-span-4">
+          <div class="h-1 w-1/4 bg-primary" :class="tabScroll"></div>
+        </div>
       </div>
     </div>
-    <div class="h-1 w-1/4 bg-primary" :class="tabScroll"></div>
     <basicInfo v-if="selectedTab == 0" />
     <partOfSpeech v-else-if="selectedTab == 1" />
     <ner v-else-if="selectedTab == 2" />
