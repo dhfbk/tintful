@@ -101,7 +101,7 @@ export default {
           markers: {
             size: 0,
           },
-          formatter: function (seriesName, opts) {
+          formatter: function(seriesName, opts) {
             return (
               seriesName + ":  " + opts.w.globals.series[opts.seriesIndex] / 100
             );
@@ -155,7 +155,7 @@ export default {
           markers: {
             size: 4,
           },
-          formatter: function (seriesName, opts) {
+          formatter: function(seriesName, opts) {
             return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex];
           },
           itemMargin: {
@@ -180,22 +180,10 @@ export default {
         "Lexical density",
       ];
       this.seriesDifficulty = [
-        this.roundNumber(
-          this.processedData.readability.measures.main,
-          2
-        ),
-        this.roundNumber(
-          this.processedData.readability.measures.level1,
-          2
-        ),
-        this.roundNumber(
-          this.processedData.readability.measures.level2,
-          2
-        ),
-        this.roundNumber(
-          this.processedData.readability.measures.level3,
-          2
-        ),
+        this.roundNumber(this.processedData.readability.measures.main, 2),
+        this.roundNumber(this.processedData.readability.measures.level1, 2),
+        this.roundNumber(this.processedData.readability.measures.level2, 2),
+        this.roundNumber(this.processedData.readability.measures.level3, 2),
       ];
       this.chartOptionsDifficulty.labels = [
         this.processedData.readability.labels.main,
@@ -211,23 +199,17 @@ export default {
           this.seriesReadability[i] / 100 ==
           this.processedData.readability.subordinateRatio
         ) {
-          min = this.processedData.readability.minYellowValues
-            .subordinateRatio;
-          max = this.processedData.readability.maxYellowValues
-            .subordinateRatio;
+          min = this.processedData.readability.minYellowValues.subordinateRatio;
+          max = this.processedData.readability.maxYellowValues.subordinateRatio;
         } else if (
           this.seriesReadability[i] / 100 ==
           this.processedData.readability.ttrValue
         ) {
-          min = this.processedData.readability.minYellowValues
-            .ttrValue;
-          max = this.processedData.readability.maxYellowValues
-            .ttrValue;
+          min = this.processedData.readability.minYellowValues.ttrValue;
+          max = this.processedData.readability.maxYellowValues.ttrValue;
         } else {
-          min = this.processedData.readability.minYellowValues
-            .density;
-          max = this.processedData.readability.maxYellowValues
-            .density;
+          min = this.processedData.readability.minYellowValues.density;
+          max = this.processedData.readability.maxYellowValues.density;
         }
         if (
           this.seriesReadability[i] / 100 >= min &&
@@ -279,3 +261,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@import url("../css/brat.css");
+</style>

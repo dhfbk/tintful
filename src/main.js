@@ -8,6 +8,9 @@ Vue.config.productionTip = false
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
+import VueHead from 'vue-head'
+Vue.use(VueHead)
+
 new Vue({
   router,
   render: h => h(App)

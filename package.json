@@ -11,10 +11,12 @@
     "apexcharts": "^3.22.3",
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
+    "debounce": "^1.2.0",
     "json-formatter-js": "^2.3.4",
     "poplar-annotation": "^2.0.3",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
+    "vue-head": "^2.2.0",
     "vue-router": "^3.2.0",
     "vuelidate": "^0.7.6"
   },
