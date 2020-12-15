@@ -5,7 +5,7 @@
       @click="modal"
     >
       <div
-        class="bg-white rounded-lg w-5/6 max-w-3xl max-h-80 overflow-y-auto"
+        class="bg-white rounded-lg w-5/6 max-w-3xl max-h-80 h-4/5 overflow-y-auto"
         @click.stop
       >
         <div class="flex flex-col p-4">

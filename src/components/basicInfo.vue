@@ -32,7 +32,7 @@
       <div v-if="!info" class="font-bold text-lg text-center sticky top-1/2">
         Click on a token for further information.
       </div>
-      <div class="sticky top-0" v-else>
+      <div class="sticky top-0 overflow-y-auto h-screen" v-else>
         <div class="font-light text-lg text-center">
           Info on the token "
           <span class="font-bold">{{ info.word }}</span>
@@ -130,10 +130,15 @@ export default {
         var i = 0;
         for (i = 0; i < this.keys.length; i++) {
           if (this.keys[i] == "featuresText") {
-            break;
+            this.values[i] = this.values[i].replace(/\|/g, ", ");
+          }
+          if (
+            this.keys[i] == "full_morpho" ||
+            this.keys[i] == "selected_morpho"
+          ) {
+            this.values[i] = this.values[i].replace(/\+/g, " + ");
           }
         }
-        this.values[i] = this.values[i].replace(/\|/g, ", ");
         console.log(this.values[i]);
       }
     },

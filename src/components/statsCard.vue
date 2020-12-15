@@ -39,7 +39,7 @@
           :style="'background-color:' + options.colors[n]"
         ></span>
         <span :style="'color:' + options.colors[n]"
-          >{{ each }}: {{ series[n] / dividerValue }}</span
+          >{{ each }}: {{ roundNumber(series[n] / dividerValue, 2) }}</span
         >
       </span>
     </div>
@@ -91,6 +91,22 @@ export default {
             }
           }
         });
+    },
+    roundNumber(num, scale) {
+      if (!("" + num).includes("e")) {
+        return +(Math.round(num + "e+" + scale) + "e-" + scale);
+      } else {
+        var arr = ("" + num).split("e");
+        var sig = "";
+        if (+arr[1] + scale > 0) {
+          sig = "+";
+        }
+        return +(
+          Math.round(+arr[0] + "e" + sig + (+arr[1] + scale)) +
+          "e-" +
+          scale
+        );
+      }
     },
   },
 };
