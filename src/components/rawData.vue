@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2 col-span-8 transition duration-150 ease-out"
+    class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2 col-span-8 transition-shadow duration-150 ease-out"
     :class="hoverCard ? 'shadow-lg' : ''"
   >
     <div
@@ -14,7 +14,7 @@
         class="bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max justify-self-end"
       >
         <svg
-          class="transition duration-300 ease-out"
+          class="transition-transform duration-300 ease-out"
           :class="{ 'transform  rotate-180': isOpen }"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -32,14 +32,14 @@
         <div class="w-full grid grid-cols-2 text-center">
           <div
             @click="selectedTab = 0"
-            class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
+            class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
             :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
           >
             Raw text
           </div>
           <div
             @click="selectedTab = 1"
-            class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
+            class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
             :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
           >
             JSON data
@@ -50,11 +50,11 @@
         <div v-else>
           <button
             @click="downloadJSON()"
-            class="ml-1 bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition duration-150 ease-out hover:bg-gray-100"
+            class="ml-1 bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100"
           >
             <span>Download JSON</span>
             <svg
-              class="transition duration-300 ease-out fill-current text-primary ml-2"
+              class="fill-current text-primary ml-2"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width="24px"
@@ -82,7 +82,7 @@ export default {
       isOpen: false,
       hoverCard: false,
       selectedTab: 0,
-      tabScroll: "transition transform translate-x-0",
+      tabScroll: "transition-transform ease-out transform translate-x-0",
       downloadableJSON: {},
       text: localStorage.getItem("text"),
       processedData: JSON.parse(localStorage.getItem("processedText"))
@@ -102,9 +102,9 @@ export default {
   watch: {
     selectedTab: function () {
       if (this.selectedTab == 0) {
-        this.tabScroll = "transition transform translate-x-0";
+        this.tabScroll = "transition-transform ease-out transform translate-x-0";
       } else {
-        this.tabScroll = "transition transform translate-x-full";
+        this.tabScroll = "transition-transform ease-out transform translate-x-full";
         const formatter = new JSONFormatter(this.processedData);
         this.downloadableJSON = JSON.stringify(
           this.processedData,

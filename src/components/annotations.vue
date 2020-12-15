@@ -4,28 +4,28 @@
       <div class="w-full grid grid-cols-4 text-center min-w-max">
         <div
           @click="selectedTab = 0"
-          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
         >
           Basic information
         </div>
         <div
           @click="selectedTab = 1"
-          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
         >
           Part of Speech
         </div>
         <div
           @click="selectedTab = 2"
-          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
         >
           Named Entity Recognition
         </div>
         <div
           @click="selectedTab = 3"
-          class="transition duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+          class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 3 ? 'text-primary' : 'text-gray-500'"
         >
           Basic Dependencies
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       selectedTab: 0,
-      tabScroll: "transition transform translate-x-0",
+      tabScroll: "transition-transform ease-out transform translate-x-0",
       bratLocation: "http://hlt-services7.fbk.eu/mysql/js/brat",
       tokensMap: {
         "=LRB=": "(",
@@ -719,12 +719,12 @@ export default {
   watch: {
     selectedTab: function() {
       if (this.selectedTab == 0) {
-        this.tabScroll = "transition transform translate-x-0";
+        this.tabScroll = "transition-transform ease-out transform translate-x-0";
       } else if (this.selectedTab == 1) {
-        this.tabScroll = "transition transform translate-x-full";
+        this.tabScroll = "transition-transform ease-out transform translate-x-full";
       } else {
         this.tabScroll =
-          "transition transform translate-x-" +
+          "transition-transform ease-out transform translate-x-" +
           this.selectedTab.toString() +
           "full";
         if (this.selectedTab == 3) {

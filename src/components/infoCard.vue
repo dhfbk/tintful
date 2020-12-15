@@ -76,7 +76,7 @@
           class="col-span-1 bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max justify-self-end"
         >
           <svg
-            class="transition duration-300 ease-out"
+            class="transition-transform duration-300 ease-out"
             :class="{ 'transform  rotate-180': isOpen }"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

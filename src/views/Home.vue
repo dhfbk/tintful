@@ -17,7 +17,7 @@
               hoverText ? 'border-primary' : 'border-gray-200',
               $v.text.$error ? 'border-primary' : 'border-gray-200',
             ]"
-            class="w-full border-2 transition duration-150 ease-out hover:border-primary rounded-md py-2 px-4 focus:outline-none"
+            class="w-full border-2 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-4 focus:outline-none"
             id="textInput"
             rows="8"
             @focus="hoverText = true"
@@ -35,7 +35,7 @@
         >
         <div class="relative">
           <select
-            class="block border-b-2 border-gray-200 appearance-none w-full py-2 pl-2 pr-8 text-gray-700 transition duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
+            class="block border-b-2 border-gray-200 appearance-none w-full py-2 pl-2 pr-8 text-gray-700 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
             id="action"
             name="action"
             v-model="exampleChoice"
@@ -73,7 +73,7 @@
       </div>
       <div class="m-2 mt-4 width-full flow-root">
         <button
-          class="ripple flex flex-row transition duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded focus:outline-none float-right"
+          class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded focus:outline-none float-right"
           @click="process()"
         >
           <svg

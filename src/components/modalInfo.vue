@@ -5,7 +5,7 @@
       @click="modal"
     >
       <div
-        class="bg-white rounded-lg w-5/6 max-w-3xl max-h-80 h-4/5 overflow-y-auto"
+        class="bg-white rounded-lg w-5/6 max-w-3xl max-h-80 h-4/5 overflow-y-auto overscroll-none"
         @click.stop
       >
         <div class="flex flex-col p-4">
@@ -24,7 +24,7 @@
                   d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
                 />
               </svg>
-              <span class="sr-only">Close</span>
+              <span class="sr-only">Close dialog</span>
             </span>
           </div>
           <div class="py-2">
