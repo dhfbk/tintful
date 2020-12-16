@@ -28,8 +28,33 @@
     <div
       class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2 col-span-8"
     >
-      <annotations />
+      <annotations
+        @sheet="sheetData"
+        @closesheet="$refs.swipeableBottomSheet.setState('close')"
+        @opensheet="
+          (info = ''),
+            (values = []),
+            (keys = []),
+            $refs.swipeableBottomSheet.setState('half')
+        "
+      />
     </div>
+    <swipeable-bottom-sheet ref="swipeableBottomSheet" class="md:hidden">
+      <h1 v-if="info == ''" class="px-4 text-center">
+        Click on a token for further information
+      </h1>
+      <div v-else class="px-4">
+        <div class="font-light text-lg text-center">
+          Info on the token "
+          <span class="font-bold">{{ info.word }}</span>
+          "
+        </div>
+        <span v-for="(i, x) in keys" :key="x">
+          <span class="font-bold">{{ i }}</span
+          >: {{ values[x] }}<br
+        /></span>
+      </div>
+    </swipeable-bottom-sheet>
   </div>
 </template>
 
@@ -39,6 +64,7 @@ import statsCard from "../components/statsCard.vue";
 import infoCard from "../components/infoCard.vue";
 import rawData from "../components/rawData.vue";
 import modalInfo from "../components/modalInfo.vue";
+import { SwipeableBottomSheet } from "vue-swipeable-bottom-sheet";
 export default {
   name: "result",
   components: {
@@ -47,9 +73,13 @@ export default {
     infoCard,
     rawData,
     modalInfo,
+    SwipeableBottomSheet,
   },
   data() {
     return {
+      info: "",
+      values: [],
+      keys: [],
       processedData: JSON.parse(localStorage.getItem("processedText")),
       modalMode: "",
       modal: false,
@@ -240,6 +270,14 @@ export default {
       }
       this.show = true;
     }
+  },
+  methods: {
+    sheetData(arr) {
+      this.info = arr[0];
+      this.keys = arr[1];
+      this.values = arr[2];
+      this.$refs.swipeableBottomSheet.setState("half");
+    },
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-3 gap-x-2 mt-4">
-    <div class="col-span-2">
+    <div class="col-span-3 md:col-span-2">
       <div class="divide-y divide-primary divide-opacity-75">
         <div v-for="sen in processedData.sentences" :key="sen.index" class="">
           <!-- <div class="flex flex-row"> -->
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-1">
+    <div class="hidden md:block md:col-span-1">
       <div v-if="!info" class="font-bold text-lg text-center sticky top-1/2">
         Click on a token for further information.
       </div>
@@ -84,7 +84,12 @@ export default {
     // }
     //console.log(this.legend);
   },
-  methods: {},
+  methods: {
+    sheet() {
+      var arr = [this.info, this.keys, this.values];
+      this.$emit("sheet", arr);
+    },
+  },
   watch: {
     info: function() {
       if (this.info != "") {
@@ -139,8 +144,8 @@ export default {
             this.values[i] = this.values[i].replace(/\+/g, " + ");
           }
         }
-        console.log(this.values[i]);
       }
+      this.sheet();
     },
   },
 };

@@ -3,28 +3,28 @@
     <div class="overflow-x-auto">
       <div class="w-full grid grid-cols-4 text-center min-w-max">
         <div
-          @click="selectedTab = 0"
+          @click="(selectedTab = 0), $emit('opensheet')"
           class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
         >
           Basic information
         </div>
         <div
-          @click="selectedTab = 1"
+          @click="(selectedTab = 1), $emit('closesheet')"
           class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
         >
           Part of Speech
         </div>
         <div
-          @click="selectedTab = 2"
+          @click="(selectedTab = 2), $emit('closesheet')"
           class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
         >
           Named Entity Recognition
         </div>
         <div
-          @click="selectedTab = 3"
+          @click="(selectedTab = 3), $emit('closesheet')"
           class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 3 ? 'text-primary' : 'text-gray-500'"
         >
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <basicInfo v-if="selectedTab == 0" />
+    <basicInfo v-if="selectedTab == 0" @sheet="sheet" />
     <partOfSpeech v-else-if="selectedTab == 1" />
     <ner v-else-if="selectedTab == 2" />
     <div id="deps" v-else></div>
@@ -164,12 +164,12 @@ export default {
     basicInfo,
   },
   created() {
-    window.onresize = debounce(this.checkRedraw, 50);
-  },
-  destroyed() {
-    window.onresize.clear();
+    window.onresize = debounce(this.checkRedraw, 200);
   },
   methods: {
+    sheet(arr) {
+      this.$emit("sheet", arr);
+    },
     checkRedraw() {
       if (this.selectedTab == 3) {
         this.loadBrat();
@@ -719,9 +719,11 @@ export default {
   watch: {
     selectedTab: function() {
       if (this.selectedTab == 0) {
-        this.tabScroll = "transition-transform ease-out transform translate-x-0";
+        this.tabScroll =
+          "transition-transform ease-out transform translate-x-0";
       } else if (this.selectedTab == 1) {
-        this.tabScroll = "transition-transform ease-out transform translate-x-full";
+        this.tabScroll =
+          "transition-transform ease-out transform translate-x-full";
       } else {
         this.tabScroll =
           "transition-transform ease-out transform translate-x-" +
