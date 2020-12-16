@@ -3432,27 +3432,27 @@ var Visualizer = (function($, window, undefined) {
       forceRedraw();
     };
 
-    var onClick = function(evt) {
-      console.log(sourceData);
-      var target = $(evt.target);
-      console.log(evt.target);
-      if (target.attr("data-span-id")) {
-        console.log(target.attr("data-span-id"));
-        $svg
-          .find("rect[data-span-id=" + target.attr("data-span-id") + "]")
-          .fill("#fffff");
-      } else {
-        console.log(evt.target);
-        console.log(
-          target.attr("data-arc-role"),
-          target.attr("data-arc-origin"),
-          target.attr("data-arc-ed")
-        );
+    // var onClick = function(evt) {
+    //   console.log(sourceData);
+    //   var target = $(evt.target);
+    //   console.log(evt.target);
+    //   if (target.attr("data-span-id")) {
+    //     console.log(target.attr("data-span-id"));
+    //     $svg
+    //       .find("rect[data-span-id=" + target.attr("data-span-id") + "]")
+    //       .fill("#fffff");
+    //   } else {
+    //     console.log(evt.target);
+    //     console.log(
+    //       target.attr("data-arc-role"),
+    //       target.attr("data-arc-origin"),
+    //       target.attr("data-arc-ed")
+    //     );
 
-        // target.attr("data-arc-role") = "btuhhhh";
-      }
-      forceRedraw();
-    };
+    //     // target.attr("data-arc-role") = "btuhhhh";
+    //   }
+    //   forceRedraw();
+    // };
 
     var onDblClick = function(e) {
       console.log(e);
@@ -3677,8 +3677,8 @@ var Visualizer = (function($, window, undefined) {
       .on("current", gotCurrent)
       .on("clearSVG", clearSVG)
       .on("mouseover", onMouseOver)
-      .on("mouseout", onMouseOut)
-      .on("click", onClick);
+      .on("mouseout", onMouseOut);
+    //  .on("click", onClick);
     //.on("dblclick", onDblClick);
   };
 

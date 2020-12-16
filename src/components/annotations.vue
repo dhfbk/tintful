@@ -51,6 +51,9 @@ import { debounce } from "debounce";
 export default {
   data() {
     return {
+      sonId: "",
+      newFatherId: "",
+      isEditMode: false,
       selectedTab: 0,
       tabScroll: "transition-transform ease-out transform translate-x-0",
       bratLocation: "http://hlt-services7.fbk.eu/mysql/js/brat",
@@ -170,6 +173,44 @@ export default {
     sheet(arr) {
       this.$emit("sheet", arr);
     },
+    handleDbl(e) {
+      let i = e.target;
+      this.isEditMode = true;
+      i.parentNode.children[1].setAttribute("fill", "white");
+      i.parentNode.children[0].setAttribute("fill", "#688e26");
+      var infos = i.getAttribute("data-span-id").split("_");
+      this.sonId = infos[2];
+      console.log(this.isEditMode);
+    },
+    handleClick(e) {
+      console.log("siamo dentro l'evento click");
+
+      //console.log(e.target);
+      var i = e.target;
+      i.parentNode.children[1].setAttribute("fill", "white");
+      i.parentNode.children[0].setAttribute("fill", "#688e26");
+      var infos = i.getAttribute("data-span-id").split("_");
+      this.newFatherId = infos[2];
+      this.isEditMode = false;
+
+      console.log("son: " + this.sonId, "new father: " + this.newFatherId);
+    },
+    addEvents() {
+      console.log("siamo dentro la funzione che inserisce gli eventi");
+      var x = document.getElementById("deps");
+      var pos = x.getElementsByClassName("span_default");
+      if (this.isEditMode) {
+        pos.forEach((el) => {
+          el.onclick = this.handleClick;
+        });
+      } else {
+        pos.forEach((el) => {
+          el.onclick = function(e) {
+            console.log(e.target);
+          };
+        });
+      }
+    },
     checkRedraw() {
       if (this.selectedTab == 3) {
         this.loadBrat();
@@ -187,6 +228,81 @@ export default {
           };
         }
         this.render(JSON.parse(localStorage.getItem("processedText")));
+        var x = document.getElementById("deps");
+        var pos = x.getElementsByClassName("span_default");
+        var depend = x.getElementsByClassName("arcs");
+        setTimeout(() => {
+          //console.log(x);
+          pos.forEach((el) => {
+            el.ondblclick = this.handleDbl; //function(e) {
+            // let i = e.target;
+            // this.isEditMode = true;
+            // i.parentNode.children[1].setAttribute("fill", "white");
+            // i.parentNode.children[0].setAttribute("fill", "#688e26");
+            // var infos = i.getAttribute("data-span-id").split("_");
+            // this.sonId = infos[2];
+            // console.log(this.isEditMode);
+            //let i = e.target;
+            // console.log(i.getAttribute("data-span-id").split("_"));
+            // console.log(i.className.baseVal.split(" "));
+            // console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
+            // if (this.isEditMode) {
+            //  }
+            // var infos = i.getAttribute("data-span-id").split("_");
+            // //console.log(infos[2]);
+            // this.isEditMode = !this.isEditMode;
+            // if (!this.isEditMode) {
+            //   this.sonId = infos[2];
+            //   //console.log(this.sonId);
+            // } else {
+            //   this.newFatherId = infos[2];
+            //   // this.sonId=''
+            //   // this.newFatherId=''
+            // }
+            // console.log(this.sonId);
+            // console.log(this.newFatherId);
+            // this.render(JSON.parse(localStorage.getItem("processedText")));
+            //document.getElementById("demo").innerHTML = "Hello World";
+            // };
+            // el.addEventListener("click", function(e) {
+            //   var self = this;
+            //   let i = e.target;
+            //   console.log(i.getAttribute("data-span-id").split("_"));
+            //   console.log(i.className.baseVal.split(" "));
+            //   console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
+            //   // if (this.isEditMode) {
+            //   el.parentNode.children[1].setAttribute("fill", "white");
+            //   el.parentNode.children[0].setAttribute("fill", "#688e26");
+            //   //  }
+            //   var infos = i.getAttribute("data-span-id").split("_");
+            //   console.log(infos[2]);
+            //   if (!self.isEditMode) {
+            //     self.sonId = infos[2];
+            //     console.log(self.sonId);
+            //   } else {
+            //     self.newFatherId = infos[2];
+            //     // this.sonId=''
+            //     // this.newFatherId=''
+            //   }
+            //   self.isEditMode = !self.isEditMode;
+            //   // this.render(JSON.parse(localStorage.getItem("processedText")));
+            //   //document.getElementById("demo").innerHTML = "Hello World";
+            // });
+          });
+          //console.log(depend);
+          depend.forEach((el) => {
+            //console.log(el.children);
+            el.children.forEach((p) => {
+              //console.log(p.children[0]);
+              p.children[0].addEventListener("click", function(e) {
+                let i = e.target;
+                console.log(i.getAttribute("data-arc-role"));
+                console.log(i.getAttribute("data-arc-origin").split("_"));
+                console.log(i.getAttribute("data-arc-target").split("_"));
+              });
+            });
+          });
+        }, 1000);
       } else {
         setTimeout(() => {
           document.getElementById("deps").innerHTML = "";
@@ -735,6 +851,9 @@ export default {
           }, 100);
         }
       }
+    },
+    isEditMode: function() {
+      this.addEvents();
     },
   },
 };
