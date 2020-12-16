@@ -170,17 +170,20 @@ export default {
     window.onresize = debounce(this.checkRedraw, 200);
   },
   methods: {
+    isGovernor(el) {
+      return el.index == this.newFatherId;
+    },
     sheet(arr) {
       this.$emit("sheet", arr);
     },
     handleDbl(e) {
       let i = e.target;
-      this.isEditMode = true;
       i.parentNode.children[1].setAttribute("fill", "white");
       i.parentNode.children[0].setAttribute("fill", "#688e26");
       var infos = i.getAttribute("data-span-id").split("_");
-      this.sonId = infos[2];
+      this.sonId = parseInt(infos[2]) + 1;
       console.log(this.isEditMode);
+      this.isEditMode = true;
     },
     handleClick(e) {
       console.log("siamo dentro l'evento click");
@@ -190,7 +193,40 @@ export default {
       i.parentNode.children[1].setAttribute("fill", "white");
       i.parentNode.children[0].setAttribute("fill", "#688e26");
       var infos = i.getAttribute("data-span-id").split("_");
-      this.newFatherId = infos[2];
+      this.newFatherId = parseInt(infos[2]) + 1;
+      var d = JSON.parse(localStorage.getItem("processedText"));
+
+      var dep = d.sentences[infos[1]]["basic-dependencies"];
+      for (let i = 0; i < dep.length; i++) {
+        if (dep[i].dependent == this.sonId) {
+          dep[i].governor = this.newFatherId;
+          dep[i].governorGloss = d.sentences[infos[1]].tokens.find(
+            this.isGovernor
+          ).word;
+          console.log(dep[i].governorGloss);
+          console.log(
+            "new father of " +
+              dep[i].dependent +
+              " (" +
+              dep[i].dependentGloss +
+              ")" +
+              " is " +
+              dep[i].governor +
+              " (" +
+              dep[i].governorGloss +
+              ")"
+          );
+
+          break;
+        }
+      }
+      localStorage.setItem("processedText", JSON.stringify(d));
+
+      document.getElementById("deps").innerHTML = "";
+      document.getElementById("deps").className = "";
+      this.currentText = [];
+      this.loadBrat();
+
       this.isEditMode = false;
 
       console.log("son: " + this.sonId, "new father: " + this.newFatherId);
@@ -855,6 +891,15 @@ export default {
     isEditMode: function() {
       this.addEvents();
     },
+  },
+  beforeDestroy() {
+    var pos = document
+      .getElementById("deps")
+      .getElementsByClassName("span_default");
+    pos.forEach((el) => {
+      el.onclick.clear();
+      el.ondblclick.clear();
+    });
   },
 };
 </script>
