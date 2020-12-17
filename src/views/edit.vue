@@ -1,5 +1,13 @@
 <template>
-  <div id="deps"></div>
+  <div>
+    <div @click="sentenceIndex++">
+      +
+    </div>
+    <div @click="sentenceIndex--">
+      -
+    </div>
+    <div id="deps"></div>
+  </div>
 </template>
 
 <script>
@@ -10,6 +18,7 @@ export default {
       sonId: "",
       newFatherId: "",
       isEditMode: false,
+      sentenceIndex: 0,
       //selectedTab: 0,
       //tabScroll: "transition-transform ease-out transform translate-x-0",
       //bratLocation: "http://hlt-services7.fbk.eu/mysql/js/brat",
@@ -216,7 +225,35 @@ export default {
             return this.indexOf(str) === 0;
           };
         }
-        this.render(JSON.parse(localStorage.getItem("processedText")));
+        // document.getElementById("deps").innerHTML = "";
+        //document.getElementById("deps").className = "";
+        var doc = JSON.parse(localStorage.getItem("processedText"));
+        // if (this.sentenceIndex > 0) {
+        //   doc.sentences[this.sentenceIndex].index = 0;
+        //   doc.sentences[this.sentenceIndex].characterOffsetEnd -=
+        //     doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1;
+        //   doc.sentences[this.sentenceIndex].characterOffsetBegin = 0;
+        //   // doc.sentences[this.sentenceIndex].characterOffsetEnd -=
+        //   //   doc.sentences[this.sentenceIndex - 1].characterOffsetBegin + 1;
+        //   doc.sentences[this.sentenceIndex].tokens.forEach((el) => {
+        //     el.characterOffsetBegin -=
+        //       doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1;
+        //     el.characterOffsetEnd -=
+        //       doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1;
+        //   });
+        // }
+        // doc.sentences[this.sentenceIndex].tokens.forEach((el) => {
+        //   console.log(el.characterOffsetBegin, el.characterOffsetEnd);
+        // });
+        console.log(this.sentenceIndex);
+        console.log({
+          sentences: [doc.sentences[this.sentenceIndex]],
+        });
+
+        this.render({
+          sentences: [doc.sentences[this.sentenceIndex]],
+        });
+
         var x = document.getElementById("deps");
         var pos = x.getElementsByClassName("span_default");
         var depend = x.getElementsByClassName("arcs");
@@ -309,6 +346,13 @@ export default {
         setTimeout(() => {
           document.getElementById("deps").innerHTML = "";
           document.getElementById("deps").className = "";
+          // this.render({
+          //   sentences: [
+          //     JSON.parse(localStorage.getItem("processedText")).sentences[
+          //       this.sentenceIndex
+          //     ],
+          //   ],
+          // });
           this.embed("deps", this.posEntities, this.depsRelations);
         }, 50);
       }
@@ -856,6 +900,56 @@ export default {
     // },
     isEditMode: function() {
       this.addEvents();
+    },
+    sentenceIndex: function() {
+      // var doc = JSON.parse(localStorage.getItem("processedText"));
+      document.getElementById("deps").innerHTML = "";
+      document.getElementById("deps").className = "";
+      /**
+       * Register an entity type (a tag) for Brat
+       */
+      this.entityTypesSet = {};
+      this.entityTypes = [];
+      /**
+       * Register a relation type (an arc) for Brat
+       */
+      this.relationTypesSet = {};
+      this.relationTypes = [];
+      //
+      // Construct text of annotation
+      //
+      this.currentText = []; // GLOBAL
+      this.sentI = 0;
+      this.tokens = [];
+      //
+      // Shared variables
+      // These are what we'll render in BRAT
+      //
+      // (pos)
+      this.posEntities = [];
+      // (lemma)
+      this.lemmaEntities = [];
+      // (ner)
+      this.nerEntities = [];
+      // (sentiment)
+      this.sentimentEntities = [];
+      // (entitylinking)
+      this.linkEntities = [];
+      // (dependencies)
+      this.depsRelations = [];
+      this.deps2Relations = [];
+      // (openie
+      this.openieEntities = [];
+      this.openieEntitiesSet = {};
+      this.openieRelations = [];
+      this.openieRelationsSet = {};
+      // (kbp)
+      this.kbpEntities = [];
+      this.kbpEntitiesSet = [];
+      this.kbpRelations = [];
+      this.kbpRelationsSet = [];
+      this.currentSentences = [];
+      this.loadBrat();
     },
   },
   beforeDestroy() {

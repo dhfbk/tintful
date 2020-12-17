@@ -1,5 +1,11 @@
 <template>
   <div>
+    <span
+      class="rounded ripple bg-gray-200 p-1 m-1 cursor-pointer"
+      @click="$router.push({ path: '/edit' })"
+    >
+      Edit
+    </span>
     <div class="overflow-x-auto">
       <div class="w-full grid grid-cols-4 text-center min-w-max">
         <div
