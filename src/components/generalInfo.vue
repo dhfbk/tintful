@@ -54,7 +54,7 @@
 //import singleToken from "../components/singleToken.vue";
 
 export default {
-  name: "basicInfo",
+  name: "generalInfo",
   components: {
     // singleToken,
   },

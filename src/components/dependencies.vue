@@ -65,59 +65,11 @@ export default {
       currentSentences: [],
     };
   },
-  head: function() {
-    return {
-      script: [
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/lib/jquery.svg.min.js",
-          async: true,
-          body: false,
-        },
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/src/configuration.js",
-          async: true,
-          body: false,
-        },
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/src/util.js",
-          async: true,
-          body: false,
-        },
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/src/annotation_log.js",
-          async: true,
-          body: false,
-        },
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/lib/webfont.js",
-          async: true,
-          body: false,
-        },
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/src/dispatcher.js",
-          async: true,
-          body: false,
-        },
-        {
-          type: "text/javascript",
-          src: this.bratLocation + "/client/src/url_monitor.js",
-          async: true,
-          body: false,
-        },
-      ],
-    };
-  },
-  created() {
+  mounted() {
     window.onresize = debounce(this.loadBrat, 200);
     setTimeout(() => {
       this.loadBrat();
-    }, 200);
+    }, 100);
   },
   destroyed() {
     window.onresize.clear();

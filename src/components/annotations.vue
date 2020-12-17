@@ -7,14 +7,14 @@
           class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
         >
-          Basic information
+          General Information
         </div>
         <div
           @click="(selectedTab = 1), $emit('closesheet')"
           class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
           :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
         >
-          Part of Speech
+          Part Of Speech
         </div>
         <div
           @click="(selectedTab = 2), $emit('closesheet')"
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <basicInfo v-if="selectedTab == 0" @sheet="sheet" />
+    <general-info v-if="selectedTab == 0" @sheet="sheet" />
     <partOfSpeech v-else-if="selectedTab == 1" />
     <ner v-else-if="selectedTab == 2" />
     <dependencies v-else />
@@ -46,7 +46,7 @@
 <script>
 import partOfSpeech from "./partOfSpeech.vue";
 import ner from "./ner.vue";
-import basicInfo from "./basicInfo.vue";
+import generalInfo from "./generalInfo.vue";
 import dependencies from "./dependencies.vue";
 export default {
   data() {
@@ -58,7 +58,7 @@ export default {
   components: {
     partOfSpeech,
     ner,
-    basicInfo,
+    generalInfo,
     dependencies,
   },
   methods: {

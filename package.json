@@ -16,7 +16,6 @@
     "poplar-annotation": "^2.0.3",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
-    "vue-head": "^2.2.0",
     "vue-router": "^3.2.0",
     "vue-swipeable-bottom-sheet": "0.0.5",
     "vuelidate": "^0.7.6"
