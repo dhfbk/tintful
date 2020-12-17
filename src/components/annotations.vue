@@ -267,10 +267,23 @@ export default {
         var x = document.getElementById("deps");
         var pos = x.getElementsByClassName("span_default");
         var depend = x.getElementsByClassName("arcs");
+
         setTimeout(() => {
+          x.addEventListener(
+            "contextmenu",
+            function(e) {
+              e.preventDefault();
+            },
+            true
+          );
+          // x.children.forEach((el) => {
+          //   el.oncontextmenu = "return false;";
+          // });
           //console.log(x);
           pos.forEach((el) => {
-            el.ondblclick = this.handleDbl; //function(e) {
+            el.ondblclick = this.handleDbl;
+
+            //function(e) {
             // let i = e.target;
             // this.isEditMode = true;
             // i.parentNode.children[1].setAttribute("fill", "white");
