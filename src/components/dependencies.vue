@@ -8,7 +8,6 @@ export default {
   name: "dependencies",
   data() {
     return {
-      bratLocation: "http://hlt-services7.fbk.eu/mysql/js/brat",
       tokensMap: {
         "=LRB=": "(",
         "=RRB=": ")",
@@ -67,9 +66,7 @@ export default {
   },
   mounted() {
     window.onresize = debounce(this.loadBrat, 200);
-    setTimeout(() => {
-      this.loadBrat();
-    }, 100);
+    this.loadBrat();
   },
   destroyed() {
     window.onresize.clear();
