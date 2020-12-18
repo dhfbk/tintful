@@ -2,14 +2,14 @@
   <div>
     <div
       @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
-      class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block"
+      class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
       :class="sentenceIndex == sentencesNum - 1 ? 'text-gray-500' : ''"
     >
       Next
     </div>
     <div
       @click="sentenceIndex > 0 ? sentenceIndex-- : false"
-      class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block"
+      class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
       :class="sentenceIndex == 0 ? 'text-gray-500' : ''"
     >
       Previous
@@ -85,6 +85,9 @@ export default {
       kbpRelations: [],
       kbpRelationsSet: [],
       currentSentences: [],
+      doc: JSON.parse(localStorage.getItem("processedText")),
+      dispatcher: undefined,
+      visualizer: undefined,
     };
   },
   // head: function() {
@@ -239,7 +242,6 @@ export default {
         }
         // document.getElementById("deps").innerHTML = "";
         //document.getElementById("deps").className = "";
-        var doc = JSON.parse(localStorage.getItem("processedText"));
         // if (this.sentenceIndex > 0) {
         //   doc.sentences[this.sentenceIndex].index = 0;
         //   doc.sentences[this.sentenceIndex].characterOffsetEnd -= parseInt(
@@ -268,12 +270,12 @@ export default {
         //   console.log(el.characterOffsetBegin, el.characterOffsetEnd);
         // });
         // console.log(this.sentenceIndex);
-        console.log({
-          sentences: [doc.sentences[this.sentenceIndex]],
-        });
+        /* console.log({
+          sentences: [this.doc.sentences[this.sentenceIndex]],
+        }); */
 
         this.render({
-          sentences: [doc.sentences[this.sentenceIndex]],
+          sentences: [this.doc.sentences[this.sentenceIndex]],
         });
 
         var x = document.getElementById("deps");
@@ -887,8 +889,7 @@ export default {
       this.embed("deps", this.posEntities, this.depsRelations);
     },
     embed(container, entities, relations) {
-      // eslint-disable-next-line no-undef
-      Util.embed(
+      this.utilEmbed(
         container,
         {
           entity_types: this.entityTypes,
@@ -896,6 +897,34 @@ export default {
         },
         { text: this.currentText, entities: entities, relations: relations }
       );
+    },
+    unregisterHandlers(element) {
+      // eslint-disable-next-line no-undef
+      element.unbind();
+      //console.log(element);
+      /* console.log($("#deps").event);
+      var tmp = {};
+      if (element.jQuery351050590575794885741 != undefined) {
+        element.jQuery351050590575794885741.forEach((el) => {
+          tmp = el[el.length - 1];
+          el = tmp;
+        });
+      } else if (element.jQuery351099887161471225451 != undefined) {
+        element.jQuery351099887161471225451.forEach((el) => {
+          tmp = el[el.length - 1];
+          el = tmp;
+        });
+      } */
+    },
+    utilEmbed(container, collData, docData, webFontURLs) {
+      // eslint-disable-next-line no-undef
+      this.dispatcher = new Dispatcher();
+      // eslint-disable-next-line no-undef
+      this.visualizer = new Visualizer(this.dispatcher, container, webFontURLs);
+      docData.collection = null;
+      this.dispatcher.post("collectionLoaded", [collData]);
+      this.dispatcher.post("requestRenderData", [docData]);
+      return this.dispatcher;
     },
   },
   watch: {
@@ -931,6 +960,13 @@ export default {
       //   el.ondblclick.clear();
       //   el.onmouseover.clear();
       // });
+
+      // eslint-disable-next-line no-undef
+      this.unregisterHandlers($("#deps"));
+      // eslint-disable-next-line no-undef
+      this.unregisterHandlers($(document));
+      // eslint-disable-next-line no-undef
+      this.unregisterHandlers($(window));
       document.getElementById("deps").innerHTML = "";
       document.getElementById("deps").className = "";
       /**

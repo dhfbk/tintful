@@ -3433,7 +3433,6 @@ var Visualizer = (function($, window, undefined) {
     };
 
     var onClick = function(evt) {
-      console.log(sourceData);
       var target = $(evt.target);
       console.log(evt.target);
       if (target.attr("data-span-id")) {
