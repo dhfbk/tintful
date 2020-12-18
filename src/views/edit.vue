@@ -1,10 +1,18 @@
 <template>
   <div>
-    <div @click="sentenceIndex++">
-      +
+    <div
+      @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
+      class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block"
+      :class="sentenceIndex == sentencesNum - 1 ? 'text-gray-500' : ''"
+    >
+      Next
     </div>
-    <div @click="sentenceIndex--">
-      -
+    <div
+      @click="sentenceIndex > 0 ? sentenceIndex-- : false"
+      class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block"
+      :class="sentenceIndex == 0 ? 'text-gray-500' : ''"
+    >
+      Previous
     </div>
     <div id="deps"></div>
   </div>
@@ -19,6 +27,7 @@ export default {
       newFatherId: "",
       isEditMode: false,
       sentenceIndex: 0,
+      sentencesNum: 0,
       //selectedTab: 0,
       //tabScroll: "transition-transform ease-out transform translate-x-0",
       //bratLocation: "http://hlt-services7.fbk.eu/mysql/js/brat",
@@ -128,6 +137,9 @@ export default {
   // },
 
   mounted() {
+    this.sentencesNum = JSON.parse(
+      localStorage.getItem("processedText")
+    ).sentences.length;
     window.onresize = debounce(this.loadBrat, 200);
     this.loadBrat();
   },
@@ -230,22 +242,32 @@ export default {
         var doc = JSON.parse(localStorage.getItem("processedText"));
         // if (this.sentenceIndex > 0) {
         //   doc.sentences[this.sentenceIndex].index = 0;
-        //   doc.sentences[this.sentenceIndex].characterOffsetEnd -=
-        //     doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1;
+        //   doc.sentences[this.sentenceIndex].characterOffsetEnd -= parseInt(
+        //     doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1
+        //   );
         //   doc.sentences[this.sentenceIndex].characterOffsetBegin = 0;
         //   // doc.sentences[this.sentenceIndex].characterOffsetEnd -=
         //   //   doc.sentences[this.sentenceIndex - 1].characterOffsetBegin + 1;
         //   doc.sentences[this.sentenceIndex].tokens.forEach((el) => {
-        //     el.characterOffsetBegin -=
-        //       doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1;
-        //     el.characterOffsetEnd -=
-        //       doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1;
+        //     console.log(
+        //       el.characterOffsetBegin +
+        //         "-" +
+        //         parseInt(
+        //           doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1
+        //         )
+        //     );
+        //     el.characterOffsetBegin -= parseInt(
+        //       doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1
+        //     );
+        //     el.characterOffsetEnd -= parseInt(
+        //       doc.sentences[this.sentenceIndex - 1].characterOffsetEnd + 1
+        //     );
         //   });
         // }
         // doc.sentences[this.sentenceIndex].tokens.forEach((el) => {
         //   console.log(el.characterOffsetBegin, el.characterOffsetEnd);
         // });
-        console.log(this.sentenceIndex);
+        // console.log(this.sentenceIndex);
         console.log({
           sentences: [doc.sentences[this.sentenceIndex]],
         });
@@ -255,93 +277,91 @@ export default {
         });
 
         var x = document.getElementById("deps");
-        var pos = x.getElementsByClassName("span_default");
-        var depend = x.getElementsByClassName("arcs");
+        var pos = document.getElementsByClassName("span_default");
+        var depend = document.getElementsByClassName("arcs");
 
-        setTimeout(() => {
-          x.addEventListener(
-            "contextmenu",
-            function(e) {
-              e.preventDefault();
-            },
-            true
-          );
-          // x.children.forEach((el) => {
-          //   el.oncontextmenu = "return false;";
+        x.addEventListener(
+          "contextmenu",
+          function(e) {
+            e.preventDefault();
+          },
+          true
+        );
+        // x.children.forEach((el) => {
+        //   el.oncontextmenu = "return false;";
+        // });
+        //console.log(x);
+        pos.forEach((el) => {
+          el.ondblclick = this.handleDbl;
+
+          //function(e) {
+          // let i = e.target;
+          // this.isEditMode = true;
+          // i.parentNode.children[1].setAttribute("fill", "white");
+          // i.parentNode.children[0].setAttribute("fill", "#688e26");
+          // var infos = i.getAttribute("data-span-id").split("_");
+          // this.sonId = infos[2];
+          // console.log(this.isEditMode);
+          //let i = e.target;
+          // console.log(i.getAttribute("data-span-id").split("_"));
+          // console.log(i.className.baseVal.split(" "));
+          // console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
+          // if (this.isEditMode) {
+          //  }
+          // var infos = i.getAttribute("data-span-id").split("_");
+          // //console.log(infos[2]);
+          // this.isEditMode = !this.isEditMode;
+          // if (!this.isEditMode) {
+          //   this.sonId = infos[2];
+          //   //console.log(this.sonId);
+          // } else {
+          //   this.newFatherId = infos[2];
+          //   // this.sonId=''
+          //   // this.newFatherId=''
+          // }
+          // console.log(this.sonId);
+          // console.log(this.newFatherId);
+          // this.render(JSON.parse(localStorage.getItem("processedText")));
+          //document.getElementById("demo").innerHTML = "Hello World";
+          // };
+          // el.addEventListener("click", function(e) {
+          //   var self = this;
+          //   let i = e.target;
+          //   console.log(i.getAttribute("data-span-id").split("_"));
+          //   console.log(i.className.baseVal.split(" "));
+          //   console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
+          //   // if (this.isEditMode) {
+          //   el.parentNode.children[1].setAttribute("fill", "white");
+          //   el.parentNode.children[0].setAttribute("fill", "#688e26");
+          //   //  }
+          //   var infos = i.getAttribute("data-span-id").split("_");
+          //   console.log(infos[2]);
+          //   if (!self.isEditMode) {
+          //     self.sonId = infos[2];
+          //     console.log(self.sonId);
+          //   } else {
+          //     self.newFatherId = infos[2];
+          //     // this.sonId=''
+          //     // this.newFatherId=''
+          //   }
+          //   self.isEditMode = !self.isEditMode;
+          //   // this.render(JSON.parse(localStorage.getItem("processedText")));
+          //   //document.getElementById("demo").innerHTML = "Hello World";
           // });
-          //console.log(x);
-          pos.forEach((el) => {
-            el.ondblclick = this.handleDbl;
-
-            //function(e) {
-            // let i = e.target;
-            // this.isEditMode = true;
-            // i.parentNode.children[1].setAttribute("fill", "white");
-            // i.parentNode.children[0].setAttribute("fill", "#688e26");
-            // var infos = i.getAttribute("data-span-id").split("_");
-            // this.sonId = infos[2];
-            // console.log(this.isEditMode);
-            //let i = e.target;
-            // console.log(i.getAttribute("data-span-id").split("_"));
-            // console.log(i.className.baseVal.split(" "));
-            // console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
-            // if (this.isEditMode) {
-            //  }
-            // var infos = i.getAttribute("data-span-id").split("_");
-            // //console.log(infos[2]);
-            // this.isEditMode = !this.isEditMode;
-            // if (!this.isEditMode) {
-            //   this.sonId = infos[2];
-            //   //console.log(this.sonId);
-            // } else {
-            //   this.newFatherId = infos[2];
-            //   // this.sonId=''
-            //   // this.newFatherId=''
-            // }
-            // console.log(this.sonId);
-            // console.log(this.newFatherId);
-            // this.render(JSON.parse(localStorage.getItem("processedText")));
-            //document.getElementById("demo").innerHTML = "Hello World";
-            // };
-            // el.addEventListener("click", function(e) {
-            //   var self = this;
-            //   let i = e.target;
-            //   console.log(i.getAttribute("data-span-id").split("_"));
-            //   console.log(i.className.baseVal.split(" "));
-            //   console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
-            //   // if (this.isEditMode) {
-            //   el.parentNode.children[1].setAttribute("fill", "white");
-            //   el.parentNode.children[0].setAttribute("fill", "#688e26");
-            //   //  }
-            //   var infos = i.getAttribute("data-span-id").split("_");
-            //   console.log(infos[2]);
-            //   if (!self.isEditMode) {
-            //     self.sonId = infos[2];
-            //     console.log(self.sonId);
-            //   } else {
-            //     self.newFatherId = infos[2];
-            //     // this.sonId=''
-            //     // this.newFatherId=''
-            //   }
-            //   self.isEditMode = !self.isEditMode;
-            //   // this.render(JSON.parse(localStorage.getItem("processedText")));
-            //   //document.getElementById("demo").innerHTML = "Hello World";
-            // });
-          });
-          //console.log(depend);
-          depend.forEach((el) => {
-            //console.log(el.children);
-            el.children.forEach((p) => {
-              //console.log(p.children[0]);
-              p.children[0].addEventListener("click", function(e) {
-                let i = e.target;
-                console.log(i.getAttribute("data-arc-role"));
-                console.log(i.getAttribute("data-arc-origin").split("_"));
-                console.log(i.getAttribute("data-arc-target").split("_"));
-              });
+        });
+        //console.log(depend);
+        depend.forEach((el) => {
+          //console.log(el.children);
+          el.children.forEach((p) => {
+            //console.log(p.children[0]);
+            p.children[0].addEventListener("click", function(e) {
+              let i = e.target;
+              console.log(i.getAttribute("data-arc-role"));
+              console.log(i.getAttribute("data-arc-origin").split("_"));
+              console.log(i.getAttribute("data-arc-target").split("_"));
             });
           });
-        }, 1000);
+        });
       } else {
         setTimeout(() => {
           document.getElementById("deps").innerHTML = "";
@@ -903,6 +923,14 @@ export default {
     },
     sentenceIndex: function() {
       // var doc = JSON.parse(localStorage.getItem("processedText"));
+
+      // var pos = document.getElementsByClassName("span_default");
+      // pos.forEach((el) => {
+      //   //console.log(el.onmouseover);
+      //   el.onclick.clear();
+      //   el.ondblclick.clear();
+      //   el.onmouseover.clear();
+      // });
       document.getElementById("deps").innerHTML = "";
       document.getElementById("deps").className = "";
       /**
@@ -949,18 +977,11 @@ export default {
       this.kbpRelations = [];
       this.kbpRelationsSet = [];
       this.currentSentences = [];
+
       this.loadBrat();
     },
   },
-  beforeDestroy() {
-    var pos = document
-      .getElementById("deps")
-      .getElementsByClassName("span_default");
-    pos.forEach((el) => {
-      el.onclick.clear();
-      el.ondblclick.clear();
-    });
-  },
+  beforeDestroy() {},
 };
 </script>
 
