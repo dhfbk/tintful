@@ -147,6 +147,49 @@ export default {
     this.loadBrat();
   },
   methods: {
+    resetVariables() {
+      this.entityTypesSet = {};
+      this.entityTypes = [];
+      /**
+       * Register a relation type (an arc) for Brat
+       */
+      this.relationTypesSet = {};
+      this.relationTypes = [];
+      //
+      // Construct text of annotation
+      //
+      this.currentText = []; // GLOBAL
+      this.sentI = 0;
+      this.tokens = [];
+      //
+      // Shared variables
+      // These are what we'll render in BRAT
+      //
+      // (pos)
+      this.posEntities = [];
+      // (lemma)
+      this.lemmaEntities = [];
+      // (ner)
+      this.nerEntities = [];
+      // (sentiment)
+      this.sentimentEntities = [];
+      // (entitylinking)
+      this.linkEntities = [];
+      // (dependencies)
+      this.depsRelations = [];
+      this.deps2Relations = [];
+      // (openie
+      this.openieEntities = [];
+      this.openieEntitiesSet = {};
+      this.openieRelations = [];
+      this.openieRelationsSet = {};
+      // (kbp)
+      this.kbpEntities = [];
+      this.kbpEntitiesSet = [];
+      this.kbpRelations = [];
+      this.kbpRelationsSet = [];
+      this.currentSentences = [];
+    },
     isGovernor(el) {
       return el.index == this.newFatherId;
     },
@@ -173,11 +216,11 @@ export default {
       this.newFatherId = parseInt(infos[2]) + 1;
       var d = JSON.parse(localStorage.getItem("processedText"));
 
-      var dep = d.sentences[infos[1]]["basic-dependencies"];
+      var dep = d.sentences[this.sentenceIndex]["basic-dependencies"];
       for (let i = 0; i < dep.length; i++) {
         if (dep[i].dependent == this.sonId) {
           dep[i].governor = this.newFatherId;
-          dep[i].governorGloss = d.sentences[infos[1]].tokens.find(
+          dep[i].governorGloss = d.sentences[this.sentenceIndex].tokens.find(
             this.isGovernor
           ).word;
           console.log(dep[i].governorGloss);
@@ -193,7 +236,6 @@ export default {
               dep[i].governorGloss +
               ")"
           );
-
           break;
         }
       }
@@ -201,10 +243,10 @@ export default {
 
       document.getElementById("deps").innerHTML = "";
       document.getElementById("deps").className = "";
-      this.currentText = [];
+      this.resetVariables();
       this.loadBrat();
-
       this.isEditMode = false;
+      //this.currentText = [];
 
       console.log("son: " + this.sonId, "new father: " + this.newFatherId);
     },
@@ -230,6 +272,7 @@ export default {
     //   }
     // },
     loadBrat() {
+      //console.log(this.currentText.length);
       if (this.currentText.length == 0) {
         /**
          * Add the startsWith function to the String class
@@ -273,14 +316,14 @@ export default {
         /* console.log({
           sentences: [this.doc.sentences[this.sentenceIndex]],
         }); */
-
+        let doc = JSON.parse(localStorage.getItem("processedText"));
         this.render({
-          sentences: [this.doc.sentences[this.sentenceIndex]],
+          sentences: [doc.sentences[this.sentenceIndex]],
         });
-
+        console.log(this.doc.sentences[this.sentenceIndex]);
         var x = document.getElementById("deps");
-        var pos = document.getElementsByClassName("span_default");
-        var depend = document.getElementsByClassName("arcs");
+        var pos = x.getElementsByClassName("span_default");
+        var depend = x.getElementsByClassName("arcs");
 
         x.addEventListener(
           "contextmenu",
@@ -293,77 +336,81 @@ export default {
         //   el.oncontextmenu = "return false;";
         // });
         //console.log(x);
-        pos.forEach((el) => {
-          el.ondblclick = this.handleDbl;
+        //console.log(pos.length);
+        setTimeout(() => {
+          pos.forEach((el) => {
+            //console.log(el);
+            el.ondblclick = this.handleDbl;
 
-          //function(e) {
-          // let i = e.target;
-          // this.isEditMode = true;
-          // i.parentNode.children[1].setAttribute("fill", "white");
-          // i.parentNode.children[0].setAttribute("fill", "#688e26");
-          // var infos = i.getAttribute("data-span-id").split("_");
-          // this.sonId = infos[2];
-          // console.log(this.isEditMode);
-          //let i = e.target;
-          // console.log(i.getAttribute("data-span-id").split("_"));
-          // console.log(i.className.baseVal.split(" "));
-          // console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
-          // if (this.isEditMode) {
-          //  }
-          // var infos = i.getAttribute("data-span-id").split("_");
-          // //console.log(infos[2]);
-          // this.isEditMode = !this.isEditMode;
-          // if (!this.isEditMode) {
-          //   this.sonId = infos[2];
-          //   //console.log(this.sonId);
-          // } else {
-          //   this.newFatherId = infos[2];
-          //   // this.sonId=''
-          //   // this.newFatherId=''
-          // }
-          // console.log(this.sonId);
-          // console.log(this.newFatherId);
-          // this.render(JSON.parse(localStorage.getItem("processedText")));
-          //document.getElementById("demo").innerHTML = "Hello World";
-          // };
-          // el.addEventListener("click", function(e) {
-          //   var self = this;
-          //   let i = e.target;
-          //   console.log(i.getAttribute("data-span-id").split("_"));
-          //   console.log(i.className.baseVal.split(" "));
-          //   console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
-          //   // if (this.isEditMode) {
-          //   el.parentNode.children[1].setAttribute("fill", "white");
-          //   el.parentNode.children[0].setAttribute("fill", "#688e26");
-          //   //  }
-          //   var infos = i.getAttribute("data-span-id").split("_");
-          //   console.log(infos[2]);
-          //   if (!self.isEditMode) {
-          //     self.sonId = infos[2];
-          //     console.log(self.sonId);
-          //   } else {
-          //     self.newFatherId = infos[2];
-          //     // this.sonId=''
-          //     // this.newFatherId=''
-          //   }
-          //   self.isEditMode = !self.isEditMode;
-          //   // this.render(JSON.parse(localStorage.getItem("processedText")));
-          //   //document.getElementById("demo").innerHTML = "Hello World";
-          // });
-        });
-        //console.log(depend);
-        depend.forEach((el) => {
-          //console.log(el.children);
-          el.children.forEach((p) => {
-            //console.log(p.children[0]);
-            p.children[0].addEventListener("click", function(e) {
-              let i = e.target;
-              console.log(i.getAttribute("data-arc-role"));
-              console.log(i.getAttribute("data-arc-origin").split("_"));
-              console.log(i.getAttribute("data-arc-target").split("_"));
+            //function(e) {
+            // let i = e.target;
+            // this.isEditMode = true;
+            // i.parentNode.children[1].setAttribute("fill", "white");
+            // i.parentNode.children[0].setAttribute("fill", "#688e26");
+            // var infos = i.getAttribute("data-span-id").split("_");
+            // this.sonId = infos[2];
+            // console.log(this.isEditMode);
+            //let i = e.target;
+            // console.log(i.getAttribute("data-span-id").split("_"));
+            // console.log(i.className.baseVal.split(" "));
+            // console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
+            // if (this.isEditMode) {
+            //  }
+            // var infos = i.getAttribute("data-span-id").split("_");
+            // //console.log(infos[2]);
+            // this.isEditMode = !this.isEditMode;
+            // if (!this.isEditMode) {
+            //   this.sonId = infos[2];
+            //   //console.log(this.sonId);
+            // } else {
+            //   this.newFatherId = infos[2];
+            //   // this.sonId=''
+            //   // this.newFatherId=''
+            // }
+            // console.log(this.sonId);
+            // console.log(this.newFatherId);
+            // this.render(JSON.parse(localStorage.getItem("processedText")));
+            //document.getElementById("demo").innerHTML = "Hello World";
+            // };
+            // el.addEventListener("click", function(e) {
+            //   var self = this;
+            //   let i = e.target;
+            //   console.log(i.getAttribute("data-span-id").split("_"));
+            //   console.log(i.className.baseVal.split(" "));
+            //   console.log(el.parentNode.children); //.setAttribute("fill", "#688e26");
+            //   // if (this.isEditMode) {
+            //   el.parentNode.children[1].setAttribute("fill", "white");
+            //   el.parentNode.children[0].setAttribute("fill", "#688e26");
+            //   //  }
+            //   var infos = i.getAttribute("data-span-id").split("_");
+            //   console.log(infos[2]);
+            //   if (!self.isEditMode) {
+            //     self.sonId = infos[2];
+            //     console.log(self.sonId);
+            //   } else {
+            //     self.newFatherId = infos[2];
+            //     // this.sonId=''
+            //     // this.newFatherId=''
+            //   }
+            //   self.isEditMode = !self.isEditMode;
+            //   // this.render(JSON.parse(localStorage.getItem("processedText")));
+            //   //document.getElementById("demo").innerHTML = "Hello World";
+            // });
+          });
+          //console.log(depend);
+          depend.forEach((el) => {
+            //console.log(el.children);
+            el.children.forEach((p) => {
+              //console.log(p.children[0]);
+              p.children[0].addEventListener("click", function(e) {
+                let i = e.target;
+                console.log(i.getAttribute("data-arc-role"));
+                console.log(i.getAttribute("data-arc-origin").split("_"));
+                console.log(i.getAttribute("data-arc-target").split("_"));
+              });
             });
           });
-        });
+        }, 200);
       } else {
         setTimeout(() => {
           document.getElementById("deps").innerHTML = "";
@@ -900,7 +947,7 @@ export default {
     },
     unregisterHandlers(element) {
       // eslint-disable-next-line no-undef
-      element.unbind();
+      element.off();
       //console.log(element);
       /* console.log($("#deps").event);
       var tmp = {};
@@ -964,55 +1011,12 @@ export default {
       // eslint-disable-next-line no-undef
       this.unregisterHandlers($("#deps"));
       // eslint-disable-next-line no-undef
-      this.unregisterHandlers($(document));
+      //this.unregisterHandlers($(document));
       // eslint-disable-next-line no-undef
-      this.unregisterHandlers($(window));
+      //this.unregisterHandlers($(window));
       document.getElementById("deps").innerHTML = "";
       document.getElementById("deps").className = "";
-      /**
-       * Register an entity type (a tag) for Brat
-       */
-      this.entityTypesSet = {};
-      this.entityTypes = [];
-      /**
-       * Register a relation type (an arc) for Brat
-       */
-      this.relationTypesSet = {};
-      this.relationTypes = [];
-      //
-      // Construct text of annotation
-      //
-      this.currentText = []; // GLOBAL
-      this.sentI = 0;
-      this.tokens = [];
-      //
-      // Shared variables
-      // These are what we'll render in BRAT
-      //
-      // (pos)
-      this.posEntities = [];
-      // (lemma)
-      this.lemmaEntities = [];
-      // (ner)
-      this.nerEntities = [];
-      // (sentiment)
-      this.sentimentEntities = [];
-      // (entitylinking)
-      this.linkEntities = [];
-      // (dependencies)
-      this.depsRelations = [];
-      this.deps2Relations = [];
-      // (openie
-      this.openieEntities = [];
-      this.openieEntitiesSet = {};
-      this.openieRelations = [];
-      this.openieRelationsSet = {};
-      // (kbp)
-      this.kbpEntities = [];
-      this.kbpEntitiesSet = [];
-      this.kbpRelations = [];
-      this.kbpRelationsSet = [];
-      this.currentSentences = [];
+      this.resetVariables();
 
       this.loadBrat();
     },
