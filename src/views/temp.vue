@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto" v-if="!loading">
     <table class="xs2:min-w-5/6 bg-white mx-auto border border-gray-300">
       <thead>
         <tr
@@ -10,7 +10,9 @@
       </thead>
       <tbody>
         <tr
-          v-for="(d, index) in newData.sentences[currentPhrase].tokens"
+          v-for="(d, index) in $store.state.editableData.sentences[
+            currentPhrase
+          ].tokens"
           :key="index"
           class="border-b border-gray-300 hover:bg-gray-100"
         >
@@ -38,15 +40,41 @@
             v-html="d.hyphenation"
           ></td>
           <td class="p-1 px-2 border-r border-gray-300">
-            {{ heads[d.index] }}
+            <select
+              :name="'head' + d.index"
+              :id="'head' + d.index"
+              v-model="headsEditable[d.index]"
+              class="w-full"
+            >
+              <option
+                v-for="(n, c) in $store.state.editableData.sentences[
+                  currentPhrase
+                ]['basic-dependencies'].length + 1"
+                :key="c"
+                :value="c"
+                @click="$set(headsEditable, d.index, c)"
+                >{{ c }}</option
+              >
+            </select>
           </td>
           <td class="p-1 px-2 border-r border-gray-300">
-            {{ deprels[d.index] }}
+            <select
+              :name="'dep' + d.index"
+              :id="'dep' + d.index"
+              v-model="deprelsEditable[d.index]"
+              class="w-full"
+            >
+              <option
+                v-for="i in deps"
+                :key="i"
+                :value="i"
+                @click="$set(deprelsEditable, d.index, i)"
+                >{{ i }}</option
+              >
+            </select>
           </td>
           <td class="p-1 px-2 border-r border-gray-300">-</td>
-          <td class="p-1 px-2">
-            NER: {{ d.ner == "O" ? "-" : d.ner }}
-          </td>
+          <td class="p-1 px-2">NER: {{ d.ner == "O" ? "-" : d.ner }}</td>
         </tr>
       </tbody>
     </table>
@@ -110,9 +138,12 @@ export default {
         V: "main verb",
         X: "residual class",
       },
-      heads: {}, //object with the index of the token as the key and the head as the value
-      deprels: {}, //object with the index of the token as the key and the deprel as the value
+      headsRef: {}, //object with the index of the token as the key and the head as the values
+      headsEditable: {},
+      deprelsRef: {}, //object with the index of the token as the key and the deprel as the value
+      deprelsEditable: {},
       deps: [
+        "ROOT", //aggiunta a mano
         "acl",
         "acl:relcl",
         "advcl",
@@ -135,6 +166,7 @@ export default {
         "det:predet",
         "discourse",
         "dislocated",
+        "dobj", //aggiunta a mano
         "expl",
         "expl:impers",
         "expl:pass",
@@ -159,20 +191,123 @@ export default {
         "vocative",
         "xcomp",
       ],
-      currentData: JSON.parse(localStorage.getItem("processedText")),
-      newData: JSON.parse(localStorage.getItem("processedText")),
+      currentData: JSON.parse(localStorage.getItem("processedText")), //da lasciare poi solo in edit
       currentPhrase: 0, //da spostare poi come prop
+      loading: true,
     };
   },
+  beforeCreate() {
+    this.$store.state.editableData = JSON.parse(
+      localStorage.getItem("processedText")
+    );
+  },
   created() {
-    var phraseDependencies = this.newData.sentences[this.currentPhrase][
-      "basic-dependencies"
-    ];
+    var phraseDependencies = this.$store.state.editableData.sentences[
+      this.currentPhrase
+    ]["basic-dependencies"];
     for (let i = 0; i < phraseDependencies.length; i++) {
-      this.heads[phraseDependencies[i].dependent] =
+      this.headsRef[phraseDependencies[i].dependent] =
         phraseDependencies[i].governor;
-      this.deprels[phraseDependencies[i].dependent] = phraseDependencies[i].dep;
+      this.deprelsRef[phraseDependencies[i].dependent] =
+        phraseDependencies[i].dep;
     }
+    this.deprelsEditable = this.deprelsRef;
+    this.headsEditable = this.headsRef;
+    this.loading = false;
+  },
+  watch: {
+    deprelsEditable: {
+      deep: true,
+      handler() {
+        for (
+          let i = 0;
+          i <
+          this.$store.state.editableData.sentences[this.currentPhrase][
+            "basic-dependencies"
+          ].length;
+          i++
+        ) {
+          if (
+            this.deprelsRef[
+              this.$store.state.editableData.sentences[this.currentPhrase][
+                "basic-dependencies"
+              ][i].dependent
+            ] !=
+            this.deprelsEditable[
+              this.$store.state.editableData.sentences[this.currentPhrase][
+                "basic-dependencies"
+              ][i].dependent
+            ]
+          ) {
+            this.$store.state.editableData.sentences[this.currentPhrase][
+              "basic-dependencies"
+            ][i].dep = this.deprelsEditable[
+              this.$store.state.editableData.sentences[this.currentPhrase][
+                "basic-dependencies"
+              ][i].dependent
+            ];
+            console.log(
+              "cambiato deprel a posizione: " +
+                this.$store.state.editableData.sentences[this.currentPhrase][
+                  "basic-dependencies"
+                ][i].dependent +
+                ". nuovo valore: " +
+                this.deprelsEditable[
+                  this.$store.state.editableData.sentences[this.currentPhrase][
+                    "basic-dependencies"
+                  ][i].dependent
+                ]
+            );
+          }
+        }
+      },
+    },
+    headsEditable: {
+      deep: true,
+      handler() {
+        for (
+          let i = 0;
+          i <
+          this.$store.state.editableData.sentences[this.currentPhrase][
+            "basic-dependencies"
+          ].length;
+          i++
+        ) {
+          if (
+            this.headsRef[
+              this.$store.state.editableData.sentences[this.currentPhrase][
+                "basic-dependencies"
+              ][i].dependent
+            ] !=
+            this.headsEditable[
+              this.$store.state.editableData.sentences[this.currentPhrase][
+                "basic-dependencies"
+              ][i].dependent
+            ]
+          ) {
+            this.$store.state.editableData.sentences[this.currentPhrase][
+              "basic-dependencies"
+            ][i].governor = this.headsEditable[
+              this.$store.state.editableData.sentences[this.currentPhrase][
+                "basic-dependencies"
+              ][i].dependent
+            ];
+            console.log(
+              "cambiato head a posizione: " +
+                this.$store.state.editableData.sentences[this.currentPhrase][
+                  "basic-dependencies"
+                ][i].dependent +
+                ". nuovo valore: " +
+                this.headsEditable[
+                  this.$store.state.editableData.sentences[this.currentPhrase][
+                    "basic-dependencies"
+                  ][i].dependent
+                ]
+            );
+          }
+        }
+      },
+    },
   },
 };
 </script>
