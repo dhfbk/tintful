@@ -1,5 +1,11 @@
 <template>
   <div>
+    <depsModal
+      v-if="showDepsModal"
+      @closeDepsModal="showDepsModal = false"
+      @edited="editedDep"
+      :dep="depToEdit"
+    />
     <div
       @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
       class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
@@ -20,9 +26,14 @@
 
 <script>
 import { debounce } from "debounce";
+import depsModal from "../components/depsModal.vue";
 export default {
+  components: { depsModal },
+
   data() {
     return {
+      showDepsModal: false,
+      depToEdit: {},
       sonId: "",
       newFatherId: "",
       isEditMode: false,
@@ -85,7 +96,7 @@ export default {
       kbpRelations: [],
       kbpRelationsSet: [],
       currentSentences: [],
-      doc: JSON.parse(localStorage.getItem("processedText")),
+      doc: this.$store.state.editableData,
       dispatcher: undefined,
       visualizer: undefined,
     };
@@ -147,6 +158,33 @@ export default {
     this.loadBrat();
   },
   methods: {
+    editedDep(dep) {
+      console.log(dep);
+      var x = this.$store.state.editableData.sentences[this.sentenceIndex][
+        "basic-dependencies"
+      ];
+      console.log(x);
+
+      for (let i = 0; i < x.length; i++) {
+        if (dep.governor == x[i].governor && dep.dependent == x[i].dependent) {
+          this.$store.state.editableData.sentences[this.sentenceIndex][
+            "basic-dependencies"
+          ][i].dep = dep.dep;
+          console.log("###############################################");
+          console.log(
+            this.$store.state.editableData.sentences[this.sentenceIndex][
+              "basic-dependencies"
+            ][i].dep
+          );
+          break;
+        }
+      }
+
+      document.getElementById("deps").innerHTML = "";
+      document.getElementById("deps").className = "";
+      this.resetVariables();
+      this.loadBrat();
+    },
     resetVariables() {
       this.entityTypesSet = {};
       this.entityTypes = [];
@@ -196,14 +234,22 @@ export default {
     sheet(arr) {
       this.$emit("sheet", arr);
     },
-    handleDbl(e) {
-      let i = e.target;
-      i.parentNode.children[1].setAttribute("fill", "white");
-      i.parentNode.children[0].setAttribute("fill", "#688e26");
-      var infos = i.getAttribute("data-span-id").split("_");
-      this.sonId = parseInt(infos[2]) + 1;
-      console.log(this.isEditMode);
-      this.isEditMode = true;
+    handleRight(e) {
+      if (!this.isEditMode) {
+        let i = e.target;
+        i.parentNode.children[1].setAttribute("fill", "white");
+        i.parentNode.children[0].setAttribute("fill", "#688e26");
+        var infos = i.getAttribute("data-span-id").split("_");
+        this.sonId = parseInt(infos[2]) + 1;
+        console.log(this.isEditMode);
+        this.isEditMode = true;
+      } else {
+        this.isEditMode = false;
+        document.getElementById("deps").innerHTML = "";
+        document.getElementById("deps").className = "";
+        this.resetVariables();
+        this.loadBrat();
+      }
     },
     handleClick(e) {
       console.log("siamo dentro l'evento click");
@@ -214,7 +260,7 @@ export default {
       i.parentNode.children[0].setAttribute("fill", "#688e26");
       var infos = i.getAttribute("data-span-id").split("_");
       this.newFatherId = parseInt(infos[2]) + 1;
-      var d = JSON.parse(localStorage.getItem("processedText"));
+      var d = this.$store.state.editableData;
 
       var dep = d.sentences[this.sentenceIndex]["basic-dependencies"];
       for (let i = 0; i < dep.length; i++) {
@@ -239,7 +285,7 @@ export default {
           break;
         }
       }
-      localStorage.setItem("processedText", JSON.stringify(d));
+      this.$store.state.editableData = d;
 
       document.getElementById("deps").innerHTML = "";
       document.getElementById("deps").className = "";
@@ -316,7 +362,7 @@ export default {
         /* console.log({
           sentences: [this.doc.sentences[this.sentenceIndex]],
         }); */
-        let doc = JSON.parse(localStorage.getItem("processedText"));
+        let doc = this.$store.state.editableData;
         this.render({
           sentences: [doc.sentences[this.sentenceIndex]],
         });
@@ -340,7 +386,7 @@ export default {
         setTimeout(() => {
           pos.forEach((el) => {
             //console.log(el);
-            el.ondblclick = this.handleDbl;
+            el.oncontextmenu = this.handleRight;
 
             //function(e) {
             // let i = e.target;
@@ -402,12 +448,19 @@ export default {
             //console.log(el.children);
             el.children.forEach((p) => {
               //console.log(p.children[0]);
-              p.children[0].addEventListener("click", function(e) {
+              p.children[0].ondblclick = (e) => {
                 let i = e.target;
+                this.depToEdit.dep = i.getAttribute("data-arc-role");
+                this.depToEdit.governor =
+                  parseInt(i.getAttribute("data-arc-origin").split("_")[2]) + 1;
+                this.depToEdit.dependent =
+                  parseInt(i.getAttribute("data-arc-target").split("_")[2]) + 1;
+                this.showDepsModal = true;
+
                 console.log(i.getAttribute("data-arc-role"));
                 console.log(i.getAttribute("data-arc-origin").split("_"));
                 console.log(i.getAttribute("data-arc-target").split("_"));
-              });
+              };
             });
           });
         }, 200);
@@ -1021,7 +1074,11 @@ export default {
       this.loadBrat();
     },
   },
-  beforeDestroy() {},
+  beforeCreate() {
+    this.$store.state.editableData = JSON.parse(
+      localStorage.getItem("processedText")
+    );
+  },
 };
 </script>
 
