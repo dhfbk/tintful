@@ -1,17 +1,6 @@
 <template>
     <div>
-        <transition
-            name="fade"
-            appear
-            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-75 z-40 transition-opacity"
-        >
-            <depsModal
-                @closeDepsModal="showDepsModal = false"
-                @edited="editedDep"
-                :dep="depToEdit"
-                v-if="showDepsModal"
-            />
-        </transition>
+        <depsModal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
 
         <div
             @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
