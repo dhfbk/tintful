@@ -129,6 +129,22 @@ export default {
         isGovernor(el) {
             return el.index == this.newFatherId
         },
+        handleDbl(e) {
+            var i = e.target
+            var infos = i.getAttribute('data-span-id').split('_')
+            console.log('sentence index:' + this.sentenceIndex, 'token index:' + infos[2])
+            var d = this.$store.state.editableData
+            var feat = d.sentences[this.sentenceIndex].tokens[infos[2]]
+
+            let infoToEdit = {}
+            infoToEdit.senIndex = this.sentenceIndex
+            infoToEdit.tokIndex = infos[2]
+            infoToEdit.feats = feat.features
+            infoToEdit.lemma = feat.lemma
+            infoToEdit.pos = feat.pos
+            this.$emit('showFeatsModal', infoToEdit)
+            console.log(infoToEdit)
+        },
         handleRight(e) {
             if (!this.isEditMode) {
                 let i = e.target
@@ -235,6 +251,7 @@ export default {
                     pos.forEach(el => {
                         //console.log(el);
                         el.oncontextmenu = this.handleRight
+                        el.ondblclick = this.handleDbl
                     })
                     //console.log(depend);
                     depend.forEach(el => {

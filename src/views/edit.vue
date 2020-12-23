@@ -1,6 +1,7 @@
 <template>
     <div class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2">
-        <depsModal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
+        <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
+        <features-modal @closeFeatsModal="showFeatsModal = false" v-if="showFeatsModal" :featsToEdit="featsToEdit" />
         <div class="overflow-x-auto">
             <div class="w-full grid grid-cols-3 text-center min-w-max">
                 <div
@@ -52,6 +53,7 @@
             :sentenceIndex="sentenceIndex"
             :doc="doc"
             @showDepsModal="depsModal"
+            @showFeatsModal="featsModal"
             :refresh="refreshBrat"
         />
         <table-edit v-else-if="selectedTab == 1" :currentPhrase="sentenceIndex" @edited="isEdited = true" />
@@ -62,22 +64,25 @@
 import bratEdit from '../components/bratEdit.vue'
 import tableEdit from '../components/tableEdit.vue'
 import depsModal from '../components/depsModal.vue'
+import FeaturesModal from '../components/featuresModal.vue'
 export default {
     data() {
         return {
             currentData: JSON.parse(localStorage.getItem('processedText')),
             doc: this.$store.state.editableData,
             showDepsModal: false,
+            showFeatsModal: false,
             sentenceIndex: 0,
             sentencesNum: 0,
             selectedTab: 0,
             tabScroll: 'transition-transform ease-out transform translate-x-0',
             isEdited: false,
             depToEdit: {},
+            featsToEdit: {},
             refreshBrat: false,
         }
     },
-    components: { bratEdit, tableEdit, depsModal },
+    components: { bratEdit, tableEdit, depsModal, FeaturesModal },
     created() {
         if (localStorage.getItem('text') == '') {
             this.$router.replace({ name: 'home' })
@@ -116,6 +121,10 @@ export default {
             this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
             this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
             this.showDepsModal = true
+        },
+        featsModal(info) {
+            this.featsToEdit = info
+            this.showFeatsModal = true
         },
     },
     watch: {
