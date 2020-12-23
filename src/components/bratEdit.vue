@@ -11,6 +11,7 @@ export default {
     props: { sentenceIndex: Number, doc: Object },
     data() {
         return {
+            isEditMode: false,
             dispatcher: undefined,
             visualizer: undefined,
             sentI: 0,
@@ -751,6 +752,9 @@ export default {
             this.resetVariables()
 
             this.loadBrat()
+        },
+        isEditMode: function() {
+            this.addEvents()
         },
     },
 }
