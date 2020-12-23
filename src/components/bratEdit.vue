@@ -8,7 +8,7 @@
 import { debounce } from 'debounce'
 export default {
     name: 'bratEdit',
-    props: { sentenceIndex: Number, doc: Object },
+    props: { sentenceIndex: Number, doc: Object, refresh: Boolean },
     data() {
         return {
             isEditMode: false,
@@ -58,7 +58,6 @@ export default {
              */
             relationTypesSet: {},
             relationTypes: [],
-            depToEdit: {},
             sonId: '',
             newFatherId: '',
             tokensMap: {
@@ -78,22 +77,7 @@ export default {
         this.loadBrat()
     },
     methods: {
-        editedDep(dep) {
-            console.log(dep)
-            var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
-            console.log(x)
-
-            for (let i = 0; i < x.length; i++) {
-                if (dep.governor == x[i].governor && dep.dependent == x[i].dependent) {
-                    this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies'][i].dep = dep.dep
-                    console.log('###############################################')
-                    console.log(
-                        this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies'][i].dep
-                    )
-                    break
-                }
-            }
-
+        editedDep() {
             document.getElementById('deps').innerHTML = ''
             document.getElementById('deps').className = ''
             this.resetVariables()
@@ -155,7 +139,7 @@ export default {
                 console.log(this.isEditMode)
                 this.isEditMode = true
             } else {
-                this.isEditMode = false
+                //this.isEditMode = false
                 document.getElementById('deps').innerHTML = ''
                 document.getElementById('deps').className = ''
                 this.resetVariables()
@@ -259,10 +243,7 @@ export default {
                             //console.log(p.children[0]);
                             p.children[0].ondblclick = e => {
                                 let i = e.target
-                                this.depToEdit.dep = i.getAttribute('data-arc-role')
-                                this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
-                                this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
-                                this.showDepsModal = true
+                                this.$emit('showDepsModal', i)
 
                                 console.log(i.getAttribute('data-arc-role'))
                                 console.log(i.getAttribute('data-arc-origin').split('_'))
@@ -755,6 +736,11 @@ export default {
         },
         isEditMode: function() {
             this.addEvents()
+        },
+        refresh() {
+            if (this.refresh == true) {
+                this.editedDep()
+            }
         },
     },
 }

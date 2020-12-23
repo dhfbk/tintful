@@ -47,7 +47,13 @@
             </div>
         </div>
         <p v-html="currentData.sentences[sentenceIndex].text" class="my-1"></p>
-        <brat-edit v-if="selectedTab == 0" :sentenceIndex="sentenceIndex" :doc="doc" />
+        <brat-edit
+            v-if="selectedTab == 0"
+            :sentenceIndex="sentenceIndex"
+            :doc="doc"
+            @showDepsModal="depsModal"
+            :refresh="refreshBrat"
+        />
         <table-edit v-else-if="selectedTab == 1" :currentPhrase="sentenceIndex" @edited="isEdited = true" />
     </div>
 </template>
@@ -55,6 +61,7 @@
 <script>
 import bratEdit from '../components/bratEdit.vue'
 import tableEdit from '../components/tableEdit.vue'
+import depsModal from '../components/depsModal.vue'
 export default {
     data() {
         return {
@@ -66,9 +73,11 @@ export default {
             selectedTab: 0,
             tabScroll: 'transition-transform ease-out transform translate-x-0',
             isEdited: false,
+            depToEdit: {},
+            refreshBrat: false,
         }
     },
-    components: { bratEdit, tableEdit },
+    components: { bratEdit, tableEdit, depsModal },
     created() {
         if (localStorage.getItem('text') == '') {
             this.$router.replace({ name: 'home' })
@@ -79,6 +88,35 @@ export default {
     },
     beforeCreate() {
         this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+    },
+    methods: {
+        editedDep(dep) {
+            console.log(dep)
+            var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
+            console.log(x)
+
+            for (let i = 0; i < x.length; i++) {
+                if (dep.governor == x[i].governor && dep.dependent == x[i].dependent) {
+                    this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies'][i].dep = dep.dep
+                    console.log('###############################################')
+                    console.log(
+                        this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies'][i].dep
+                    )
+                    break
+                }
+            }
+            this.refreshBrat = true
+            setTimeout(() => {
+                this.refreshBrat = false
+            }, 200)
+        },
+        depsModal(i) {
+            console.log('ci arrivo')
+            this.depToEdit.dep = i.getAttribute('data-arc-role')
+            this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
+            this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
+            this.showDepsModal = true
+        },
     },
     watch: {
         selectedTab: function() {
