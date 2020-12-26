@@ -57,6 +57,7 @@
             :refresh="refreshBrat"
         />
         <table-edit v-else-if="selectedTab == 1" :currentPhrase="sentenceIndex" @edited="isEdited = true" />
+        <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
     </div>
 </template>
 
@@ -65,6 +66,7 @@ import bratEdit from '../components/bratEdit.vue'
 import tableEdit from '../components/tableEdit.vue'
 import depsModal from '../components/depsModal.vue'
 import FeaturesModal from '../components/featuresModal.vue'
+import nerEdit from '../components/nerEdit.vue'
 export default {
     data() {
         return {
@@ -82,7 +84,7 @@ export default {
             refreshBrat: false,
         }
     },
-    components: { bratEdit, tableEdit, depsModal, FeaturesModal },
+    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit },
     created() {
         if (localStorage.getItem('text') == '') {
             this.$router.replace({ name: 'home' })
