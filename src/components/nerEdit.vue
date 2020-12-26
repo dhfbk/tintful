@@ -71,20 +71,19 @@ export default {
         changeNer(i, cont) {
             switch (this.$store.state.editableData.sentences[i].tokens[cont].ner) {
                 case 'O':
-                    this.$store.state.editableData.sentences[i].tokens[cont].ner == 'PER'
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'PER'
                     this.$emit('edited')
-                    console.log('BRUH')
                     break
                 case 'PER':
-                    this.$store.state.editableData.sentences[i].tokens[cont].ner == 'ORG'
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'ORG'
                     this.$emit('edited')
                     break
                 case 'ORG':
-                    this.$store.state.editableData.sentences[i].tokens[cont].ner == 'LOC'
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'LOC'
                     this.$emit('edited')
                     break
                 case 'LOC':
-                    this.$store.state.editableData.sentences[i].tokens[cont].ner == 'O'
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'O'
                     this.$emit('edited')
                     break
             }
