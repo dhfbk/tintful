@@ -22,7 +22,7 @@
                         class="flex flex-col place-items-center my-2 cursor-pointer"
                     >
                         <span
-                            class="mx-1 px-1 rounded"
+                            class="mx-1 px-1 rounded select-none"
                             :class="
                                 token.ner == 'PER' || token.ner == 'ORG' || token.ner == 'LOC'
                                     ? 'text-white'

@@ -15,7 +15,7 @@
               class="flex flex-col place-items-center my-2 cursor-pointer"
             >
               <span
-                class="mx-1 px-1 bg-gray-100 rounded ripple"
+                class="mx-1 px-1 bg-gray-100 rounded ripple select-none"
                 :class="
                   selected == token.characterOffsetBegin ? 'bg-gray-300' : ''
                 "

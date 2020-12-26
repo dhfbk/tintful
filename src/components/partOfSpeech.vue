@@ -20,7 +20,7 @@
           <span
             v-for="token in sen.tokens"
             :key="token.index"
-            class="flex flex-col place-items-center my-2 cursor-pointer"
+            class="flex flex-col place-items-center my-2 select-none"
           >
             <!-- <singleToken
               :token="token"
