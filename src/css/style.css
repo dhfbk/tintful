@@ -60,6 +60,26 @@ body {
         opacity: 0;
     }
 }
+@keyframes zoom-in {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
+}
+
+.zoom-enter-active {
+    animation: zoom-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zoom-leave-active {
+    animation: zoom-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) reverse;
+}
+.zoom-enter,
+.zoom-leave-to {
+    height: 0;
+}
 
 .fade-enter-active {
     animation: fade-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);

@@ -11,17 +11,49 @@
                     <div>
                         <div class="text-lg mb-2 font-medium">Edit token features</div>
                         <span class="">{{ featsToEdit }} </span>
-                        <select
-                            class="appearance-none font-medium h-full border-b  inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            name="depsSelect"
-                            id="depsSelect"
-                            @change="gender"
-                            v-model="gen"
-                        >
-                            <option v-for="(gen, i) in params.Gender" :key="i" :value="gen" class="">
-                                {{ gen }}
-                            </option>
-                        </select>
+                        <transition name="zoom">
+                            <select
+                                class="appearance-none font-medium h-full border-b   block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                name="depsSelect"
+                                id="depsSelect"
+                                @change="gender"
+                                v-model="gen"
+                                v-if="showGen"
+                            >
+                                <option v-for="(gen, i) in params.Gender" :key="i" :value="gen" class="">
+                                    {{ gen }}
+                                </option>
+                            </select>
+                        </transition>
+                        <transition name="zoom">
+                            <select
+                                class="appearance-none font-medium h-full border-b  block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                name="depsSelect"
+                                id="depsSelect"
+                                @change="number"
+                                v-model="num"
+                                v-if="showNum"
+                            >
+                                <option v-for="(num, i) in params.Number" :key="i" :value="num" class="">
+                                    {{ num }}
+                                </option>
+                            </select>
+                        </transition>
+                        <transition name="zoom">
+                            <select
+                                class="appearance-none font-medium h-full border-b  block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                name="depsSelect"
+                                id="depsSelect"
+                                @change="tense"
+                                v-model="ten"
+                                v-if="showTen"
+                            >
+                                <option v-for="(ten, i) in params.Tense" :key="i" :value="ten" class="">
+                                    {{ ten }}
+                                </option>
+                            </select>
+                        </transition>
+                        <div @click="showGen = true">show</div>
                     </div>
                     <div class="float-right">
                         <button
@@ -57,13 +89,30 @@ export default {
             form: '',
             per: '',
             mood: '',
+            deg: '',
+            pro: '',
+            showGen: false,
+            showNum: false,
+            showTen: false,
+            showForm: false,
+            showPer: false,
+            showMood: false,
+            showDeg: false,
+            showPronType: false,
+            showPoss: false,
+            showClic: false,
             params: {
-                Gender: ['Femm', 'Masc'],
+                Gender: ['Fem', 'Masc'],
                 Number: ['Sing', 'Plur'],
-                Tense: ['Present', 'Future', 'Imperfect', 'Past'],
-                VerbForm: ['Inf', 'Part', 'Fin'],
+                Tense: ['Pres', 'Fut', 'Imp', 'Past'],
+                VerbForm: ['Fin', 'Inf', 'Part', 'Ger'],
                 Person: ['1', '2', '3'],
-                Mood: ['Ind'],
+                Mood: ['Ind', 'Imp', 'Cnd', 'Sub'],
+                Degree: ['Cmp', 'Sup', 'Abs'],
+                PronType: ['Prs', 'Art', 'Int', 'Rel', 'Dem', 'Tot', 'Neg', 'Ind', 'Exc', 'Predet', 'Ord'],
+                Clitic: ['Yes', 'No'],
+                Poss: ['Yes', 'No'],
+                Definite: ['Ind', 'Def'],
             },
         }
     },
@@ -74,8 +123,14 @@ export default {
         save() {
             this.$emit('closeFeatsModal')
         },
-        gender(bro) {
-            console.log(bro)
+        gender(i) {
+            console.log(i)
+        },
+        number(i) {
+            console.log(i)
+        },
+        tense(i) {
+            console.log(i)
         },
     },
     created() {
@@ -88,6 +143,20 @@ export default {
         this.form = this.featsToEdit.feats.VerbForm == undefined ? '' : this.featsToEdit.feats.VerbForm[0]
         this.per = this.featsToEdit.feats.Person == undefined ? '' : this.featsToEdit.feats.Person[0]
         this.mood = this.featsToEdit.feats.Mood == undefined ? '' : this.featsToEdit.feats.Mood[0]
+        this.deg = this.featsToEdit.feats.Degree == undefined ? '' : this.featsToEdit.feats.Degree[0]
+
+        switch (this.featsToEdit.pos) {
+            case 'A':
+                this.showGen = true
+                this.showNum = true
+                if (this.deg != '') this.showDeg = true
+                break
+            case 'AP':
+                this.showGen = true
+                this.showNum = true
+                this.showPronType = true
+                this.showPoss = true
+        }
     },
 }
 </script>
