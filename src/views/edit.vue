@@ -2,24 +2,25 @@
     <div class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2">
         <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
         <features-modal @closeFeatsModal="showFeatsModal = false" v-if="showFeatsModal" :featsToEdit="featsToEdit" />
+        <modalInfo v-if="modalInfo" @modal="modalInfo = !modalInfo" :type="type" />
         <div class="overflow-x-auto">
             <div class="w-full grid grid-cols-3 text-center min-w-max">
                 <div
-                    @click="selectedTab = 0"
+                    @click=";(selectedTab = 0), (type = 'graph')"
                     class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
                 >
                     Flat graph
                 </div>
                 <div
-                    @click="selectedTab = 1"
+                    @click=";(selectedTab = 1), (type = 'table')"
                     class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
                 >
                     Table
                 </div>
                 <div
-                    @click="selectedTab = 2"
+                    @click=";(selectedTab = 2), (type = 'ner')"
                     class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
                 >
@@ -30,21 +31,42 @@
                 </div>
             </div>
         </div>
-        <div v-if="selectedTab == 0 || selectedTab == 1" class="flex content-center items-center">
+        <div class="grid grid-cols-2">
             <div
-                @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
-                class="rounded m-1 ml-0 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
-                :class="sentenceIndex == sentencesNum - 1 ? 'text-gray-500' : ''"
+                v-if="selectedTab == 0 || selectedTab == 1"
+                class="flex content-center items-center col-span-2 sm:col-span-1 justify-center sm:justify-start"
             >
-                Next
+                <div
+                    @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
+                    class="rounded m-1 ml-0 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
+                    :class="sentenceIndex == sentencesNum - 1 ? 'text-gray-500' : ''"
+                >
+                    Next
+                </div>
+                <span>{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
+                <div
+                    @click="sentenceIndex > 0 ? sentenceIndex-- : false"
+                    class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
+                    :class="sentenceIndex == 0 ? 'text-gray-500' : ''"
+                >
+                    Prev.
+                </div>
             </div>
-            <span>{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
             <div
-                @click="sentenceIndex > 0 ? sentenceIndex-- : false"
-                class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
-                :class="sentenceIndex == 0 ? 'text-gray-500' : ''"
+                class="w-max col-span-2 sm:col-span-1 justify-self-end"
+                :class="selectedTab == 2 ? 'sm:col-span-2' : ''"
             >
-                Previous
+                <button
+                    @click="modalInfo = true"
+                    class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                >
+                    <svg class="fill-current text-primary" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+                        <path
+                            d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                        />
+                    </svg>
+                    <span class="sr-only">Open information dialog</span>
+                </button>
             </div>
         </div>
         <p v-html="currentData.sentences[sentenceIndex].text" class="my-1"></p>
@@ -67,6 +89,7 @@ import tableEdit from '../components/tableEdit.vue'
 import depsModal from '../components/depsModal.vue'
 import FeaturesModal from '../components/featuresModal.vue'
 import nerEdit from '../components/nerEdit.vue'
+import modalInfo from '../components/modalInfo.vue'
 export default {
     data() {
         return {
@@ -82,9 +105,11 @@ export default {
             depToEdit: {},
             featsToEdit: {},
             refreshBrat: false,
+            type: 'graph',
+            modalInfo: false,
         }
     },
-    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit },
+    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo },
     created() {
         if (localStorage.getItem('text') == '') {
             this.$router.replace({ name: 'home' })

@@ -76,6 +76,9 @@ export default {
         window.onresize = debounce(this.loadBrat, 200)
         this.loadBrat()
     },
+    beforeDestroy() {
+        window.onresize = function() {}
+    },
     methods: {
         editedDep() {
             document.getElementById('deps').innerHTML = ''
