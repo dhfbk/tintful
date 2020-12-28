@@ -3,6 +3,7 @@
         <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
         <features-modal @closeFeatsModal="showFeatsModal = false" v-if="showFeatsModal" :featsToEdit="featsToEdit" />
         <modalInfo v-if="modalInfo" @modal="modalInfo = !modalInfo" :type="type" />
+        <confirmationModal v-if="confirmation" @close="confirmation = !confirmation" :msg="confirmText" />
         <div class="overflow-x-auto">
             <div class="w-full grid grid-cols-3 text-center min-w-max">
                 <div
@@ -53,9 +54,20 @@
                 </div>
             </div>
             <div
-                class="w-max col-span-2 sm:col-span-1 justify-self-end"
+                class="w-full col-span-2 sm:col-span-1 justify-self-end flex content-center items-center justify-between sm:justify-end"
                 :class="selectedTab == 2 ? 'sm:col-span-2' : ''"
             >
+                <div
+                    :class="
+                        isEdited
+                            ? 'bg-primary hover:bg-primaryDark cursor-pointer'
+                            : 'bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
+                    "
+                    @click="confirmModal('save')"
+                    class="rounded m-1 py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none text-white"
+                >
+                    Save changes
+                </div>
                 <button
                     @click="modalInfo = true"
                     class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
@@ -90,6 +102,7 @@ import depsModal from '../components/depsModal.vue'
 import FeaturesModal from '../components/featuresModal.vue'
 import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
+import confirmationModal from '../components/confirmationModal.vue'
 export default {
     data() {
         return {
@@ -107,9 +120,11 @@ export default {
             refreshBrat: false,
             type: 'graph',
             modalInfo: false,
+            confirmText: '',
+            confirmation: false,
         }
     },
-    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo },
+    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
     created() {
         if (localStorage.getItem('text') == '') {
             this.$router.replace({ name: 'home' })
@@ -122,6 +137,14 @@ export default {
         this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
     },
     methods: {
+        confirmModal(mode) {
+            if (this.isEdited) {
+                if (mode == 'save') {
+                    this.confirmText = 'Are you sure you want to save?'
+                    this.confirmation = true
+                }
+            }
+        },
         editedDep(dep) {
             console.log(dep)
             var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
