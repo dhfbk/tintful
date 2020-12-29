@@ -13,21 +13,21 @@
             <div class="w-full grid grid-cols-3 text-center min-w-max">
                 <div
                     @click="confirmModal('graph')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+                    class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
                 >
                     Flat graph
                 </div>
                 <div
                     @click="confirmModal('table')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+                    class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
                 >
                     Table
                 </div>
                 <div
                     @click="confirmModal('ner')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
+                    class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
                 >
                     Named Entity Recognition
@@ -37,42 +37,8 @@
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-2">
-            <div
-                v-if="selectedTab == 0 || selectedTab == 1"
-                class="flex content-center items-center col-span-2 sm:col-span-1 justify-center sm:justify-start"
-            >
-                <div
-                    @click="confirmModal('next')"
-                    class="rounded m-1 ml-0 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
-                    :class="sentenceIndex == sentencesNum - 1 ? 'text-gray-500' : ''"
-                >
-                    Next
-                </div>
-                <span>{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
-                <div
-                    @click="confirmModal('prev')"
-                    class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
-                    :class="sentenceIndex == 0 ? 'text-gray-500' : ''"
-                >
-                    Prev.
-                </div>
-            </div>
-            <div
-                class="w-full col-span-2 sm:col-span-1 justify-self-end flex content-center items-center justify-between sm:justify-end"
-                :class="selectedTab == 2 ? 'sm:col-span-2' : ''"
-            >
-                <div
-                    :class="
-                        isEdited
-                            ? 'bg-primary hover:bg-primaryDark cursor-pointer'
-                            : 'bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
-                    "
-                    @click="confirmModal('save')"
-                    class="rounded m-1 py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none text-white"
-                >
-                    Save changes
-                </div>
+        <div class="grid grid-cols-3 mt-1">
+            <div class="w-full col-span-1 justify-self-start flex content-center items-center justify-start">
                 <button
                     @click="modalInfo = true"
                     class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
@@ -84,6 +50,50 @@
                     </svg>
                     <span class="sr-only">Open information dialog</span>
                 </button>
+            </div>
+            <div
+                v-if="selectedTab == 0 || selectedTab == 1"
+                class="flex content-center items-center col-span-2 sm:col-span-1 justify-end sm:justify-center"
+            >
+                <div
+                    @click="confirmModal('prev')"
+                    class="rounded h-full flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none"
+                    :class="
+                        sentenceIndex == 0
+                            ? 'text-white bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
+                            : 'bg-primary hover:bg-primaryDark text-white cursor-pointer'
+                    "
+                >
+                    Prev.
+                </div>
+                <span class="mx-2">{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
+                <div
+                    @click="confirmModal('next')"
+                    class="rounded h-full flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none"
+                    :class="
+                        sentenceIndex == sentencesNum - 1
+                            ? 'text-white bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
+                            : 'bg-primary hover:bg-primaryDark text-white cursor-pointer'
+                    "
+                >
+                    Next
+                </div>
+            </div>
+            <div
+                class="w-full mt-1 sm:mt-0 col-span-3 sm:col-span-1 justify-self-end flex content-center items-center justify-start sm:justify-end"
+                :class="selectedTab == 2 ? 'sm:col-span-2' : ''"
+            >
+                <div
+                    :class="
+                        isEdited
+                            ? 'bg-primary hover:bg-primaryDark cursor-pointer'
+                            : 'bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
+                    "
+                    @click="confirmModal('save')"
+                    class="rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none text-white"
+                >
+                    Save changes
+                </div>
             </div>
         </div>
         <p v-html="currentData.sentences[sentenceIndex].text" class="my-1"></p>
@@ -176,6 +186,8 @@ export default {
         confirmAction() {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
+            console.log(this.currentData.sentences[0].tokens[0].ner, this.$store.state.editableData.sentences[0].tokens[0].ner)
+            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {

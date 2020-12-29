@@ -73,7 +73,7 @@
           {{ isOpen ? "Hide" : "Show more" }}
         </p>
         <button
-          class="col-span-1 bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max justify-self-end"
+          class="col-span-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max justify-self-end"
         >
           <svg
             class="transition-transform duration-300 ease-out"

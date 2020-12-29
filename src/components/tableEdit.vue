@@ -23,14 +23,40 @@
                         />
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300 uppercase">
-                        {{
-                            d.pos.indexOf('+') == -1
-                                ? upos[d.pos]
-                                : upos[d.pos.split('+')[0]] + ' + ' + upos[d.pos.split('+')[1]]
-                        }}
+                        <div class="flex content-center items-center h-full w-max">
+                            <button
+                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                            >
+                                <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path
+                                        fill="currentColor"
+                                        d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                                    />
+                                </svg>
+                            </button>
+                            {{
+                                d.pos.indexOf('+') == -1
+                                    ? upos[d.pos]
+                                    : upos[d.pos.split('+')[0]] + ' + ' + upos[d.pos.split('+')[1]]
+                            }}
+                        </div>
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300" v-html="d.pos"></td>
-                    <td class="p-1 px-2 border-r border-gray-300" v-html="d.featuresText"></td>
+                    <td class="p-1 px-2 border-r border-gray-300">
+                        <div class="flex content-center items-center h-full">
+                            <button
+                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                            >
+                                <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path
+                                        fill="currentColor"
+                                        d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                                    />
+                                </svg>
+                            </button>
+                            {{ d.featuresText }}
+                        </div>
+                    </td>
                     <td class="relative p-1 px-2 border-r border-gray-300">
                         <select
                             :name="'head' + d.index"

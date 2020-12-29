@@ -187,7 +187,7 @@ export default {
         }
     },
     created() {
-        if (localStorage.getItem('text') == '') {
+        if (localStorage.getItem('text') == '' || localStorage.getItem('text') == undefined) {
             this.$router.replace({ name: 'home' })
         } else {
             this.seriesReadability = [

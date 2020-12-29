@@ -10,7 +10,7 @@
             @mouseleave="hoverCard = false"
         >
             <h3 class="font-bold">Show raw text and json</h3>
-            <button class="bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max justify-self-end">
+            <button class="bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max justify-self-end">
                 <svg
                     class="transition-transform duration-300 ease-out"
                     :class="{ 'transform  rotate-180': isOpen }"
@@ -30,14 +30,14 @@
                 <div class="w-full grid grid-cols-2 text-center">
                     <div
                         @click="selectedTab = 0"
-                        class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
+                        class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
                         :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
                     >
                         Raw text
                     </div>
                     <div
                         @click="selectedTab = 1"
-                        class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
+                        class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
                         :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
                     >
                         JSON data
@@ -47,7 +47,7 @@
                 <p v-if="selectedTab == 0">
                     <button
                         @click="downloadFile('downloadText', 'raw_text.txt')"
-                        class="my-1 bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100"
+                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100"
                     >
                         <span>Download text</span>
                         <svg
@@ -68,7 +68,7 @@
                 <div v-else>
                     <button
                         @click="downloadFile('downloadJSON', 'processed_text.json')"
-                        class="my-1 bg-transparent ripple-light py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100"
+                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100"
                     >
                         <span>Download JSON</span>
                         <svg
