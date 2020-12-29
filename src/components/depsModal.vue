@@ -1,46 +1,64 @@
 <template>
     <transition name="fade-bg" appear>
         <div
-            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-30 z-40 transition-opacity"
+            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-25 customZ"
+            @click="toggleModal"
         >
             <transition name="fade" appear>
                 <div
-                    class=" bg-white rounded w-2/3 max-w-3xl max-h-80 overflow-y-auto focus:outline-none p-4 shadow-lg z-50"
+                    class="bg-white rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    @click.stop
                     v-if="showDialog"
                 >
-                    <div>
-                        <div class="text-lg mb-2 font-medium">Edit basic dependency name</div>
-                        <span class="">
-                            Head: <span class="font-medium mr-4">{{ dep.governor }}</span> Dependent:
-                            <span class="font-medium mr-4">{{ dep.dependent }}</span
-                            ><br />
-                            from: <span class="font-medium mr-4">{{ originalDep }}</span> to:</span
-                        >
-                        <select
-                            class="appearance-none font-medium h-full border-b  inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            name="depsSelect"
-                            id="depsSelect"
-                            @change="edit()"
-                            v-model="selectedDep"
-                        >
-                            <option v-for="(dep, i) in depsList" :key="i" :value="dep" class="font-medium">
-                                {{ dep }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="float-right">
-                        <button
-                            class="font-medium ripple transition duration-100 ease-out hover:bg-gray-200 focus:outline-none mt-2 xs2:mt-0 xs2:ml-2 bg-transparent text-text-primary  py-2 px-4 rounded mr-2"
-                            @click="toggleModal()"
-                        >
-                            CANCEL
-                        </button>
-                        <button
-                            class="font-medium text-blue-700 ripple transition duration-100 ease-out hover:bg-gray-200 focus:outline-none mt-2 xs2:mt-0 xs2:ml-2 bg-transparent py-2 px-4 rounded"
-                            @click="save()"
-                        >
-                            SAVE
-                        </button>
+                    <div class="p-4">
+                        <div class="flex w-full">
+                            <div class="text-primary font-bold text-lg text-primary">Edit basic dependency name</div>
+                            <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="toggleModal()">
+                                <svg
+                                    class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 18 18"
+                                >
+                                    <path
+                                        d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
+                                    />
+                                </svg>
+                                <span class="sr-only">Close dialog</span>
+                            </span>
+                        </div>
+                        <div class="py-2">
+                            <span>
+                                Head: <span class="font-medium mr-4">{{ dep.governor }}</span> Dependent:
+                                <span class="font-medium mr-4">{{ dep.dependent }}</span
+                                ><br />
+                                from: <span class="font-medium mr-4">{{ originalDep }}</span> to:</span
+                            >
+                            <select
+                                class="appearance-none font-medium h-full border-b  inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                name="depsSelect"
+                                id="depsSelect"
+                                @change="edit()"
+                                v-model="selectedDep"
+                            >
+                                <option v-for="(dep, i) in depsList" :key="i" :value="dep" class="font-medium">
+                                    {{ dep }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="float-right pb-4">
+                            <button
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
+                                @click="toggleModal()"
+                            >
+                                CANCEL
+                            </button>
+                            <button
+                                class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                @click="save()"
+                            >
+                                SAVE
+                            </button>
+                        </div>
                     </div>
                 </div>
             </transition>
@@ -131,4 +149,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.customZ {
+    z-index: 990;
+}
+</style>

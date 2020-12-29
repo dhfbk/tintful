@@ -1,51 +1,56 @@
 <template>
-    <transition name="fade" mode="out-in" appear>
+    <transition name="fade-bg" appear>
         <div
             class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-25 customZ"
             @click="modal"
         >
-            <div class="bg-white rounded-lg w-5/6 max-w-3xl max-h-80 h-4/5 overflow-y-auto overscroll-none" @click.stop>
-                <div class="flex flex-col p-4">
-                    <div class="flex w-full">
-                        <div class="text-primary font-bold text-lg text-primary">Help</div>
-                        <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="modal">
-                            <svg
-                                class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 18 18"
-                            >
-                                <path
-                                    d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
-                                />
-                            </svg>
-                            <span class="sr-only">Close dialog</span>
-                        </span>
+            <transition name="fade" appear>
+                <div
+                    class="bg-white rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    @click.stop
+                >
+                    <div class="flex flex-col p-4">
+                        <div class="flex w-full">
+                            <div class="text-primary font-bold text-lg text-primary">Help</div>
+                            <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="modal">
+                                <svg
+                                    class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 18 18"
+                                >
+                                    <path
+                                        d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
+                                    />
+                                </svg>
+                                <span class="sr-only">Close dialog</span>
+                            </span>
+                        </div>
+                        <div class="py-2" v-if="type == 'results'">
+                            <p>About the colors:</p>
+                            <ul class="px-4">
+                                <li class="list-disc" v-for="(key, value, count) in colors" :key="key">
+                                    If the color is <span :style="'color:' + key">{{ value }}</span
+                                    >, it means that {{ meanings[count] }}
+                                </li>
+                            </ul>
+                            <p class="mt-2">About the values' meaning:</p>
+                            <ul class="px-4" v-if="mode == 'readability'">
+                                <li class="list-disc" v-for="(key, value, count) in readabilityInfo" :key="count">
+                                    <b>{{ value }}</b
+                                    >: {{ key }}
+                                </li>
+                            </ul>
+                            <ul class="px-4" v-else>
+                                <li class="list-disc" v-for="(key, value, count) in difficultyInfo" :key="count">
+                                    <b>{{ value }}</b
+                                    >: {{ key }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="py-2" v-else v-html="text"></div>
                     </div>
-                    <div class="py-2" v-if="type == 'results'">
-                        <p>About the colors:</p>
-                        <ul class="px-4">
-                            <li class="list-disc" v-for="(key, value, count) in colors" :key="key">
-                                If the color is <span :style="'color:' + key">{{ value }}</span
-                                >, it means that {{ meanings[count] }}
-                            </li>
-                        </ul>
-                        <p class="mt-2">About the values' meaning:</p>
-                        <ul class="px-4" v-if="mode == 'readability'">
-                            <li class="list-disc" v-for="(key, value, count) in readabilityInfo" :key="count">
-                                <b>{{ value }}</b
-                                >: {{ key }}
-                            </li>
-                        </ul>
-                        <ul class="px-4" v-else>
-                            <li class="list-disc" v-for="(key, value, count) in difficultyInfo" :key="count">
-                                <b>{{ value }}</b
-                                >: {{ key }}
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="py-2" v-else v-html="text"></div>
                 </div>
-            </div>
+            </transition>
         </div>
     </transition>
 </template>
@@ -116,16 +121,6 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active {
-    transition: opacity 0.25s ease-out !important;
-}
-.fade-leave-active {
-    transition: opacity 0.2s ease-out !important;
-}
-.fade-enter,
-.fade-leave-to {
-    opacity: 0;
-}
 .customZ {
     z-index: 990;
 }

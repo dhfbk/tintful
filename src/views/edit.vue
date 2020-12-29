@@ -3,25 +3,30 @@
         <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
         <features-modal @closeFeatsModal="showFeatsModal = false" v-if="showFeatsModal" :featsToEdit="featsToEdit" />
         <modalInfo v-if="modalInfo" @modal="modalInfo = !modalInfo" :type="type" />
-        <confirmationModal v-if="confirmation" @close="confirmation = !confirmation" :msg="confirmText" />
+        <confirmationModal
+            v-if="confirmation"
+            @close="confirmation = !confirmation"
+            :msg="confirmText"
+            @confirm="confirmAction"
+        />
         <div class="overflow-x-auto">
             <div class="w-full grid grid-cols-3 text-center min-w-max">
                 <div
-                    @click=";(selectedTab = 0), (type = 'graph')"
+                    @click="confirmModal('graph')"
                     class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
                 >
                     Flat graph
                 </div>
                 <div
-                    @click=";(selectedTab = 1), (type = 'table')"
+                    @click="confirmModal('table')"
                     class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
                 >
                     Table
                 </div>
                 <div
-                    @click=";(selectedTab = 2), (type = 'ner')"
+                    @click="confirmModal('ner')"
                     class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
                     :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
                 >
@@ -38,7 +43,7 @@
                 class="flex content-center items-center col-span-2 sm:col-span-1 justify-center sm:justify-start"
             >
                 <div
-                    @click="sentenceIndex < sentencesNum - 1 ? sentenceIndex++ : false"
+                    @click="confirmModal('next')"
                     class="rounded m-1 ml-0 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
                     :class="sentenceIndex == sentencesNum - 1 ? 'text-gray-500' : ''"
                 >
@@ -46,7 +51,7 @@
                 </div>
                 <span>{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
                 <div
-                    @click="sentenceIndex > 0 ? sentenceIndex-- : false"
+                    @click="confirmModal('prev')"
                     class="rounded m-1 p-1 ripple bg-gray-200 hover:bg-gray-300 inline-block select-none cursor-pointer"
                     :class="sentenceIndex == 0 ? 'text-gray-500' : ''"
                 >
@@ -122,6 +127,7 @@ export default {
             modalInfo: false,
             confirmText: '',
             confirmation: false,
+            action: '',
         }
     },
     components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
@@ -136,13 +142,65 @@ export default {
     beforeCreate() {
         this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
     },
+    beforeRouteLeave(to, from, next) {
+        if (this.isEdited) {
+            const answer = window.confirm('Do you really want to leave? Your changes will be discarded!')
+            if (answer) {
+                this.$store.state.editableData = {}
+                next()
+            } else {
+                next(false)
+            }
+        } else {
+            next()
+        }
+    },
     methods: {
         confirmModal(mode) {
+            this.action = mode
             if (this.isEdited) {
-                if (mode == 'save') {
-                    this.confirmText = 'Are you sure you want to save?'
-                    this.confirmation = true
+                switch (mode) {
+                    case 'save':
+                        this.confirmText = 'Are you sure you want to save?'
+                        this.confirmation = true
+                        break
+                    default:
+                        this.confirmText = 'Doing this will cause you to lose your latest changes. Proceed?'
+                        this.confirmation = true
+                        break
                 }
+            } else {
+                this.confirmAction()
+            }
+        },
+        confirmAction() {
+            this.isEdited = false
+            this.confirmation ? (this.confirmation = !this.confirmation) : ''
+            switch (this.action) {
+                case 'graph':
+                    if (this.selectedTab != 0) {
+                        this.selectedTab = 0
+                        this.type = 'graph'
+                    }
+                    break
+                case 'table':
+                    if (this.selectedTab != 1) {
+                        this.selectedTab = 1
+                        this.type = 'table'
+                    }
+                    break
+                case 'ner':
+                    if (this.selectedTab != 2) {
+                        this.selectedTab = 2
+                        this.type = 'ner'
+                    }
+                    break
+                case 'next':
+                    this.sentenceIndex < this.sentencesNum - 1 ? this.sentenceIndex++ : false
+                    break
+                case 'prev':
+                    this.sentenceIndex > 0 ? this.sentenceIndex-- : false
+                    break
             }
         },
         editedDep(dep) {
@@ -166,7 +224,6 @@ export default {
             }, 200)
         },
         depsModal(i) {
-            console.log('ci arrivo')
             this.depToEdit.dep = i.getAttribute('data-arc-role')
             this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
             this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
