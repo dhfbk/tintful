@@ -26,10 +26,10 @@
                                 <span class="sr-only">Close dialog</span>
                             </span>
                         </div>
-                        <span>POS:</span>
+                        <span>POS: </span>
                         <transition name="zoom">
                             <select
-                                class="appearance-none font-medium h-full border-b   block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                class="appearance-none font-medium h-full border-b  inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 name="posSelect"
                                 id="posSelect"
                                 v-model="pos"
@@ -40,21 +40,93 @@
                             </select>
                         </transition>
                         <div class="py-2">
-                            <span class="">{{ featsToEdit }} </span>
-                            <transition name="zoom">
-                                <featsSelect :opt="params.Gender" :model="this.gen" v-if="showGen" />
-                            </transition>
-                            <featsSelect :opt="params.Number" :model="this.num" v-if="showNum" />
-                            <featsSelect :opt="params.Tense" :model="this.ten" v-if="showTen" />
-                            <featsSelect :opt="params.VerbForm" :model="this.form" v-if="showForm" />
-                            <featsSelect :opt="params.Person" :model="this.per" v-if="showPer" />
-                            <featsSelect :opt="params.Mood" :model="this.mood" v-if="showMood" />
-                            <featsSelect :opt="params.Degree" :model="this.deg" v-if="showDeg" />
-                            <featsSelect :opt="params.PronType" :model="this.pro" v-if="showPronType" />
-                            <featsSelect :opt="params.Clitic" :model="this.cli" v-if="showCli" />
-                            <featsSelect :opt="params.Poss" :model="this.poss" v-if="showPoss" />
-                            <featsSelect :opt="params.Definite" :model="this.def" v-if="showDef" />
-                            <featsSelect :opt="params.NumType" :model="this.numTy" v-if="showNumType" />
+                            <!-- <span class="">{{ featsToEdit }} </span> -->
+                            <transition-group name="zoom">
+                                <featsSelect
+                                    :opt="params.Gender"
+                                    :label="'Gender'"
+                                    :model="this.gen"
+                                    v-if="showGen"
+                                    key="0"
+                                />
+                                <featsSelect
+                                    :opt="params.Number"
+                                    :label="'Number'"
+                                    :model="this.num"
+                                    v-if="showNum"
+                                    key="1"
+                                />
+                                <featsSelect
+                                    :opt="params.Tense"
+                                    :label="'Tense'"
+                                    :model="this.ten"
+                                    v-if="showTen"
+                                    key="2"
+                                />
+                                <featsSelect
+                                    :opt="params.VerbForm"
+                                    :label="'Verb Form'"
+                                    :model="this.form"
+                                    v-if="showForm"
+                                    key="3"
+                                />
+                                <featsSelect
+                                    :opt="params.Person"
+                                    :label="'Person'"
+                                    :model="this.per"
+                                    v-if="showPer"
+                                    key="4"
+                                />
+                                <featsSelect
+                                    :opt="params.Mood"
+                                    :label="'Mood'"
+                                    :model="this.mood"
+                                    v-if="showMood"
+                                    key="5"
+                                />
+                                <featsSelect
+                                    :opt="params.Degree"
+                                    :label="'Degree'"
+                                    :model="this.deg"
+                                    v-if="showDeg"
+                                    key="6"
+                                />
+                                <featsSelect
+                                    :opt="params.PronType"
+                                    :label="'Pron Type'"
+                                    :model="this.pro"
+                                    v-if="showPronType"
+                                    key="7"
+                                />
+                                <featsSelect
+                                    :opt="params.Clitic"
+                                    :label="'Clitic'"
+                                    :model="this.cli"
+                                    v-if="showCli"
+                                    key="8"
+                                />
+                                <featsSelect
+                                    :opt="params.Poss"
+                                    :label="'Possessive'"
+                                    :model="this.poss"
+                                    v-if="showPoss"
+                                    key="9"
+                                />
+                                <featsSelect
+                                    :opt="params.Definite"
+                                    :label="'Definite'"
+                                    :model="this.def"
+                                    v-if="showDef"
+                                    key="10"
+                                />
+                                <featsSelect
+                                    :opt="params.NumType"
+                                    :label="'Num Type'"
+                                    :model="this.numTy"
+                                    v-if="showNumType"
+                                    key="11"
+                                />
+                            </transition-group>
                         </div>
                         <div class="float-right pb-4">
                             <button
@@ -204,7 +276,7 @@ export default {
         this.def = features.Definite == undefined ? '' : features.Definite[0]
         this.numTy = features.NumType == undefined ? '' : features.NumType[0]
 
-        switch (this.featsToEdit.pos) {
+        switch (this.pos) {
             case 'A':
                 this.showGen = true
                 this.showNum = true
@@ -219,40 +291,56 @@ export default {
             case 'B':
                 if (this.deg != '') this.showDeg = true
                 break
-            case 'DD' || 'DE' || 'DI' || 'DQ' || 'DR':
+            case 'DD':
+            case 'DE':
+            case 'DI':
+            case 'DQ':
+            case 'DR':
                 this.showNum = true
                 this.showPer = true
                 this.showPronType = true
                 break
-            case 'N' || 'NO':
+            case 'N':
+            case 'NO':
                 this.showNumType = true
                 if (this.num != '') this.showNum = true
                 if (this.gen != '') this.showGen = true
                 break
-            case 'P' || 'PD' || 'PI' || 'PP' || 'PQ' || 'PR':
+            case 'P':
+            case 'PD':
+            case 'PI':
+            case 'PP':
+            case 'PQ':
+            case 'PR':
+                console.log(this.pos)
                 this.showGen = true
                 this.showNum = true
                 this.showPronType = true
                 if (this.gen != '') this.showGen = true
                 break
-            case 'PC' || 'PE':
+            case 'PC':
+            case 'PE':
                 this.showGen = true
                 this.showNum = true
                 this.showPronType = true
                 this.showPer = true
                 if (this.cli != '') this.showCli = true
                 break
-            case 'RD' || 'RI':
+            case 'RD':
+            case 'RI':
                 this.showGen = true
                 this.showNum = true
                 this.showDef = true
                 this.showPronType = true
                 break
-            case 'S' || 'SA':
+            case 'S':
+            case 'SA':
                 this.showGen = true
                 this.showNum = true
                 break
-            case 'V' || 'VA' || 'VM':
+            case 'V':
+            case 'VA':
+            case 'VM':
                 this.showForm = true
                 if (this.mood != '') this.showMood = true
                 if (this.num != '') this.showNum = true
@@ -263,7 +351,6 @@ export default {
     },
     watch: {
         pos: function() {
-            console.log('cambia')
             this.showGen = false
             this.showNum = false
             this.showTen = false
@@ -291,45 +378,75 @@ export default {
                 case 'B':
                     if (this.deg != '') this.showDeg = true
                     break
-                case 'DD' || 'DE' || 'DI' || 'DQ' || 'DR':
+                case 'DD':
+                case 'DE':
+                case 'DI':
+                case 'DQ':
+                case 'DR':
                     this.showNum = true
                     this.showPer = true
                     this.showPronType = true
                     break
-                case 'N' || 'NO':
+                case 'N':
+                case 'NO':
                     this.showNumType = true
                     if (this.num != '') this.showNum = true
                     if (this.gen != '') this.showGen = true
                     break
-                case 'P' || 'PD' || 'PI' || 'PP' || 'PQ' || 'PR':
+                case 'P':
+                case 'PD':
+                case 'PI':
+                case 'PP':
+                case 'PQ':
+                case 'PR':
+                    console.log(this.pos)
                     this.showGen = true
                     this.showNum = true
                     this.showPronType = true
                     if (this.gen != '') this.showGen = true
                     break
-                case 'PC' || 'PE':
+                case 'PC':
+                case 'PE':
                     this.showGen = true
                     this.showNum = true
                     this.showPronType = true
                     this.showPer = true
                     if (this.cli != '') this.showCli = true
                     break
-                case 'RD' || 'RI':
+                case 'RD':
+                case 'RI':
                     this.showGen = true
                     this.showNum = true
                     this.showDef = true
                     this.showPronType = true
                     break
-                case 'S' || 'SA':
+                case 'S':
+                case 'SA':
                     this.showGen = true
                     this.showNum = true
                     break
-                case 'V' || 'VA' || 'VM':
+                case 'V':
+                case 'VA':
+                case 'VM':
                     this.showForm = true
                     if (this.mood != '') this.showMood = true
                     if (this.num != '') this.showNum = true
                     if (this.per != '') this.showPer = true
                     if (this.tense != '') this.showTen = true
+                    break
+                default:
+                    this.showGen = false
+                    this.showNum = false
+                    this.showTen = false
+                    this.showForm = false
+                    this.showPer = false
+                    this.showMood = false
+                    this.showDeg = false
+                    this.showPronType = false
+                    this.showPoss = false
+                    this.showCli = false
+                    this.showNumType = false
+                    this.showDef = false
                     break
             }
         },
