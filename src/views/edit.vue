@@ -1,7 +1,12 @@
 <template>
     <div class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2">
         <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
-        <features-modal @closeFeatsModal="showFeatsModal = false" v-if="showFeatsModal" :featsToEdit="featsToEdit" />
+        <features-modal
+            @closeFeatsModal="showFeatsModal = false"
+            v-if="showFeatsModal"
+            :featsToEdit="featsToEdit"
+            @edited="editedFeat"
+        />
         <modalInfo v-if="modalInfo" @modal="modalInfo = !modalInfo" :type="type" />
         <confirmationModal
             v-if="confirmation"
@@ -186,7 +191,10 @@ export default {
         confirmAction() {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
-            console.log(this.currentData.sentences[0].tokens[0].ner, this.$store.state.editableData.sentences[0].tokens[0].ner)
+            console.log(
+                this.currentData.sentences[0].tokens[0].ner,
+                this.$store.state.editableData.sentences[0].tokens[0].ner
+            )
             this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             switch (this.action) {
                 case 'graph':
@@ -235,6 +243,16 @@ export default {
                 this.refreshBrat = false
             }, 200)
         },
+        editedFeat(feats) {
+            var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
+            console.log(feats)
+            x.features = feats.newFeats
+            x.pos = feats.newPos
+            this.refreshBrat = true
+            setTimeout(() => {
+                this.refreshBrat = false
+            }, 200)
+        },
         depsModal(i) {
             this.depToEdit.dep = i.getAttribute('data-arc-role')
             this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
@@ -242,6 +260,7 @@ export default {
             this.showDepsModal = true
         },
         featsModal(info) {
+            console.log(info)
             this.featsToEdit = info
             this.showFeatsModal = true
         },

@@ -12,7 +12,7 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-bold text-lg text-primary">Edit token features</div>
+                            <div class="text-primary font-medium text-lg text-primary">Edit token features</div>
                             <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="toggleModal()">
                                 <svg
                                     class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
@@ -25,6 +25,10 @@
                                 </svg>
                                 <span class="sr-only">Close dialog</span>
                             </span>
+                        </div>
+                        <div>
+                            Word: "<span class="font-medium">{{ featsToEdit.word }}</span
+                            >"
                         </div>
                         <span>POS: </span>
                         <transition name="zoom">
@@ -48,6 +52,7 @@
                                     :model="this.gen"
                                     v-if="showGen"
                                     key="0"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Number"
@@ -55,6 +60,7 @@
                                     :model="this.num"
                                     v-if="showNum"
                                     key="1"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Tense"
@@ -62,13 +68,15 @@
                                     :model="this.ten"
                                     v-if="showTen"
                                     key="2"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.VerbForm"
-                                    :label="'Verb Form'"
+                                    :label="'VerbForm'"
                                     :model="this.form"
                                     v-if="showForm"
                                     key="3"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Person"
@@ -76,6 +84,7 @@
                                     :model="this.per"
                                     v-if="showPer"
                                     key="4"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Mood"
@@ -83,6 +92,7 @@
                                     :model="this.mood"
                                     v-if="showMood"
                                     key="5"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Degree"
@@ -90,13 +100,15 @@
                                     :model="this.deg"
                                     v-if="showDeg"
                                     key="6"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.PronType"
-                                    :label="'Pron Type'"
+                                    :label="'PronType'"
                                     :model="this.pro"
                                     v-if="showPronType"
                                     key="7"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Clitic"
@@ -104,6 +116,7 @@
                                     :model="this.cli"
                                     v-if="showCli"
                                     key="8"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Poss"
@@ -111,6 +124,7 @@
                                     :model="this.poss"
                                     v-if="showPoss"
                                     key="9"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.Definite"
@@ -118,13 +132,15 @@
                                     :model="this.def"
                                     v-if="showDef"
                                     key="10"
+                                    @updateData="updateData"
                                 />
                                 <featsSelect
                                     :opt="params.NumType"
-                                    :label="'Num Type'"
+                                    :label="'NumType'"
                                     :model="this.numTy"
                                     v-if="showNumType"
                                     key="11"
+                                    @updateData="updateData"
                                 />
                             </transition-group>
                         </div>
@@ -216,8 +232,8 @@ export default {
                 { abbr: 'FC', full: 'clause boundary punctuation' },
                 { abbr: 'FF', full: 'comma, hyphen' },
                 { abbr: 'FS', full: 'sentence boundary punctuation' },
-                { abbr: 'I', full: 'cardinal number' },
-                { abbr: 'N', full: 'preposition' },
+                { abbr: 'I', full: 'interjection' },
+                { abbr: 'N', full: 'cardinal number' },
                 { abbr: 'NO', full: 'ordinal number' },
                 { abbr: 'PD', full: 'demonstrative pronoun' },
                 { abbr: 'PE', full: 'personal pronoun' },
@@ -244,10 +260,79 @@ export default {
             this.$emit('closeFeatsModal')
         },
         save() {
+            let toCheck = {
+                Gender: [this.gen],
+                Number: [this.num],
+                Tense: [this.ten],
+                VerbForm: [this.form],
+                Person: [this.per],
+                Mood: [this.mood],
+                Degree: [this.deg],
+                PronType: [this.pro],
+                Clitic: [this.cli],
+                Poss: [this.poss],
+                Definite: [this.def],
+                NumType: [this.numTy],
+            }
+            let values = Object.values(toCheck)
+            let keys = Object.keys(toCheck)
+            var newFeatures = {}
+
+            for (let i = 0; i < values.length; i++) {
+                if (values[i][0] != '') {
+                    newFeatures[keys[i]] = values[i]
+                }
+            }
+            console.log(newFeatures)
+            console.log(this.featsToEdit.tokIndex)
+            let dataToSend = {
+                senIndex: this.featsToEdit.senIndex,
+                tokIndex: parseInt(this.featsToEdit.tokIndex),
+                newPos: this.pos,
+                newFeats: newFeatures,
+            }
+            this.$emit('edited', dataToSend)
             this.$emit('closeFeatsModal')
         },
-        gender(i) {
-            console.log(i)
+        updateData(i) {
+            switch (i.type) {
+                case 'Gender':
+                    this.gen = i.info
+                    break
+                case 'Number':
+                    this.num = i.info
+                    break
+                case 'Tense':
+                    this.ten = i.info
+                    break
+                case 'VerbForm':
+                    this.form = i.info
+                    break
+                case 'Person':
+                    this.per = i.info
+                    break
+                case 'Mood':
+                    this.mood = i.info
+                    break
+                case 'Degree':
+                    this.deg = i.info
+                    break
+                case 'PronType':
+                    this.pro = i.info
+                    break
+                case 'Clitic':
+                    this.cli = i.info
+                    break
+                case 'Poss':
+                    this.poss = i.info
+                    break
+                case 'Definite':
+                    this.def = i.info
+                    break
+                case 'NumType':
+                    this.numTy = i.info
+                    break
+            }
         },
         number(i) {
             console.log(i)
@@ -260,7 +345,7 @@ export default {
         setTimeout(() => {
             this.showDialog = true
         }, 1)
-        console.log(this.posList.length)
+        console.log(this.featsToEdit)
         this.pos = this.featsToEdit.pos
         let features = this.featsToEdit.feats
         this.gen = features.Gender == undefined ? '' : features.Gender[0]
@@ -399,7 +484,6 @@ export default {
                 case 'PP':
                 case 'PQ':
                 case 'PR':
-                    console.log(this.pos)
                     this.showGen = true
                     this.showNum = true
                     this.showPronType = true

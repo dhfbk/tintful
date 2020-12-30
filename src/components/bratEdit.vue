@@ -145,6 +145,7 @@ export default {
             infoToEdit.feats = feat.features
             infoToEdit.lemma = feat.lemma
             infoToEdit.pos = feat.pos
+            infoToEdit.word = feat.word
             this.$emit('showFeatsModal', infoToEdit)
             console.log(infoToEdit)
         },
