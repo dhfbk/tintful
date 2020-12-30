@@ -1,7 +1,7 @@
 <template>
     <div>
         <button
-            class="text-primary bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center float-right mb-2"
+            class="text-primary bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"
             @click="$router.push({ path: '/edit' })"
         >
             <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
