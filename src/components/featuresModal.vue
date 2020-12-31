@@ -6,7 +6,7 @@
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    class="bg-white rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
                     @click.stop
                     v-if="showDialog"
                 >
@@ -109,6 +109,7 @@
                                     v-if="showPronType"
                                     key="7"
                                     @updateData="updateData"
+                                    :disabled="pos == 'AP'"
                                 />
                                 <featsSelect
                                     :opt="params.Clitic"
@@ -340,114 +341,7 @@ export default {
         tense(i) {
             console.log(i)
         },
-    },
-    created() {
-        setTimeout(() => {
-            this.showDialog = true
-        }, 1)
-        console.log(this.featsToEdit)
-        this.pos = this.featsToEdit.pos
-        let features = this.featsToEdit.feats
-        this.gen = features.Gender == undefined ? '' : features.Gender[0]
-        this.num = features.Number == undefined ? '' : features.Number[0]
-        this.ten = features.Tense == undefined ? '' : features.Tense[0]
-        this.form = features.VerbForm == undefined ? '' : features.VerbForm[0]
-        this.per = features.Person == undefined ? '' : features.Person[0]
-        this.mood = features.Mood == undefined ? '' : features.Mood[0]
-        this.deg = features.Degree == undefined ? '' : features.Degree[0]
-        this.pro = features.PronType == undefined ? '' : features.PronType[0]
-        this.cli = features.Clitic == undefined ? '' : features.Clitic[0]
-        this.poss = features.Poss == undefined ? '' : features.Poss[0]
-        this.def = features.Definite == undefined ? '' : features.Definite[0]
-        this.numTy = features.NumType == undefined ? '' : features.NumType[0]
-
-        switch (this.pos) {
-            case 'A':
-                this.showGen = true
-                this.showNum = true
-                if (this.deg != '') this.showDeg = true
-                break
-            case 'AP':
-                this.showGen = true
-                this.showNum = true
-                this.showPronType = true
-                this.showPoss = true
-                break
-            case 'B':
-                if (this.deg != '') this.showDeg = true
-                break
-            case 'DD':
-            case 'DE':
-            case 'DI':
-            case 'DQ':
-            case 'DR':
-                this.showNum = true
-                this.showPer = true
-                this.showPronType = true
-                break
-            case 'N':
-            case 'NO':
-                this.showNumType = true
-                if (this.num != '') this.showNum = true
-                if (this.gen != '') this.showGen = true
-                break
-            case 'P':
-            case 'PD':
-            case 'PI':
-            case 'PP':
-            case 'PQ':
-            case 'PR':
-                console.log(this.pos)
-                this.showGen = true
-                this.showNum = true
-                this.showPronType = true
-                if (this.gen != '') this.showGen = true
-                break
-            case 'PC':
-            case 'PE':
-                this.showGen = true
-                this.showNum = true
-                this.showPronType = true
-                this.showPer = true
-                if (this.cli != '') this.showCli = true
-                break
-            case 'RD':
-            case 'RI':
-                this.showGen = true
-                this.showNum = true
-                this.showDef = true
-                this.showPronType = true
-                break
-            case 'S':
-            case 'SA':
-                this.showGen = true
-                this.showNum = true
-                break
-            case 'V':
-            case 'VA':
-            case 'VM':
-                this.showForm = true
-                if (this.mood != '') this.showMood = true
-                if (this.num != '') this.showNum = true
-                if (this.per != '') this.showPer = true
-                if (this.tense != '') this.showTen = true
-                break
-        }
-    },
-    watch: {
-        pos: function() {
-            this.showGen = false
-            this.showNum = false
-            this.showTen = false
-            this.showForm = false
-            this.showPer = false
-            this.showMood = false
-            this.showDeg = false
-            this.showPronType = false
-            this.showPoss = false
-            this.showCli = false
-            this.showNumType = false
-            this.showDef = false
+        checkSelects() {
             switch (this.pos) {
                 case 'A':
                     this.showGen = true
@@ -459,6 +353,8 @@ export default {
                     this.showNum = true
                     this.showPronType = true
                     this.showPoss = true
+                    this.pro = 'Prs'
+                    this.poss = 'Yes'
                     break
                 case 'B':
                     if (this.deg != '') this.showDeg = true
@@ -484,6 +380,7 @@ export default {
                 case 'PP':
                 case 'PQ':
                 case 'PR':
+                    console.log(this.pos)
                     this.showGen = true
                     this.showNum = true
                     this.showPronType = true
@@ -518,21 +415,45 @@ export default {
                     if (this.per != '') this.showPer = true
                     if (this.tense != '') this.showTen = true
                     break
-                default:
-                    this.showGen = false
-                    this.showNum = false
-                    this.showTen = false
-                    this.showForm = false
-                    this.showPer = false
-                    this.showMood = false
-                    this.showDeg = false
-                    this.showPronType = false
-                    this.showPoss = false
-                    this.showCli = false
-                    this.showNumType = false
-                    this.showDef = false
-                    break
             }
+        },
+    },
+    created() {
+        setTimeout(() => {
+            this.showDialog = true
+        }, 1)
+        console.log(this.featsToEdit)
+        this.pos = this.featsToEdit.pos
+        let features = this.featsToEdit.feats
+        this.gen = features.Gender == undefined ? '' : features.Gender[0]
+        this.num = features.Number == undefined ? '' : features.Number[0]
+        this.ten = features.Tense == undefined ? '' : features.Tense[0]
+        this.form = features.VerbForm == undefined ? '' : features.VerbForm[0]
+        this.per = features.Person == undefined ? '' : features.Person[0]
+        this.mood = features.Mood == undefined ? '' : features.Mood[0]
+        this.deg = features.Degree == undefined ? '' : features.Degree[0]
+        this.pro = features.PronType == undefined ? '' : features.PronType[0]
+        this.cli = features.Clitic == undefined ? '' : features.Clitic[0]
+        this.poss = features.Poss == undefined ? '' : features.Poss[0]
+        this.def = features.Definite == undefined ? '' : features.Definite[0]
+        this.numTy = features.NumType == undefined ? '' : features.NumType[0]
+        this.checkSelects()
+    },
+    watch: {
+        pos: function() {
+            this.showGen = false
+            this.showNum = false
+            this.showTen = false
+            this.showForm = false
+            this.showPer = false
+            this.showMood = false
+            this.showDeg = false
+            this.showPronType = false
+            this.showPoss = false
+            this.showCli = false
+            this.showNumType = false
+            this.showDef = false
+            this.checkSelects()
         },
     },
 }

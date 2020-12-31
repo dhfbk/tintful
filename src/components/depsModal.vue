@@ -6,13 +6,13 @@
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    class="bg-white rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
                     @click.stop
                     v-if="showDialog"
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-bold text-lg text-primary">Edit basic dependency name</div>
+                            <div class="text-primary font-medium text-lg text-primary">Edit basic dependency name</div>
                             <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="toggleModal()">
                                 <svg
                                     class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
