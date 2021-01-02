@@ -11,7 +11,7 @@
                 >
                     <div class="flex flex-col p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-bold text-lg text-primary">Help</div>
+                            <div class="text-primary font-medium text-lg text-primary">Help</div>
                             <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="modal">
                                 <svg
                                     class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
@@ -99,13 +99,13 @@ export default {
     created() {
         if (this.type == 'graph') {
             this.text =
-                '<p class="font-bold">Dependencies actions:</p>' +
+                '<p class="font-medium">Dependencies actions:</p>' +
                 '<ul class="list-disc px-4">' +
                 '<li>to change the head of a current dependency, right click on the dependent and then left click on the new head</li>' +
                 '<li>to add a new dependency, right click on the element that should become the dependent and then left click on the new head</li>' +
                 "<li>to edit the type of a dependency, double click on the dependency's type in the middle of the arrow and use the modal to choose the new one</li>" +
                 '</ul>' +
-                '<br/><p class="font-bold">Features\' actions:</p>' +
+                '<br/><p class="font-medium">Features\' actions:</p>' +
                 '<ul class="list-disc px-4">' +
                 "<li>to edit a token's features double click on the token's Part Of Speech label and use the modal to do your editing</li>" +
                 '</ul>'

@@ -58,7 +58,7 @@
                                     :opt="params.Number"
                                     :label="'Number'"
                                     :model="this.num"
-                                    v-if="showNum"
+                                    v-if="showNum && form != 'Inf' && form != 'Ger'"
                                     key="1"
                                     @updateData="updateData"
                                 />
@@ -66,7 +66,7 @@
                                     :opt="params.Tense"
                                     :label="'Tense'"
                                     :model="this.ten"
-                                    v-if="showTen"
+                                    v-if="showTen && form != 'Inf' && form != 'Ger'"
                                     key="2"
                                     @updateData="updateData"
                                 />
@@ -82,7 +82,7 @@
                                     :opt="params.Person"
                                     :label="'Person'"
                                     :model="this.per"
-                                    v-if="showPer"
+                                    v-if="showPer && form != 'Inf' && form != 'Part' && form != 'Ger'"
                                     key="4"
                                     @updateData="updateData"
                                 />
@@ -90,7 +90,7 @@
                                     :opt="params.Mood"
                                     :label="'Mood'"
                                     :model="this.mood"
-                                    v-if="showMood"
+                                    v-if="showMood && form != 'Inf' && form != 'Part' && form != 'Ger'"
                                     key="5"
                                     @updateData="updateData"
                                 />
@@ -109,7 +109,7 @@
                                     v-if="showPronType"
                                     key="7"
                                     @updateData="updateData"
-                                    :disabled="pos == 'AP'"
+                                    :unselectable="pos == 'AP' || pos == 'RD' || pos == 'RI'"
                                 />
                                 <featsSelect
                                     :opt="params.Clitic"
@@ -118,6 +118,7 @@
                                     v-if="showCli"
                                     key="8"
                                     @updateData="updateData"
+                                    :unselectable="pos == 'PC'"
                                 />
                                 <featsSelect
                                     :opt="params.Poss"
@@ -126,6 +127,7 @@
                                     v-if="showPoss"
                                     key="9"
                                     @updateData="updateData"
+                                    :unselectable="pos == 'AP'"
                                 />
                                 <featsSelect
                                     :opt="params.Definite"
@@ -134,6 +136,7 @@
                                     v-if="showDef"
                                     key="10"
                                     @updateData="updateData"
+                                    :unselectable="pos == 'RD' || pos == 'RI'"
                                 />
                                 <featsSelect
                                     :opt="params.NumType"
@@ -142,6 +145,7 @@
                                     v-if="showNumType"
                                     key="11"
                                     @updateData="updateData"
+                                    :unselectable="pos == 'NO' || pos == 'N'"
                                 />
                             </transition-group>
                         </div>
@@ -175,6 +179,7 @@ export default {
     components: { featsSelect },
     data() {
         return {
+            notFirstIter: false,
             showDialog: false,
             pos: '',
             gen: '',
@@ -346,7 +351,7 @@ export default {
                 case 'A':
                     this.showGen = true
                     this.showNum = true
-                    if (this.deg != '') this.showDeg = true
+                    this.showDeg = true
                     break
                 case 'AP':
                     this.showGen = true
@@ -357,7 +362,7 @@ export default {
                     this.poss = 'Yes'
                     break
                 case 'B':
-                    if (this.deg != '') this.showDeg = true
+                    this.showDeg = true
                     break
                 case 'DD':
                 case 'DE':
@@ -369,10 +374,14 @@ export default {
                     this.showPronType = true
                     break
                 case 'N':
+                    this.showNumType = true
+                    this.numTy = 'Card'
+                    break
                 case 'NO':
                     this.showNumType = true
-                    if (this.num != '') this.showNum = true
-                    if (this.gen != '') this.showGen = true
+                    this.showNum = true
+                    this.showGen = true
+                    this.numTy = 'Ord'
                     break
                 case 'P':
                 case 'PD':
@@ -380,26 +389,40 @@ export default {
                 case 'PP':
                 case 'PQ':
                 case 'PR':
-                    console.log(this.pos)
                     this.showGen = true
                     this.showNum = true
                     this.showPronType = true
-                    if (this.gen != '') this.showGen = true
+                    this.showGen = true
                     break
                 case 'PC':
+                    this.showGen = true
+                    this.showNum = true
+                    this.showPronType = true
+                    this.showPer = true
+                    this.showCli = true
+                    this.cli = 'Yes'
+                    break
                 case 'PE':
                     this.showGen = true
                     this.showNum = true
                     this.showPronType = true
                     this.showPer = true
-                    if (this.cli != '') this.showCli = true
                     break
                 case 'RD':
+                    this.showGen = true
+                    this.showNum = true
+                    this.showDef = true
+                    this.showPronType = true
+                    this.pro = 'Art'
+                    this.def = 'Def'
+                    break
                 case 'RI':
                     this.showGen = true
                     this.showNum = true
                     this.showDef = true
                     this.showPronType = true
+                    this.pro = 'Art'
+                    this.def = 'Ind'
                     break
                 case 'S':
                 case 'SA':
@@ -410,10 +433,10 @@ export default {
                 case 'VA':
                 case 'VM':
                     this.showForm = true
-                    if (this.mood != '') this.showMood = true
-                    if (this.num != '') this.showNum = true
-                    if (this.per != '') this.showPer = true
-                    if (this.tense != '') this.showTen = true
+                    this.showMood = true
+                    this.showNum = true
+                    this.showPer = true
+                    this.showTen = true
                     break
             }
         },
@@ -453,6 +476,22 @@ export default {
             this.showCli = false
             this.showNumType = false
             this.showDef = false
+            if (this.notFirstIter) {
+                console.log('entra')
+                this.gen = ''
+                this.num = ''
+                this.ten = ''
+                this.form = ''
+                this.per = ''
+                this.mood = ''
+                this.deg = ''
+                this.pro = ''
+                this.numTy = ''
+                this.cli = ''
+                this.def = ''
+                this.poss = ''
+            }
+            this.notFirstIter = true
             this.checkSelects()
         },
     },

@@ -8,7 +8,12 @@
             @change="send"
             v-model="md"
             required
+            :disabled="unselectable"
+            :class="unselectable ? 'cursor-not-allowed' : ''"
         >
+            <option value="" class="appearance-none hover:bg-gray-300 text-gray-700" disabled selected hidden
+                >Choose {{ label.toLowerCase() }}</option
+            >
             <option v-for="(i, x) in opt" :key="x" :value="i" class="appearance-none hover:bg-gray-300">
                 {{ i }}
             </option>
@@ -22,6 +27,7 @@ export default {
         opt: Array,
         model: String,
         label: String,
+        unselectable: Boolean,
     },
     data() {
         return {
