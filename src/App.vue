@@ -1,8 +1,12 @@
 <template>
-    <div id="app" class="container relative mx-auto antialiased px-4">
+    <div id="app" class="relative mx-auto antialiased pr-6 pt-6 bg-gray-200">
+        <div class="flex flex-row ">
+            <topBar />
+            <div class="w-11/12 p-4 ml-2 cardShadow bg-gray-200">
+                <router-view @snack="snack" />
+            </div>
+        </div>
         <notification :msg="msg" v-if="notify" @close="notify = false" />
-        <img src="./assets/logoTint.png" alt="Logo Tint" class="mx-auto w-24 sm:w-1/6 my-4" />
-        <router-view @snack="snack" />
         <footerCustom />
     </div>
 </template>
@@ -10,10 +14,12 @@
 <script>
 import footerCustom from './components/footer.vue'
 import notification from './components/toast.vue'
+import topBar from './components/topBar'
 export default {
     components: {
         footerCustom,
         notification,
+        topBar,
     },
     data() {
         return {
