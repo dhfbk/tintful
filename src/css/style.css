@@ -2,7 +2,7 @@
 
 body {
     background-color: #f8f8f8;
-    font-family: 'Roboto', sans-serif !important;
+    font-family: 'DM Sans', sans-serif !important;
 }
 
 .ripple {
@@ -118,12 +118,24 @@ body {
 }
 
 .miniCardShadow {
-    border-radius: 10px;
-    box-shadow: 10px 10px 20px #d9d9d9, -10px -10px 20px #ffffff;
+    border-radius: 20px;
+    box-shadow: 9px 9px 20px #d9d9d9, -9px -9px 20px #ffffff;
 }
 
 .buttonShadow {
     border-radius: 50px;
     background: linear-gradient(145deg, #f0f0f0, #cacaca);
     box-shadow: 9px 9px 18px #bebebe, -9px -9px 18px #ffffff;
+}
+
+.colorCard {
+    border-radius: 10px;
+    background: linear-gradient(145deg, #23acff, #1e91e4);
+    box-shadow: 10px 10px 20px #c3c4c8, -10px -10px 20px #ffffff;
+}
+
+.insetShadow {
+    border-radius: 10px;
+    /*background: #E5E7EB;*/
+    box-shadow: inset 5px 5px 9px #c3c4c8, inset -5px -5px 9px #ffffff;
 }

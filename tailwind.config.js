@@ -5,7 +5,9 @@ module.exports = {
         extend: {
             colors: {
                 primary: '#21A1FD',
-                primaryDark: '#af212f',
+                primaryGradient: 'linear-gradient(145deg, #23acff, #1e91e4)',
+                primaryDark: '#0284e2',
+                primaryLight: '#98ECFD',
             },
             opacity: {
                 '10': '.1',
