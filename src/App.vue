@@ -1,8 +1,8 @@
 <template>
-    <div id="app" class="relative mx-auto antialiased pr-6 pt-6 bg-gray-200">
-        <div class="flex flex-row ">
+    <div id="app" class="relative mx-auto antialiased p-2 md:p-4 bg-gray-200 min-h-screen">
+        <div class="flex flex-col md:flex-row">
             <topBar />
-            <div class="w-11/12 p-8 ml-2 cardShadow bg-gray-200 min-h-full" style="height:min-content">
+            <div class="w-full md:w-11/12 p-3 md:p-4 md:p-8 mx-auto md:ml-2 cardShadow min-h-full" style="height:min-content">
                 <router-view @snack="snack" />
             </div>
         </div>

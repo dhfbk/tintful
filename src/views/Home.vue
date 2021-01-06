@@ -15,28 +15,16 @@
                     </svg>
                     <span class="col-span-4 w-auto grid text-center self-center">Facebook Login</span>
                 </button> -->
-            <div class="h-full text-xl mb-4" style="font-family: 'DM Sans', sans-serif">
-                <div class="flex mt-4 mb-12">
-                    <div class="w-1/2 flex flex-col ">
-                        <img
-                            src="../assets/logoTint.png"
-                            alt="Logo Tint"
-                            class="w-1/3 mx-auto mb-2"
-                            @click="$router.push({ path: '/' }).catch(() => {})"
-                        />
-                        <div class="h-1/2 flex items-center">
-                            <div>
-                                <span class="font-medium text-primary">Tint (The Italian NLP Tool)</span> is a
-                                Java-based pipeline for Natural Language Processing (NLP) in Italian.
-                                <div class="mt-6">
-                                    It implements most of the common linguistic tools, such as part-of-speech tagging,
-                                    dependency parsing, entity linking.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-1/2 ">
-                        <!-- <div class="rounded-lg  shadow-md ml-auto ">
+            <div>
+                <span class="font-medium text-red-500">Tint (The Italian NLP Tool)</span> is a Java-based pipeline for
+                Natural Language Processing (NLP) in Italian.
+                <p>
+                    It implements most of the common linguistic tools, such as part-of-speech tagging, dependency
+                    parsing, entity linking.
+                </p>
+            </div>
+            <div class="h-full my-2" style="font-family: 'DM Sans', sans-serif">
+                <!-- <div class="rounded-lg  shadow-md ml-auto ">
                             <div class="h-4 rounded-t w-full bg-black flex flex-row py-auto">
                                 <div class="h-2 ml-1 mr-1 w-2 rounded-full bg-red-500 my-auto"></div>
                                 <div class="h-2 mr-1 w-2 rounded-full bg-yellow-500 my-auto"></div>
@@ -44,82 +32,76 @@
                             </div>
                             <img src="../assets/demo.png" class="rounded-b" />
                         </div> -->
-                        <div>
-                            <label
-                                class="block tracking-wide text-gray-900 text-md font-medium pb-2"
-                                for="textInput"
-                                @mouseover="hoverText = true"
-                                @mouseleave="hoverText = false"
-                            >
-                                Insert text to analyse
-                            </label>
-                            <div class="rounded">
-                                <textarea
-                                    placeholder="Text"
-                                    :class="[
-                                        hoverText ? 'border-primary' : 'border-gray-200',
-                                        $v.text.$error ? 'border-primary' : 'border-gray-200',
-                                    ]"
-                                    class="w-full border-2 appearance-none insetShadow bg-gray-200 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
-                                    id="textInput"
-                                    rows="8"
-                                    @focus="hoverText = true"
-                                    @blur="hoverText = false"
-                                    v-model.trim="$v.text.$model"
-                                    required
-                                ></textarea>
-                            </div>
-                        </div>
-                        <div class="m-2">
-                            <label class="block tracking-wide text-gray-900 text-md font-medium mr-2" for="action"
-                                >You can also choose an example:</label
-                            >
-                            <div class="relative mt-4 mb-2">
-                                <select
-                                    class="block appearance-none miniCardShadow bg-gray-200 border-b-2 border-gray-200 appearance-none w-full py-2 pl-2 pr-8 text-gray-700 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
-                                    id="action"
-                                    name="action"
-                                    v-model="exampleChoice"
-                                >
-                                    <option value="" disabled selected hidden>Choose example...</option>
-                                    <option value="1">
-                                        Difficult - Appostamenti di caccia realizzati secondo [...]
-                                    </option>
-                                    <option value="2">
-                                        Easy - Un picchio e una pallina si trovavano in un cassetto [...]
-                                    </option>
-                                </select>
-                                <div
-                                    class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900"
-                                >
-                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path
-                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-2">
-                            <p class="text-blue-500 text-lg text-center" :class="serverError ? 'block' : 'hidden'">
-                                A server error happened! Check the browser's console for more details
-                            </p>
-                        </div>
-                        <div class="m-2 mt-4 width-full flow-root">
-                            <button
-                                class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded focus:outline-none"
-                                @click="process()"
-                            >
-                                <svg
-                                    :class="loading ? 'animate-spin mr-1 fill-current' : 'hidden'"
-                                    style="width: 24px; height: 24px"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" /></svg
-                                >Process
-                            </button>
+                <div>
+                    <label
+                        class="block tracking-wide text-primary text-md font-medium pb-2"
+                        for="textInput"
+                        @mouseover="hoverText = true"
+                        @mouseleave="hoverText = false"
+                    >
+                        Insert text to analyse
+                    </label>
+                    <div class="rounded">
+                        <textarea
+                            placeholder="Text"
+                            :class="[
+                                hoverText ? 'border-primary' : 'border-gray-200',
+                                $v.text.$error ? 'border-primary' : 'border-gray-200',
+                            ]"
+                            class="w-full border-2 appearance-none insetShadow bg-gray-200 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
+                            id="textInput"
+                            rows="8"
+                            @focus="hoverText = true"
+                            @blur="hoverText = false"
+                            v-model.trim="$v.text.$model"
+                            required
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="my-2">
+                    <label class="block tracking-wide text-primary text-md font-medium pb-2" for="action"
+                        >You can also choose an example:</label
+                    >
+                    <div class="relative mb-2">
+                        <select
+                            class="block appearance-none miniCardShadow rounded-full bg-gray-200 border-b-2 border-gray-200 w-full py-2 pl-2 pr-8 text-gray-700 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
+                            id="action"
+                            name="action"
+                            v-model="exampleChoice"
+                        >
+                            <option value="" disabled selected hidden>Choose example...</option>
+                            <option value="1">
+                                Difficult - Appostamenti di caccia realizzati secondo [...]
+                            </option>
+                            <option value="2">
+                                Easy - Un picchio e una pallina si trovavano in un cassetto [...]
+                            </option>
+                        </select>
+                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                            </svg>
                         </div>
                     </div>
+                </div>
+                <div class="m-2">
+                    <p class="text-blue-500 text-lg text-center" :class="serverError ? 'block' : 'hidden'">
+                        A server error happened! Check the browser's console for more details
+                    </p>
+                </div>
+                <div class="mt-4 width-full flow-root">
+                    <button
+                        class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded-full focus:outline-none"
+                        @click="process()"
+                    >
+                        <svg
+                            :class="loading ? 'animate-spin mr-1 fill-current' : 'hidden'"
+                            style="width: 24px; height: 24px"
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" /></svg
+                        >Process
+                    </button>
                 </div>
             </div>
             <!-- <div class="flex">

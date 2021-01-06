@@ -1,21 +1,21 @@
 <template>
-    <div v-if="show" class="grid grid-cols-8 gap-x-8">
+    <div v-if="show" class="grid grid-cols-8 gap-x-6 md:gap-x-8">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
         <!-- <infoCard :jsonData="processedData" /> -->
         <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
-            class="col-span-4 md:col-span-2 2xl:col-span-1 miniCardShadow mb-4 p-4 transition-colors transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 hover:text-white gradient"
+            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 miniCardShadow mb-4 p-3 md:p-4 transition-colors transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 hover:text-white gradient"
         >
-            <div class=" font-bold text-4xl">{{ i }}</div>
-            <div class="font-thin  text-sm">{{ infoMiniCards.keys[x] }}</div>
+            <p class="font-bold text-xl sm:text-2xl md:text-4xl">{{ i }}</p>
+            <p class="font-thin text-sm overflow-ellipsis block overflow-hidden">{{ infoMiniCards.keys[x] }}</p>
         </span>
         <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-8 mb-4">
-            <div class="md:col-span-3 mt-6 ">
-                <div class="miniCardShadow p-4 flex flex-col w-full">
-                    <div class="w-full flex flex-row mb-4 ">
-                        <div class="   text-primaryDark text-xl w-full">Readability</div>
+            <div class="md:col-span-3 mt-6">
+                <div class="miniCardShadow p-3 md:p-4 flex flex-col w-full">
+                    <div class="w-full flex flex-row mb-4">
+                        <div class="text-primaryDark text-xl w-full">Readability</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'readability')"
                             class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
@@ -34,29 +34,31 @@
                     </div>
                     <div class="flex flex-row">
                         <div
-                            class="w-1/3 flex flex-col place-items-center"
+                            class="w-1/3 flex flex-col place-items-center mx-1"
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div class="insetShadow inline-block h-32 w-6 relative">
+                            <div class="insetShadow inline-block h-32 w-4 sm:w-6 relative">
                                 <div
-                                    class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-6 absolute bottom-0"
+                                    class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-4 sm:w-6 absolute bottom-0"
                                     style="border-radius:10px"
                                     :style="{ height: i + '%' }"
                                 ></div>
                             </div>
-                            <div class="text-xs font-thin w-2/3 text-center text-gray-600 inline mt-2">
+                            <p
+                                class="text-xs font-thin w-2/3 text-center text-gray-600 mt-2 overflow-ellipsis block overflow-hidden"
+                            >
                                 {{ chartOptionsReadability.labels[x] }}
-                            </div>
-                            <div class="text-sm w-2/3 text-center font-bold text-gray-600 inline mt-1">
+                            </p>
+                            <p class="text-sm w-2/3 text-center font-bold text-gray-600 inline mt-1">
                                 {{ i.toFixed(2) }}
-                            </div>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="md:col-span-4 mt-6 ">
-                <div class="miniCardShadow h-full p-4 flex flex-col w-full">
+                <div class="miniCardShadow h-full p-3 md:p-4 flex flex-col w-full">
                     <div class="w-full  flex flex-row mb-4 ">
                         <div class=" text-primaryDark text-xl w-full">Difficulty</div>
                         <button
@@ -76,15 +78,21 @@
                         </button>
                     </div>
                     <div class="flex flex-row">
-                        <div class="w-1/3 flex flex-col place-items-center" v-for="(i, x) in seriesDifficulty" :key="x">
-                            <div class="insetShadow inline-block h-32 w-6 relative ">
+                        <div
+                            class="w-1/3 flex flex-col place-items-center items-center content-center mx-1"
+                            v-for="(i, x) in seriesDifficulty"
+                            :key="x"
+                        >
+                            <div class="insetShadow inline-block h-32 w-4 sm:w-6 relative ">
                                 <div
-                                    class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-6 absolute bottom-0"
+                                    class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-4 sm:w-6 absolute bottom-0"
                                     style="border-radius:10px"
                                     :style="{ height: i + '%' }"
                                 ></div>
                             </div>
-                            <div class="text-xs w-2/3 text-center font-thin text-gray-600 inline mt-2">
+                            <div
+                                class="text-xs w-2/3 text-center font-thin text-gray-600 mt-2 overflow-ellipsis block overflow-hidden"
+                            >
                                 {{ chartOptionsDifficulty.labels[x] }}
                             </div>
                             <div class="text-sm w-2/3 text-center font-bold text-gray-600 inline mt-1">
@@ -375,14 +383,14 @@ export default {
 @import url('../css/brat.css');
 
 .gradient::before {
-    border-radius: 20px;
+    border-radius: 0.75rem;
     position: absolute;
     content: '';
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: linear-gradient(to top left, #0284e2, #98ecfd);
+    background-image: linear-gradient(to top right, #0284e2, #98ecfd);
     z-index: -1;
     transition: opacity 0.15s ease-out;
     opacity: 0;

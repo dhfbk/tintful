@@ -117,13 +117,13 @@ body {
 }
 
 .cardShadow {
-    border-radius: 30px;
+    border-radius: 0.75rem;
     box-shadow   : 10px 10px 20px #c3c4c8, -10px -10px 20px #ffffff;
 }
 
 .miniCardShadow {
-    border-radius: 20px;
-    box-shadow   : 8px 8px 16px #c3c4c8, -8px -8px 16px #ffffff;
+    border-radius: 0.75rem;
+    box-shadow   : 6px 6px 10px #c3c4c8, -6px -6px 10px #ffffff;
 }
 
 .buttonShadow {
