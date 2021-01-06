@@ -110,7 +110,13 @@
             @showFeatsModal="featsModal"
             :refresh="refreshBrat"
         />
-        <table-edit v-else-if="selectedTab == 1" :currentPhrase="sentenceIndex" @edited="isEdited = true" />
+        <table-edit
+            v-else-if="selectedTab == 1"
+            :sentenceIndex="sentenceIndex"
+            :currentPhrase="sentenceIndex"
+            @edited="isEdited = true"
+            @editFeats="featsModal"
+        />
         <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
     </div>
 </template>

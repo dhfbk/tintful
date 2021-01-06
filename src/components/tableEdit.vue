@@ -46,6 +46,7 @@
                         <div class="flex content-center items-center h-full">
                             <button
                                 class="mr-1 text-primary bg-transparent hover:bg-gray-300 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                                @click="editFeats(d)"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -111,6 +112,7 @@ export default {
     name: 'tableEdit',
     props: {
         currentPhrase: Number,
+        sentenceIndex: Number,
     },
     data() {
         return {
@@ -221,6 +223,21 @@ export default {
         this.loading = false
     },
     methods: {
+        editFeats(token) {
+            var index = token.index - 1
+            var d = this.$store.state.editableData
+            var feat = d.sentences[this.sentenceIndex].tokens[index]
+
+            console.log(token)
+            let infoToEdit = {}
+            infoToEdit.senIndex = this.sentenceIndex
+            infoToEdit.tokIndex = index
+            infoToEdit.feats = feat.features
+            infoToEdit.lemma = feat.lemma
+            infoToEdit.pos = feat.pos
+            infoToEdit.word = feat.word
+            this.$emit('editFeats', infoToEdit)
+        },
         editData(mode, index, value) {
             if (mode == 'deprels') {
                 this.deprelsEditable[index] = value

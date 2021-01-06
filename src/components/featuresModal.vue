@@ -6,7 +6,7 @@
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    class="bg-white rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
                     @click.stop
                     v-if="showDialog"
                 >
@@ -33,7 +33,7 @@
                         <span>POS: </span>
                         <transition name="zoom">
                             <select
-                                class="appearance-none font-medium h-full border-b  inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                class="appearance-none font-medium h-full border-b inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 name="posSelect"
                                 id="posSelect"
                                 v-model="pos"
@@ -149,18 +149,18 @@
                                 />
                             </transition-group>
                         </div>
-                        <div class="float-right pb-4">
-                            <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
-                                @click="toggleModal()"
-                            >
-                                CANCEL
-                            </button>
+                        <div>
                             <button
                                 class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent py-2 px-4 rounded"
                                 @click="save()"
                             >
                                 SAVE
+                            </button>
+                            <button
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
+                                @click="toggleModal()"
+                            >
+                                CANCEL
                             </button>
                         </div>
                     </div>
@@ -370,7 +370,7 @@ export default {
                 case 'DQ':
                 case 'DR':
                     this.showNum = true
-                    this.showPer = true
+                    this.showGen = true
                     this.showPronType = true
                     break
                 case 'N':
@@ -445,7 +445,7 @@ export default {
         setTimeout(() => {
             this.showDialog = true
         }, 1)
-        console.log(this.featsToEdit)
+        console.log(this.featsToEdit.feats)
         this.pos = this.featsToEdit.pos
         let features = this.featsToEdit.feats
         this.gen = features.Gender == undefined ? '' : features.Gender[0]
