@@ -8,6 +8,7 @@ module.exports = {
                 primaryGradient: 'linear-gradient(145deg, #23acff, #1e91e4)',
                 primaryDark: '#0284e2',
                 primaryLight: '#98ECFD',
+                bgDark: '#26292b'
             },
             opacity: {
                 '10': '.1',

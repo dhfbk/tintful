@@ -6,7 +6,7 @@
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
-            class="col-span-4 md:col-span-2 2xl:col-span-1 miniCardShadow mb-4 p-4 transition-colors transition-transform transform hover:skew-y-1 bg-gradient-to-tl hover:to-primaryLight hover:via-primary hover:from-primaryDark text-gray-700 hover:text-white"
+            class="col-span-4 md:col-span-2 2xl:col-span-1 miniCardShadow mb-4 p-4 transition-colors transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 hover:text-white gradient"
         >
             <div class=" font-bold text-4xl">{{ i }}</div>
             <div class="font-thin  text-sm">{{ infoMiniCards.keys[x] }}</div>
@@ -373,4 +373,22 @@ export default {
 
 <style scoped>
 @import url('../css/brat.css');
+
+.gradient::before {
+    border-radius: 20px;
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to top left, #0284e2, #98ecfd);
+    z-index: -1;
+    transition: opacity 0.15s ease-out;
+    opacity: 0;
+}
+
+.gradient:hover::before {
+    opacity: 1;
+}
 </style>
