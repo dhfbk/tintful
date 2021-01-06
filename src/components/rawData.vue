@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2 col-span-8 transition-shadow duration-150 ease-out"
-        :class="hoverCard ? 'shadow-lg' : ''"
-    >
+    <div class="miniCardShadow p-4 mt-2 col-span-8">
         <div
             class="flex w-full flex-row justify-between content-center items-center cursor-pointer"
             @click.stop=";(isOpen = !isOpen) && (selectedTab = 0)"

@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <button
-            class="text-primary bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"
+    <div class="cardShadow col-span-8 mt-8 p-6">
+        <!-- <button
+            class="text-primary  bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"
             @click="$router.push({ path: '/edit' })"
         >
             <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -10,40 +10,41 @@
                 />
             </svg>
             Edit annotations
-        </button>
+        </button> -->
+        <div class="   text-primaryDark text-xl w-full">Annotations</div>
         <div class="overflow-x-auto w-full">
-            <div class="w-full grid grid-cols-4 text-center min-w-max">
+            <div class="w-full grid grid-cols-4 text-center min-w-max gap-x-6 p-3">
                 <div
                     @click=";(selectedTab = 0), $emit('opensheet')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors microShadow duration-150 cursor-pointer py-2 w-full px-1"
+                    :class="selectedTab == 0 ? 'text-primary insetShadow' : 'text-gray-500'"
                 >
                     General Information
                 </div>
                 <div
                     @click=";(selectedTab = 1), $emit('closesheet')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors microShadow duration-150 cursor-pointer py-2 min-w-max px-1"
+                    :class="selectedTab == 1 ? 'text-primary insetShadow' : 'text-gray-500'"
                 >
                     Part Of Speech
                 </div>
                 <div
                     @click=";(selectedTab = 2), $emit('closesheet')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors microShadow duration-150 cursor-pointer py-2 min-w-max px-1"
+                    :class="selectedTab == 2 ? 'text-primary insetShadow' : 'text-gray-500'"
                 >
                     Named Entity Recognition
                 </div>
                 <div
                     @click=";(selectedTab = 3), $emit('closesheet')"
-                    class="transition-colors duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 3 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors microShadow duration-150 cursor-pointer py-2 min-w-max px-1"
+                    :class="selectedTab == 3 ? 'text-primary insetShadow' : 'text-gray-500'"
                 >
                     Basic Dependencies
                 </div>
-                <div class="col-span-4">
+                <!-- <div class="col-span-4">
                     <div class="h-1 w-1/4 bg-primary" :class="tabScroll"></div>
-                </div>
+                </div> -->
             </div>
         </div>
         <general-info v-if="selectedTab == 0" @sheet="sheet" />

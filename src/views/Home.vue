@@ -60,7 +60,7 @@
                                         hoverText ? 'border-primary' : 'border-gray-200',
                                         $v.text.$error ? 'border-primary' : 'border-gray-200',
                                     ]"
-                                    class="w-full border-2 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
+                                    class="w-full border-2 appearance-none insetShadow bg-gray-200 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
                                     id="textInput"
                                     rows="8"
                                     @focus="hoverText = true"
@@ -74,9 +74,9 @@
                             <label class="block tracking-wide text-gray-900 text-md font-medium mr-2" for="action"
                                 >You can also choose an example:</label
                             >
-                            <div class="relative">
+                            <div class="relative mt-4 mb-2">
                                 <select
-                                    class="block border-b-2 border-gray-200 appearance-none w-full py-2 pl-2 pr-8 text-gray-700 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
+                                    class="block appearance-none miniCardShadow bg-gray-200 border-b-2 border-gray-200 appearance-none w-full py-2 pl-2 pr-8 text-gray-700 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
                                     id="action"
                                     name="action"
                                     v-model="exampleChoice"

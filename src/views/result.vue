@@ -2,7 +2,7 @@
     <div v-if="show" class="grid grid-cols-8 gap-x-8">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
         <!-- <infoCard :jsonData="processedData" /> -->
-        <div class="col-span-8 mb-4 font-bold text-primaryDark text-xl">General Information</div>
+        <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
@@ -11,11 +11,11 @@
             <div class=" font-bold text-4xl">{{ i }}</div>
             <div class="font-thin  text-sm">{{ infoMiniCards.keys[x] }}</div>
         </span>
-        <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-8">
+        <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-8 mb-4">
             <div class="md:col-span-3 mt-6 ">
                 <div class="miniCardShadow p-4 flex flex-col w-full">
                     <div class="w-full flex flex-row mb-4 ">
-                        <div class="  font-bold text-primaryDark text-xl w-full">Readability</div>
+                        <div class="   text-primaryDark text-xl w-full">Readability</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'readability')"
                             class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
@@ -38,7 +38,7 @@
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div class="insetShadow inline-block h-36 w-6 relative">
+                            <div class="insetShadow inline-block h-32 w-6 relative">
                                 <div
                                     class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-6 absolute bottom-0"
                                     style="border-radius:10px"
@@ -56,9 +56,9 @@
                 </div>
             </div>
             <div class="md:col-span-4 mt-6 ">
-                <div class="miniCardShadow p-4 flex flex-col w-full">
+                <div class="miniCardShadow h-full p-4 flex flex-col w-full">
                     <div class="w-full  flex flex-row mb-4 ">
-                        <div class="font-bold text-primaryDark text-xl w-full">Difficulty</div>
+                        <div class=" text-primaryDark text-xl w-full">Difficulty</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'difficulty')"
                             class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
@@ -77,7 +77,7 @@
                     </div>
                     <div class="flex flex-row">
                         <div class="w-1/3 flex flex-col place-items-center" v-for="(i, x) in seriesDifficulty" :key="x">
-                            <div class="insetShadow inline-block h-36 w-6 relative ">
+                            <div class="insetShadow inline-block h-32 w-6 relative ">
                                 <div
                                     class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-6 absolute bottom-0"
                                     style="border-radius:10px"
@@ -95,7 +95,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-8 w-full mt-8">
+        <!-- <div class="col-span-8 w-full mt-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16">
                 <statsCard
                     :title="'Readability'"
@@ -116,15 +116,12 @@
                     @modal=";(modal = !modal), (modalMode = 'difficulty')"
                 />
             </div>
-        </div>
-        <rawData />
-        <div class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2 col-span-8">
-            <annotations
-                @sheet="sheetData"
-                @closesheet="$refs.swipeableBottomSheet.setState('close')"
-                @opensheet=";(info = ''), (values = []), (keys = []), $refs.swipeableBottomSheet.setState('half')"
-            />
-        </div>
+        </div> -->
+        <annotations
+            @sheet="sheetData"
+            @closesheet="$refs.swipeableBottomSheet.setState('close')"
+            @opensheet=";(info = ''), (values = []), (keys = []), $refs.swipeableBottomSheet.setState('half')"
+        />
         <swipeable-bottom-sheet ref="swipeableBottomSheet" class="md:hidden">
             <h1 v-if="info == ''" class="px-4 text-center">
                 Click on a token for further information
@@ -141,12 +138,13 @@
                 /></span>
             </div>
         </swipeable-bottom-sheet>
+        <rawData />
     </div>
 </template>
 
 <script>
 import annotations from '../components/annotations.vue'
-import statsCard from '../components/statsCard.vue'
+//import statsCard from '../components/statsCard.vue'
 //import infoCard from '../components/infoCard.vue'
 import rawData from '../components/rawData.vue'
 import modalInfo from '../components/modalInfo.vue'
@@ -155,7 +153,7 @@ export default {
     name: 'result',
     components: {
         annotations,
-        statsCard,
+        //statsCard,
         //infoCard,
         rawData,
         modalInfo,
