@@ -39,11 +39,13 @@
                             :key="x"
                         >
                             <div class="insetShadow inline-block h-32 w-4 sm:w-6 relative">
-                                <div
-                                    class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-4 sm:w-6 absolute bottom-0"
-                                    style="border-radius:10px"
-                                    :style="{ height: i + '%' }"
-                                ></div>
+                                <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
+                                    <div
+                                        class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0"
+                                        style="border-radius:10px"
+                                        :class="chartOptionsReadability.colors[x]"
+                                    ></div>
+                                </div>
                             </div>
                             <p
                                 class="text-xs font-thin w-2/3 text-center text-gray-600 mt-2 overflow-ellipsis block overflow-hidden"
@@ -84,11 +86,13 @@
                             :key="x"
                         >
                             <div class="insetShadow inline-block h-32 w-4 sm:w-6 relative ">
-                                <div
-                                    class="bg-gradient-to-tl to-primaryLight via-primary from-primaryDark w-4 sm:w-6 absolute bottom-0"
-                                    style="border-radius:10px"
-                                    :style="{ height: i + '%' }"
-                                ></div>
+                                <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
+                                    <div
+                                        class="heightTrns h-full bg-gradient-to-tl w-full absolute bottom-0"
+                                        style="border-radius:10px"
+                                        :class="chartOptionsDifficulty.colors[x]"
+                                    ></div>
+                                </div>
                             </div>
                             <div
                                 class="text-xs w-2/3 text-center font-thin text-gray-600 mt-2 overflow-ellipsis block overflow-hidden"
@@ -345,11 +349,11 @@ export default {
                     max = this.processedData.readability.maxYellowValues.density
                 }
                 if (this.seriesReadability[i] / 100 >= min && this.seriesReadability[i] / 100 <= max) {
-                    tmpCol = '#ffbb00'
+                    tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
                 } else if (this.seriesReadability[i] / 100 < min) {
-                    tmpCol = '#15ff00'
+                    tmpCol = 'to-red-300 via-red-500 from-red-700'
                 } else {
-                    tmpCol = '#ff0000'
+                    tmpCol = 'to-green-300 via-green-500 from-green-700'
                 }
                 this.chartOptionsReadability.colors.push(tmpCol)
             }
@@ -357,11 +361,11 @@ export default {
                 min = 40
                 max = 80
                 if (this.seriesDifficulty[i] >= min && this.seriesDifficulty[i] <= max) {
-                    tmpCol = '#ffbb00'
+                    tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
                 } else if (this.seriesDifficulty[i] < min) {
-                    tmpCol = '#15ff00'
+                    tmpCol = 'to-red-300 via-red-500 from-red-700'
                 } else {
-                    tmpCol = '#ff0000'
+                    tmpCol = 'to-green-300 via-green-500 from-green-700'
                 }
                 this.chartOptionsDifficulty.colors.push(tmpCol)
             }
