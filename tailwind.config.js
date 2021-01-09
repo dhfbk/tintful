@@ -1,6 +1,6 @@
 module.exports = {
     purge: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'class', // or 'media' or 'class'
     theme: {
         extend: {
             colors: {
@@ -8,7 +8,7 @@ module.exports = {
                 primaryGradient: 'linear-gradient(145deg, #23acff, #1e91e4)',
                 primaryDark: '#0284e2',
                 primaryLight: '#98ECFD',
-                bgDark: '#26292b'
+                bgDark: '#26292b',
             },
             opacity: {
                 '10': '.1',
@@ -28,14 +28,31 @@ module.exports = {
             },
             boxShadow: {
                 borderShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                cardShadow: '10px 10px 20px #c3c4c8, -10px -10px 20px #ffffff',
+                miniCardShadow: '6px 6px 10px #c3c4c8, -6px -6px 10px #ffffff',
+                buttonShadow: '5px 5px 8px #bebebe, -5px -5px 8px #ffffff',
+                buttonShadowFocus: 'inset 5px 5px 8px #bebebe, inset -5px -5px 8px #ffffff',
+                microShadow: '4px 4px 8px #cacbcf, -4px -4px 8px #ffffff',
+                insetShadow: 'inset 5px 5px 9px #c3c4c8, inset -5px -5px 9px #ffffff',
+                microInsetShadow: 'inset 5px 5px 4px #ced0d4, inset -5px -5px 4px #fcfeff',
+
+                cardShadowDark: '10px 10px 20px #131921,-10px -10px 20px #2b394d',
+                miniCardShadowDark: '6px 6px 10px #131921, -6px -6px 10px #2b394d',
+                buttonShadowDark: '5px 5px 8px #131921, -5px -5px 8px #2b394d',
+                buttonShadowFocusDark: 'inset 5px 5px 8px #131921, inset -5px -5px 8px #2b394d',
+                insetShadowDark: 'inset 5px 5px 9px #131921, inset -5px -5px 9px #2b394d',
+                microInsetShadowDark: 'inset 5px 5px 6px #131921,inset -5px -5px 6px #2b394d',
+                microShadowDark: '5px 5px 6px #131921, -5px -5px 6px #2b394d',
             },
             maxWidth: {
-                "xxs": "12rem"
-            }
+                xxs: '12rem',
+            },
         },
     },
     variants: {
-        extend: {},
+        extend: {
+            boxShadow: ['dark'],
+        },
     },
     plugins: [],
 }

@@ -1,8 +1,14 @@
 <template>
-    <div id="app" class="relative mx-auto antialiased p-2 md:p-4 bg-gray-200 min-h-screen">
+    <div
+        id="app"
+        class="relative mx-auto antialiased p-2 md:p-4 bg-gray-200 dark:bg-gray-800 min-h-screen dark:text-gray-200"
+    >
         <div class="flex flex-col md:flex-row">
-            <topBar />
-            <div class="w-full md:w-11/12 p-3 md:p-4 md:p-8 mx-auto md:ml-2 cardShadow min-h-full" style="height:min-content">
+            <topBar @changeMode="changeMode" />
+            <div
+                class="w-full md:w-11/12 p-3 md:p-8 rounded-3xl mx-auto md:ml-2 dark:bg-gray-800 min-h-full dark:shadow-cardShadowDark shadow-cardShadow"
+                style="height:min-content"
+            >
                 <router-view @snack="snack" />
             </div>
         </div>
@@ -28,7 +34,34 @@ export default {
             notify: false,
         }
     },
+    created() {
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (!localStorage.theme) {
+            localStorage.theme = 'light'
+        } else if (localStorage.theme === 'dark') {
+            document.querySelector('html').classList.remove('dark')
+        } else {
+            document.querySelector('html').classList.add('dark')
+        }
+        // Whenever the user explicitly chooses light mode
+
+        // Whenever the user explicitly chooses dark mode
+
+        // Whenever the user explicitly chooses to respect the OS preference
+    },
     methods: {
+        changeMode() {
+            if (localStorage.theme === 'dark') {
+                localStorage.theme = 'light'
+                this.$store.state.theme = 'light'
+                document.querySelector('html').classList.remove('dark')
+            } else {
+                localStorage.theme = 'dark'
+                this.$store.state.theme = 'dark'
+                document.querySelector('html').classList.add('dark')
+            }
+            console.log(this.$store.state.theme)
+        },
         snack(msg) {
             this.msg = msg
             this.notify = true

@@ -6,14 +6,16 @@
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
-            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 miniCardShadow mb-4 p-3 md:p-4 transition-colors transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 hover:text-white gradient"
+            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl mb-4 p-3 md:p-4 transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 dark:text-gray-300 hover:text-white gradient"
         >
             <p class="font-bold text-xl sm:text-2xl md:text-4xl">{{ i }}</p>
             <p class="font-thin text-sm overflow-ellipsis block overflow-hidden">{{ infoMiniCards.keys[x] }}</p>
         </span>
         <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-8 mb-4">
             <div class="md:col-span-3 mt-6">
-                <div class="miniCardShadow p-3 md:p-4 flex flex-col w-full">
+                <div
+                    class="shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl p-3 md:p-4 flex flex-col w-full"
+                >
                     <div class="w-full flex flex-row mb-4">
                         <div class="text-primaryDark text-xl w-full">Readability</div>
                         <button
@@ -38,21 +40,23 @@
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div class="insetShadow inline-block h-32 w-4 sm:w-6 relative">
+                            <div
+                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-32 w-4 sm:w-6 relative rounded-lg	"
+                            >
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
-                                        class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0"
+                                        class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
                                         style="border-radius:10px"
                                         :class="chartOptionsReadability.colors[x]"
                                     ></div>
                                 </div>
                             </div>
                             <p
-                                class="text-xs font-thin w-2/3 text-center text-gray-600 mt-2 overflow-ellipsis block overflow-hidden"
+                                class="text-xs font-thin w-2/3 text-center text-gray-600  dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                             >
                                 {{ chartOptionsReadability.labels[x] }}
                             </p>
-                            <p class="text-sm w-2/3 text-center font-bold text-gray-600 inline mt-1">
+                            <p class="text-sm w-2/3 text-center font-bold text-gray-600 dark:text-gray-300 inline mt-1">
                                 {{ i.toFixed(2) }}
                             </p>
                         </div>
@@ -60,8 +64,10 @@
                 </div>
             </div>
             <div class="md:col-span-4 mt-6 ">
-                <div class="miniCardShadow h-full p-3 md:p-4 flex flex-col w-full">
-                    <div class="w-full  flex flex-row mb-4 ">
+                <div
+                    class="shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl h-full p-3 md:p-4 flex flex-col w-full"
+                >
+                    <div class="w-full flex flex-row mb-4 ">
                         <div class=" text-primaryDark text-xl w-full">Difficulty</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'difficulty')"
@@ -85,21 +91,25 @@
                             v-for="(i, x) in seriesDifficulty"
                             :key="x"
                         >
-                            <div class="insetShadow inline-block h-32 w-4 sm:w-6 relative ">
+                            <div
+                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-32 w-4 sm:w-6 relative rounded-lg	"
+                            >
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
-                                        class="heightTrns h-full bg-gradient-to-tl w-full absolute bottom-0"
+                                        class="heightTrns h-full bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
                                         style="border-radius:10px"
                                         :class="chartOptionsDifficulty.colors[x]"
                                     ></div>
                                 </div>
                             </div>
                             <div
-                                class="text-xs w-2/3 text-center font-thin text-gray-600 mt-2 overflow-ellipsis block overflow-hidden"
+                                class="text-xs w-2/3 text-center font-thin text-gray-600  dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                             >
                                 {{ chartOptionsDifficulty.labels[x] }}
                             </div>
-                            <div class="text-sm w-2/3 text-center font-bold text-gray-600 inline mt-1">
+                            <div
+                                class="text-sm w-2/3 text-center font-bold text-gray-600  dark:text-gray-300 inline mt-1"
+                            >
                                 {{ i.toFixed(2) }}
                             </div>
                         </div>

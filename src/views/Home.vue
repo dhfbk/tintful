@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="">
         <div class="m-2">
             <!-- <button
                     class="mb-4 sm:mb-0 rounded grid grid-cols-5 mx-auto bg-blue-500 px-2 py-2 hover:bg-blue-600 transition-colors duration-100 ease-out text-white w-max cursor-pointer focus:outline-none"
@@ -15,7 +15,7 @@
                     </svg>
                     <span class="col-span-4 w-auto grid text-center self-center">Facebook Login</span>
                 </button> -->
-            <div>
+            <div class="">
                 <span class="font-medium text-red-500">Tint (The Italian NLP Tool)</span> is a Java-based pipeline for
                 Natural Language Processing (NLP) in Italian.
                 <p>
@@ -23,7 +23,7 @@
                     parsing, entity linking.
                 </p>
             </div>
-            <div class="h-full my-2" style="font-family: 'DM Sans', sans-serif">
+            <div class="h-full my-2">
                 <!-- <div class="rounded-lg  shadow-md ml-auto ">
                             <div class="h-4 rounded-t w-full bg-black flex flex-row py-auto">
                                 <div class="h-2 ml-1 mr-1 w-2 rounded-full bg-red-500 my-auto"></div>
@@ -48,7 +48,7 @@
                                 hoverText ? 'border-primary' : 'border-gray-200',
                                 $v.text.$error ? 'border-primary' : 'border-gray-200',
                             ]"
-                            class="w-full border-2 appearance-none insetShadow bg-gray-200 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
+                            class="w-full appearance-none shadow-insetShadow dark:shadow-insetShadowDark bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
                             id="textInput"
                             rows="8"
                             @focus="hoverText = true"
@@ -64,7 +64,7 @@
                     >
                     <div class="relative mb-2">
                         <select
-                            class="block appearance-none miniCardShadow rounded-full bg-gray-200 border-b-2 border-gray-200 w-full py-2 pl-2 pr-8 text-gray-700 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
+                            class="block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-full bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-800 w-full py-2 pl-2 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
                             id="action"
                             name="action"
                             v-model="exampleChoice"

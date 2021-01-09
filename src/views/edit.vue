@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full rounded-lg shadow-md p-4 mx-auto bg-white mt-2">
+    <div class="">
         <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
         <features-modal
             @closeFeatsModal="showFeatsModal = false"
@@ -14,32 +14,44 @@
             :msg="confirmText"
             @confirm="confirmAction"
         />
-        <div class="overflow-x-auto">
-            <div class="w-full grid grid-cols-3 text-center min-w-max">
+        <div class="overflow-x-auto w-full">
+            <div class="w-full grid grid-cols-3 text-center min-w-max gap-x-6 p-3">
                 <div
                     @click="confirmModal('graph')"
-                    class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    :class="
+                        selectedTab == 0
+                            ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
+                            : 'text-gray-500 shadow-microShadow dark:shadow-microShadowDark'
+                    "
                 >
                     Flat graph
                 </div>
                 <div
                     @click="confirmModal('table')"
-                    class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    :class="
+                        selectedTab == 1
+                            ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
+                            : 'text-gray-500 shadow-microShadow dark:shadow-microShadowDark'
+                    "
                 >
                     Table
                 </div>
                 <div
                     @click="confirmModal('ner')"
-                    class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t min-w-max px-1"
-                    :class="selectedTab == 2 ? 'text-primary' : 'text-gray-500'"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    :class="
+                        selectedTab == 2
+                            ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
+                            : 'text-gray-500 shadow-microShadow dark:shadow-microShadowDark'
+                    "
                 >
                     Named Entity Recognition
                 </div>
-                <div class="col-span-4">
+                <!-- <div class="col-span-4">
                     <div class="h-1 w-1/3 bg-primary" :class="tabScroll"></div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="grid grid-cols-3 mt-1">
