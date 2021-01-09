@@ -1,15 +1,15 @@
 <template>
-    <div class="miniCardShadow p-4 mt-2 col-span-8">
+    <div class="shadow-miniCardShadow dark:shadow-miniCardShadowDark p-4 mt-2 col-span-8 rounded-xl mt-8 p-6">
         <div
             class="flex w-full flex-row justify-between content-center items-center cursor-pointer"
             @click.stop=";(isOpen = !isOpen) && (selectedTab = 0)"
             @mouseenter="hoverCard = true"
             @mouseleave="hoverCard = false"
         >
-            <h3 class="font-bold">Show raw text and json</h3>
+            <h3 class="text-primaryDark text-xl w-full">Show raw text and json</h3>
             <button class="bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max justify-self-end">
                 <svg
-                    class="transition-transform duration-300 ease-out"
+                    class="transition-transform duration-300 ease-out fill-current text-primary"
                     :class="{ 'transform  rotate-180': isOpen }"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -27,15 +27,15 @@
                 <div class="w-full grid grid-cols-2 text-center">
                     <div
                         @click="selectedTab = 0"
-                        class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
-                        :class="selectedTab == 0 ? 'text-primary' : 'text-gray-500'"
+                        class="transition-colors ease-out duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer py-2 rounded-t"
+                        :class="selectedTab == 0 ? 'text-primary' : 'text-gray-400'"
                     >
                         Raw text
                     </div>
                     <div
                         @click="selectedTab = 1"
-                        class="transition-colors ease-out duration-150 hover:bg-gray-100 cursor-pointer py-2 rounded-t"
-                        :class="selectedTab == 1 ? 'text-primary' : 'text-gray-500'"
+                        class="transition-colors ease-out duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer py-2 rounded-t"
+                        :class="selectedTab == 1 ? 'text-primary' : 'text-gray-400'"
                     >
                         JSON data
                     </div>
@@ -44,7 +44,7 @@
                 <p v-if="selectedTab == 0">
                     <button
                         @click="downloadFile('downloadText', 'raw_text.txt')"
-                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100"
+                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                         <span>Download text</span>
                         <svg

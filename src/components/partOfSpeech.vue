@@ -29,7 +29,10 @@
                             :style="{ background: legend[token.pos[0]] }"
                             >{{ token.pos }}
                         </span>
-                        <span class="mx-1 px-1 rounded bg-gray-100 dark:bg-gray-700">{{ token.word }}</span>
+                        <span
+                            class="mx-1 px-1 bg-gray-350 dark:bg-gray-600 rounded select-none text-black dark:text-white"
+                            >{{ token.word }}</span
+                        >
                     </span>
                 </div>
                 <!-- </div> -->

@@ -1,20 +1,20 @@
 <template>
     <transition name="fade-bg" appear>
         <div
-            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800 bg-opacity-25 customZ"
+            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-900 bg-opacity-50 customZ"
             @click="close"
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    class="bg-white dark:bg-black rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
                     @click.stop
                 >
                     <div class="p-4">
                         <div class="flex w-full">
                             <div class="text-primary font-bold text-lg text-primary">Confirm changes</div>
-                            <span class="ripple ml-auto rounded hover:bg-gray-200 p-1" @click="close">
+                            <span class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1" @click="close">
                                 <svg
-                                    class="m-auto fill-current text-gray-700 w-6 h-6 cursor-pointer"
+                                    class="m-auto fill-current text-gray-700 dark:text-gray-200 w-6 h-6 cursor-pointer"
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 18 18"
                                 >
@@ -28,13 +28,13 @@
                         <div class="py-2" v-html="msg"></div>
                         <div class="float-right pb-4">
                             <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
                                 @click="close"
                             >
                                 CANCEL
                             </button>
                             <button
-                                class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
                                 @click="ok"
                             >
                                 PROCEED

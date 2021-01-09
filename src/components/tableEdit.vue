@@ -1,8 +1,8 @@
 <template>
     <div class="overflow-x-auto" v-if="!loading">
-        <table class="xs2:min-w-5/6 bg-white mx-auto border border-gray-300">
+        <table class="xs2:min-w-5/6 bg-transparent mx-auto border border-gray-300 dark:border-gray-500">
             <thead>
-                <tr class="text-left text-white bg-primary border-b border-gray-300 uppercase">
+                <tr class="text-left text-white bg-primary border-b border-gray-300 dark:border-gray-500 uppercase">
                     <th class="px-2" v-for="h in headers" :key="h">{{ h }}</th>
                 </tr>
             </thead>
@@ -10,22 +10,22 @@
                 <tr
                     v-for="(d, index) in $store.state.editableData.sentences[currentPhrase].tokens"
                     :key="index"
-                    class="border-b border-gray-300 hover:bg-gray-100"
+                    class="border-b border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-500"
                 >
-                    <td class="p-1 px-2 border-r border-gray-300 overflow-x-auto" v-html="d.index"></td>
-                    <td class="p-1 px-2 border-r border-gray-300" v-html="d.word"></td>
-                    <td class="p-1 px-2 border-r border-gray-300">
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500 overflow-x-auto" v-html="d.index"></td>
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500" v-html="d.word"></td>
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <input
                             type="text"
-                            class="px-1 border border-primary bg-gray-100 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                             v-model="d.lemma"
                             @change="isEdited = true"
                         />
                     </td>
-                    <td class="p-1 px-2 border-r border-gray-300 uppercase">
+                    <td class="p-1 px-2 border-r border-gray-300 uppercase dark:border-gray-500">
                         <div class="flex content-center items-center h-full w-max">
                             <button
-                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -41,11 +41,11 @@
                             }}
                         </div>
                     </td>
-                    <td class="p-1 px-2 border-r border-gray-300" v-html="d.pos"></td>
-                    <td class="p-1 px-2 border-r border-gray-300">
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500" v-html="d.pos"></td>
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <div class="flex content-center items-center h-full">
                             <button
-                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
                                 @click="editFeats(d)"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -58,12 +58,12 @@
                             {{ d.featuresText }}
                         </div>
                     </td>
-                    <td class="relative p-1 px-2 border-r border-gray-300">
+                    <td class="relative p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <select
                             :name="'head' + d.index"
                             :id="'head' + d.index"
                             v-model="headsEditable[d.index]"
-                            class="w-full block border border-primary appearance-none mr-8 pr-1 rounded bg-gray-100 text-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option
                                 v-for="(n, c) in $store.state.editableData.sentences[currentPhrase][
@@ -76,29 +76,29 @@
                             >
                         </select>
                         <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
-                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <svg class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
                         </div>
                     </td>
-                    <td class="relative p-1 px-2 border-r border-gray-300">
+                    <td class="relative p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <select
                             :name="'dep' + d.index"
                             :id="'dep' + d.index"
                             v-model="deprelsEditable[d.index]"
-                            class="w-full block border border-primary appearance-none mr-24 pr-1 rounded bg-gray-100 text-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option v-for="i in deps" :key="i" :value="i" @click="editData('deprels', d.index, i)">{{
                                 i
                             }}</option>
                         </select>
                         <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
-                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <svg class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
                         </div>
                     </td>
-                    <td class="p-1 px-2 border-r border-gray-300">-</td>
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">-</td>
                     <!--no NER ma solo spaceAfter-->
                     <td class="p-1 px-2">NER: {{ d.ner == 'O' ? '-' : d.ner }}</td>
                 </tr>

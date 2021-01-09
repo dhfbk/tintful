@@ -48,7 +48,7 @@
                                 hoverText ? 'border-primary' : 'border-gray-200',
                                 $v.text.$error ? 'border-primary' : 'border-gray-200',
                             ]"
-                            class="w-full appearance-none shadow-insetShadow dark:shadow-insetShadowDark bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-2 focus:outline-none"
+                            class="w-full appearance-none shadow-insetShadow dark:shadow-insetShadowDark bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-3 focus:outline-none"
                             id="textInput"
                             rows="8"
                             @focus="hoverText = true"
@@ -64,7 +64,7 @@
                     >
                     <div class="relative mb-2">
                         <select
-                            class="block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-full bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-800 w-full py-2 pl-2 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary"
+                            class="block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-full bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-800 w-full py-2 pl-4 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary dark:focus:border-primary dark:hover:border-primary"
                             id="action"
                             name="action"
                             v-model="exampleChoice"
@@ -77,8 +77,8 @@
                                 Easy - Un picchio e una pallina si trovavano in un cassetto [...]
                             </option>
                         </select>
-                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
-                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 mr-2 text-gray-800 dark:text-white">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
                         </div>

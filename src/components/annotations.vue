@@ -1,5 +1,5 @@
 <template>
-    <div class="cardShadow dark:shadow-cardShadowDark rounded-2xl col-span-8 mt-8 p-6">
+    <div class="cardShadow shadow-cardShadow dark:shadow-cardShadowDark rounded-2xl col-span-8 mt-8 p-6">
         <!-- <button
             class="text-primary  bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"
             @click="$router.push({ path: '/edit' })"
@@ -11,12 +11,12 @@
             </svg>
             Edit annotations
         </button> -->
-        <div class="   text-primaryDark text-xl w-full">Annotations</div>
+        <div class="text-primaryDark text-xl w-full">Annotations</div>
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-4 text-center min-w-max gap-x-6 p-3">
                 <div
                     @click=";(selectedTab = 0), $emit('opensheet')"
-                    class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
                     :class="
                         selectedTab == 0
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
@@ -27,7 +27,7 @@
                 </div>
                 <div
                     @click=";(selectedTab = 1), $emit('closesheet')"
-                    class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 min-w-max px-1"
+                    class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 min-w-max px-2"
                     :class="
                         selectedTab == 1
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
@@ -38,7 +38,7 @@
                 </div>
                 <div
                     @click=";(selectedTab = 2), $emit('closesheet')"
-                    class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 min-w-max px-1"
+                    class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 min-w-max px-2"
                     :class="
                         selectedTab == 2
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
@@ -49,7 +49,7 @@
                 </div>
                 <div
                     @click=";(selectedTab = 3), $emit('closesheet')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 min-w-max px-1"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 min-w-max px-2"
                     :class="
                         selectedTab == 3
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'

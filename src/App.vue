@@ -9,7 +9,7 @@
                 class="w-full md:w-11/12 p-3 md:p-8 rounded-3xl mx-auto md:ml-2 dark:bg-gray-800 min-h-full dark:shadow-cardShadowDark shadow-cardShadow"
                 style="height:min-content"
             >
-                <router-view @snack="snack" />
+                <router-view @snack="snack" :sheetMode="sheetMode" />
             </div>
         </div>
         <notification :msg="msg" v-if="notify" @close="notify = false" />
@@ -32,22 +32,24 @@ export default {
             msg: '',
             timeout: 3000,
             notify: false,
+            sheetMode: 'light',
         }
     },
     created() {
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (!localStorage.theme) {
+        if (localStorage.theme == undefined) {
             localStorage.theme = 'light'
+            this.sheetMode = 'light'
+            this.$store.state.theme = 'light'
         } else if (localStorage.theme === 'dark') {
-            document.querySelector('html').classList.remove('dark')
-        } else {
             document.querySelector('html').classList.add('dark')
+            this.sheetMode = 'dark'
+            this.$store.state.theme = 'dark'
+        } else {
+            document.querySelector('html').classList.remove('dark')
+            this.sheetMode = 'light'
+            this.$store.state.theme = 'light'
         }
-        // Whenever the user explicitly chooses light mode
-
-        // Whenever the user explicitly chooses dark mode
-
-        // Whenever the user explicitly chooses to respect the OS preference
     },
     methods: {
         changeMode() {
@@ -55,10 +57,12 @@ export default {
                 localStorage.theme = 'light'
                 this.$store.state.theme = 'light'
                 document.querySelector('html').classList.remove('dark')
+                this.sheetMode = 'light'
             } else {
                 localStorage.theme = 'dark'
                 this.$store.state.theme = 'dark'
                 document.querySelector('html').classList.add('dark')
+                this.sheetMode = 'dark'
             }
             console.log(this.$store.state.theme)
         },

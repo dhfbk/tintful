@@ -9,6 +9,8 @@ module.exports = {
                 primaryDark: '#0284e2',
                 primaryLight: '#98ECFD',
                 bgDark: '#26292b',
+                tokenDefault: '#ccffff',
+                "gray-350": "#c6cbd1"
             },
             opacity: {
                 '10': '.1',

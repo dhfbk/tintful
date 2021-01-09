@@ -23,19 +23,22 @@
                     >
                         <span
                             class="mx-1 px-1 rounded select-none"
-                            :class="
-                                token.ner == 'PER' || token.ner == 'ORG' || token.ner == 'LOC'
+                            :class="[
+                                token.ner == 'PER'
+                                    ? 'text-black'
+                                    : token.ner == 'ORG' || token.ner == 'LOC'
                                     ? 'text-white'
-                                    : 'bg-gray-100'
-                            "
+                                    : 'bg-gray-350 dark:bg-gray-600 text-black dark:text-white',
+                            ]"
                             :style="{
                                 background:
                                     token.ner == 'PER' || token.ner == 'ORG' || token.ner == 'LOC'
                                         ? legend[token.ner]
                                         : '',
                             }"
-                            >{{ token.word }}</span
                         >
+                            {{ token.word }}
+                        </span>
                     </span>
                 </div>
             </div>

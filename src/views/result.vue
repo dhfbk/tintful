@@ -6,7 +6,7 @@
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
-            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl mb-4 p-3 md:p-4 transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 dark:text-gray-300 hover:text-white gradient"
+            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl mb-4 p-3 md:p-4 transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 dark:text-gray-300 hover:text-white dark:hover:text-gray-900 gradient"
         >
             <p class="font-bold text-xl sm:text-2xl md:text-4xl">{{ i }}</p>
             <p class="font-thin text-sm overflow-ellipsis block overflow-hidden">{{ infoMiniCards.keys[x] }}</p>
@@ -142,7 +142,7 @@
         <annotations
             @sheet="sheetData"
             @closesheet="$refs.swipeableBottomSheet.setState('close')"
-            @opensheet=";(info = ''), (values = []), (keys = []), $refs.swipeableBottomSheet.setState('half')"
+            @opensheet=";(info = ''), (values = []), (keys = []), sheetData('empty')"
         />
         <swipeable-bottom-sheet ref="swipeableBottomSheet" class="md:hidden">
             <h1 v-if="info == ''" class="px-4 text-center">
@@ -173,6 +173,9 @@ import modalInfo from '../components/modalInfo.vue'
 import { SwipeableBottomSheet } from 'vue-swipeable-bottom-sheet'
 export default {
     name: 'result',
+    props: {
+        sheetMode: String,
+    },
     components: {
         annotations,
         //statsCard,
@@ -300,6 +303,18 @@ export default {
             },
         }
     },
+    mounted() {
+        if (!localStorage.theme) {
+            document.querySelector('.card').classList.remove('cardDark')
+            document.querySelector('.card').classList.remove('barDark')
+        } else if (localStorage.theme === 'dark') {
+            document.querySelector('.card').classList.add('cardDark')
+            document.querySelector('.card').classList.add('barDark')
+        } else {
+            document.querySelector('.card').classList.remove('cardDark')
+            document.querySelector('.card').classList.remove('barDark')
+        }
+    },
     created() {
         if (localStorage.getItem('text') == '' || localStorage.getItem('text') == undefined) {
             this.$router.replace({ name: 'home' })
@@ -384,10 +399,25 @@ export default {
     },
     methods: {
         sheetData(arr) {
-            this.info = arr[0]
-            this.keys = arr[1]
-            this.values = arr[2]
-            this.$refs.swipeableBottomSheet.setState('half')
+            if (arr == 'empty') {
+                this.$refs.swipeableBottomSheet.setState('half')
+            } else {
+                this.info = arr[0]
+                this.keys = arr[1]
+                this.values = arr[2]
+                this.$refs.swipeableBottomSheet.setState('half')
+            }
+        },
+    },
+    watch: {
+        sheetMode() {
+            if (this.sheetMode == 'dark') {
+                document.querySelector('.card').classList.add('cardDark')
+                document.querySelector('.card').classList.add('barDark')
+            } else {
+                document.querySelector('.card').classList.remove('cardDark')
+                document.querySelector('.card').classList.remove('barDark')
+            }
         },
     },
 }

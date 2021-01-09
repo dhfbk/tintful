@@ -18,7 +18,7 @@
             <div class="w-full grid grid-cols-3 text-center min-w-max gap-x-6 p-3">
                 <div
                     @click="confirmModal('graph')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
                     :class="
                         selectedTab == 0
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
@@ -29,7 +29,7 @@
                 </div>
                 <div
                     @click="confirmModal('table')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
                     :class="
                         selectedTab == 1
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
@@ -40,7 +40,7 @@
                 </div>
                 <div
                     @click="confirmModal('ner')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-1"
+                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
                     :class="
                         selectedTab == 2
                             ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
@@ -165,7 +165,7 @@ export default {
     },
     components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
     created() {
-        if (localStorage.getItem('text') == '') {
+        if (localStorage.getItem('text') == '' || localStorage.getItem('text') == undefined) {
             this.$router.replace({ name: 'home' })
         }
     },

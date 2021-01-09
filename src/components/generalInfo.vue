@@ -15,8 +15,8 @@
                             class="flex flex-col place-items-center my-2 cursor-pointer"
                         >
                             <span
-                                class="mx-1 px-1 bg-gray-100 dark:bg-gray-700 rounded ripple select-none"
-                                :class="selected == token.characterOffsetBegin ? 'bg-gray-300 dark:bg-gray-900' : ''"
+                                class="mx-1 px-1 bg-gray-350 dark:bg-gray-600 rounded ripple select-none"
+                                :class="selected == token.characterOffsetBegin ? 'bg-primary dark:bg-primary dark:text-black text-white' : 'text-black dark:text-white'"
                                 >{{ token.word }}</span
                             >
                         </span>
@@ -31,7 +31,7 @@
                 Click on a token for further information.
             </div>
             <div class="sticky top-0 overflow-y-auto h-screen" v-else>
-                <div class="font-light text-lg text-center">
+                <div class="font-light text-lg text-center text-primary">
                     Info on the token "
                     <span class="font-bold">{{ info.word }}</span>
                     "
