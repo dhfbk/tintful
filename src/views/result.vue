@@ -1,21 +1,21 @@
 <template>
-    <div v-if="show" class="grid grid-cols-8 gap-x-6 md:gap-x-8">
+    <div v-if="show" class="grid grid-cols-8 gap-x-6 md:gap-x-6">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
         <!-- <infoCard :jsonData="processedData" /> -->
         <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
-            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl mb-4 p-3 md:p-4 transition-transform duration-150 transform hover:skew-y-1 bg-gradient-to-tl text-gray-700 dark:text-gray-300 hover:text-white dark:hover:text-gray-900 gradient"
+            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 dark:bg-dark01dp shadow-md rounded-md mb-4 p-2 md:p-3"
         >
-            <p class="font-bold text-xl sm:text-2xl md:text-4xl">{{ i }}</p>
-            <p class="font-thin text-sm overflow-ellipsis block overflow-hidden">{{ infoMiniCards.keys[x] }}</p>
+            <p class=" text-xl sm:text-2xl md:text-4xl" style="font-family: 'Eczar', sans-serif">{{ i }}</p>
+            <p class="text-gray-300 text-sm overflow-ellipsis block overflow-hidden">
+                {{ infoMiniCards.keys[x] }}
+            </p>
         </span>
-        <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-8 mb-4">
-            <div class="md:col-span-3 mt-6">
-                <div
-                    class="shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl p-3 md:p-4 flex flex-col w-full"
-                >
+        <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-6 mt-2 mb-4">
+            <div class="md:col-span-3">
+                <div class="shadow-md rounded-md dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full">
                     <div class="w-full flex flex-row mb-4">
                         <div class="text-primaryDark text-xl w-full">Readability</div>
                         <button
@@ -40,9 +40,7 @@
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div
-                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-32 w-4 sm:w-6 relative rounded-lg	"
-                            >
+                            <div class="inline-block h-32 w-4 sm:w-6 relative rounded-lg	">
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
                                         class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
@@ -63,10 +61,8 @@
                     </div>
                 </div>
             </div>
-            <div class="md:col-span-4 mt-6 ">
-                <div
-                    class="shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-xl h-full p-3 md:p-4 flex flex-col w-full"
-                >
+            <div class="md:col-span-4">
+                <div class=" dark:bg-dark01dp shadow-md rounded-md h-full p-3 md:p-4 flex flex-col w-full">
                     <div class="w-full flex flex-row mb-4 ">
                         <div class=" text-primaryDark text-xl w-full">Difficulty</div>
                         <button

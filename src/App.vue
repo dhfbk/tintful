@@ -1,12 +1,9 @@
 <template>
-    <div
-        id="app"
-        class="relative mx-auto antialiased p-2 md:p-4 bg-gray-200 dark:bg-gray-800 min-h-screen dark:text-gray-200"
-    >
+    <div id="app" class="relative mx-auto antialiased  bg-white dark:bg-bgDark min-h-screen dark:text-gray-200">
         <div class="flex flex-col md:flex-row">
             <topBar @changeMode="changeMode" />
             <div
-                class="w-full md:w-11/12 p-3 md:p-8 rounded-3xl mx-auto md:ml-2 dark:bg-gray-800 min-h-full dark:shadow-cardShadowDark shadow-cardShadow"
+                class="w-full md:w-11/12 p-3 md:p-4 mx-auto  min-h-full dark:shadow-cardShadowDark shadow-cardShadow"
                 style="height:min-content"
             >
                 <router-view @snack="snack" :sheetMode="sheetMode" />
