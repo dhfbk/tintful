@@ -2,20 +2,28 @@
     <div v-if="show" class="grid grid-cols-8 gap-x-6 md:gap-x-6">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
         <!-- <infoCard :jsonData="processedData" /> -->
-        <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
-        <span
-            v-for="(i, x) in infoMiniCards.values"
-            :key="x"
-            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 dark:bg-dark01dp shadow-md rounded-md mb-4 p-2 md:p-3"
-        >
-            <p class=" text-xl sm:text-2xl md:text-4xl" style="font-family: 'Eczar', sans-serif">{{ i }}</p>
-            <p class="text-gray-300 text-sm overflow-ellipsis block overflow-hidden">
-                {{ infoMiniCards.keys[x] }}
-            </p>
-        </span>
-        <div class="grid grid-cols-1 md:grid-cols-7 col-span-8 gap-x-6 mt-2 mb-4">
-            <div class="md:col-span-3">
-                <div class="shadow-md rounded-md dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full">
+
+        <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mt-2 mb-4">
+            <div class="col-span-9 md:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-md p-2 md:p-4">
+                <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
+
+                <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
+                    <span class="flex flex-row justify-between w-full items-center">
+                        <p class="dark:text-gray-300 text-gray-600 text-sm overflow-ellipsis overflow-hidden">
+                            {{ infoMiniCards.keys[x] }}
+                        </p>
+                        <p class=" text-xl sm:text-2xl tracking-widest " style="font-family: 'Eczar', sans-serif">
+                            {{ i }}
+                        </p></span
+                    >
+                    <div
+                        class="h-px w-full dark:bg-dark02dp bg-gray-300 my-0.5"
+                        v-if="x <= infoMiniCards.values.length - 2"
+                    ></div>
+                </span>
+            </div>
+            <div class="col-span-9 md:col-span-3 sm:col-span-5 ">
+                <div class="shadow-md rounded-md dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
                     <div class="w-full flex flex-row mb-4">
                         <div class="text-primaryDark text-xl w-full">Readability</div>
                         <button
@@ -40,7 +48,7 @@
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div class="inline-block h-32 w-4 sm:w-6 relative rounded-lg	">
+                            <div class="inline-block h-48 w-4 sm:w-6 relative rounded-lg bg-dark02dp	">
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
                                         class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
@@ -50,18 +58,21 @@
                                 </div>
                             </div>
                             <p
-                                class="text-xs font-thin w-2/3 text-center text-gray-600  dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
+                                class="text-xs font-thin w-2/3 min-w-min text-center text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                             >
                                 {{ chartOptionsReadability.labels[x] }}
                             </p>
-                            <p class="text-sm w-2/3 text-center font-bold text-gray-600 dark:text-gray-300 inline mt-1">
+                            <p
+                                class="w-2/3 text-center  tracking-widest text-gray-600 dark:text-gray-300 inline mt-1"
+                                style="font-family: 'Eczar', sans-serif"
+                            >
                                 {{ i.toFixed(2) }}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="md:col-span-4">
+            <div class="md:col-span-4 col-span-9">
                 <div class=" dark:bg-dark01dp shadow-md rounded-md h-full p-3 md:p-4 flex flex-col w-full">
                     <div class="w-full flex flex-row mb-4 ">
                         <div class=" text-primaryDark text-xl w-full">Difficulty</div>
@@ -88,7 +99,7 @@
                             :key="x"
                         >
                             <div
-                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-32 w-4 sm:w-6 relative rounded-lg	"
+                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-48 w-4 sm:w-6 relative rounded-lg bg-dark02dp"
                             >
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
@@ -99,12 +110,13 @@
                                 </div>
                             </div>
                             <div
-                                class="text-xs w-2/3 text-center font-thin text-gray-600  dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
+                                class="text-xs w-2/3 text-center font-thin text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                             >
                                 {{ chartOptionsDifficulty.labels[x] }}
                             </div>
                             <div
-                                class="text-sm w-2/3 text-center font-bold text-gray-600  dark:text-gray-300 inline mt-1"
+                                class="w-2/3 text-center tracking-widest text-gray-600  dark:text-gray-300 inline mt-1"
+                                style="font-family: 'Eczar', sans-serif"
                             >
                                 {{ i.toFixed(2) }}
                             </div>
