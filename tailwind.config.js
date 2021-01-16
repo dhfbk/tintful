@@ -17,6 +17,9 @@ module.exports = {
                 dark04dp: '#ffffff17',
                 dark06dp: '#ffffff1C',
                 dark08dp: '#ffffff1F',
+                PER: '#ffbf00',
+                ORG: "#e83f6f",
+                LOC: "#2274a5",
 
                 //                 dark02dp	7%
                 //                 dark30dp	8%

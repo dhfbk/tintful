@@ -1,6 +1,6 @@
 <template>
     <div
-        class="cardShadow shadow-cardShadow dark:bg-dark01dp dark:shadow-cardShadowDark rounded-2xl col-span-8 mt-8 p-6"
+        class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-4 mb-6"
     >
         <!-- <button
             class="text-primary  bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"

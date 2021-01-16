@@ -3,7 +3,7 @@
         <div class="flex flex-col md:flex-row">
             <topBar @changeMode="changeMode" />
             <div
-                class="w-full md:w-11/12 p-3 md:p-4 mx-auto  min-h-full dark:shadow-cardShadowDark shadow-cardShadow"
+                class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full"
                 style="height:min-content"
             >
                 <router-view @snack="snack" :sheetMode="sheetMode" />

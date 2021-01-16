@@ -1,18 +1,30 @@
 <template>
-    <div v-if="show" class="grid grid-cols-8 gap-x-6 md:gap-x-6">
+    <div v-if="show" class="grid grid-cols-8 gap-x-6">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
         <!-- <infoCard :jsonData="processedData" /> -->
-
-        <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mt-2 mb-4">
-            <div class="col-span-9 md:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-md p-2 md:p-4">
-                <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
+        <!--
+        <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
+        <span
+            v-for="(i, x) in infoMiniCards.values"
+            :key="x"
+            class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 dark:bg-dark01dp shadow-md rounded-md mb-4 p-2 md:p-3"
+        >
+            <p class=" text-xl sm:text-2xl md:text-4xl" style="font-family: 'Eczar', sans-serif">{{ i }}</p>
+            <p class="text-gray-300 text-sm overflow-ellipsis block overflow-hidden">
+                {{ infoMiniCards.keys[x] }}
+            </p>
+        </span>
+        -->
+        <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mb-6">
+            <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-2 md:p-4">
+                <div class="col-span-8 mb-4 text-primaryDark text-xl">General Information</div>
 
                 <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
                     <span class="flex flex-row justify-between w-full items-center">
                         <p class="dark:text-gray-300 text-gray-600 text-sm overflow-ellipsis overflow-hidden">
                             {{ infoMiniCards.keys[x] }}
                         </p>
-                        <p class=" text-xl sm:text-2xl tracking-widest " style="font-family: 'Eczar', sans-serif">
+                        <p class="text-xl sm:text-2xl tracking-widest ml-2" style="font-family: 'Eczar', sans-serif">
                             {{ i }}
                         </p></span
                     >
@@ -22,8 +34,8 @@
                     ></div>
                 </span>
             </div>
-            <div class="col-span-9 md:col-span-3 sm:col-span-5 ">
-                <div class="shadow-md rounded-md dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
+            <div class="col-span-9 lg:col-span-3 sm:col-span-5 ">
+                <div class="shadow-md rounded-lg dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
                     <div class="w-full flex flex-row mb-4">
                         <div class="text-primaryDark text-xl w-full">Readability</div>
                         <button
@@ -48,7 +60,7 @@
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div class="inline-block h-48 w-4 sm:w-6 relative rounded-lg bg-dark02dp	">
+                            <div class="inline-block h-48 w-4 sm:w-6 relative rounded-lg bg-dark02dp">
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
                                         class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
@@ -72,9 +84,9 @@
                     </div>
                 </div>
             </div>
-            <div class="md:col-span-4 col-span-9">
-                <div class=" dark:bg-dark01dp shadow-md rounded-md h-full p-3 md:p-4 flex flex-col w-full">
-                    <div class="w-full flex flex-row mb-4 ">
+            <div class="lg:col-span-4 col-span-9">
+                <div class=" dark:bg-dark01dp shadow-md rounded-lg h-full p-3 md:p-4 flex flex-col w-full">
+                    <div class="w-full flex flex-row mb-4">
                         <div class=" text-primaryDark text-xl w-full">Difficulty</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'difficulty')"
@@ -311,6 +323,11 @@ export default {
             },
         }
     },
+    beforeCreate() {
+        if (localStorage.getItem('text') === '' || localStorage.getItem('text') == undefined) {
+            this.$router.replace({ name: 'home' })
+        }
+    },
     mounted() {
         if (!localStorage.theme) {
             document.querySelector('.card').classList.remove('cardDark')
@@ -324,86 +341,82 @@ export default {
         }
     },
     created() {
-        if (localStorage.getItem('text') == '' || localStorage.getItem('text') == undefined) {
-            this.$router.replace({ name: 'home' })
-        } else {
-            this.infoMiniCards = {
-                keys: [
-                    'Sentences',
-                    'Tokens',
-                    'Words',
-                    'Content words',
-                    'Text length (letters only)',
-                    'Text length (all characters)',
-                    'Text length (no spaces)',
-                    'Hyphen count',
-                ],
-                values: [
-                    this.processedData.sentences.length,
-                    this.processedData.readability.tokenCount,
-                    this.processedData.readability.wordCount,
-                    this.processedData.readability.contentWordSize,
-                    this.processedData.readability.docLenLettersOnly,
-                    this.processedData.readability.docLenWithSpaces,
-                    this.processedData.readability.docLenWithoutSpaces,
-                    this.processedData.readability.hyphenCount,
-                ],
-            }
-            this.seriesReadability = [
-                this.processedData.readability.subordinateRatio * 100,
-                this.processedData.readability.ttrValue * 100,
-                this.processedData.readability.density * 100,
-            ]
-            this.chartOptionsReadability.labels = ['Subordinate ratio', 'Semantic richness', 'Lexical density']
-            this.seriesDifficulty = [
-                this.processedData.readability.measures.main,
-                this.processedData.readability.measures.level1,
-                this.processedData.readability.measures.level2,
-                this.processedData.readability.measures.level3,
-            ]
-            this.chartOptionsDifficulty.labels = [
-                this.processedData.readability.labels.main,
-                'Level 1',
-                'Level 2',
-                'Level 3',
-            ]
-            var tmpCol = ''
-            var min = 0
-            var max = 0
-            for (let i = 0; i < this.chartOptionsReadability.labels.length; i++) {
-                if (this.seriesReadability[i] / 100 == this.processedData.readability.subordinateRatio) {
-                    min = this.processedData.readability.minYellowValues.subordinateRatio
-                    max = this.processedData.readability.maxYellowValues.subordinateRatio
-                } else if (this.seriesReadability[i] / 100 == this.processedData.readability.ttrValue) {
-                    min = this.processedData.readability.minYellowValues.ttrValue
-                    max = this.processedData.readability.maxYellowValues.ttrValue
-                } else {
-                    min = this.processedData.readability.minYellowValues.density
-                    max = this.processedData.readability.maxYellowValues.density
-                }
-                if (this.seriesReadability[i] / 100 >= min && this.seriesReadability[i] / 100 <= max) {
-                    tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
-                } else if (this.seriesReadability[i] / 100 < min) {
-                    tmpCol = 'to-red-300 via-red-500 from-red-700'
-                } else {
-                    tmpCol = 'to-green-300 via-green-500 from-green-700'
-                }
-                this.chartOptionsReadability.colors.push(tmpCol)
-            }
-            for (let i = 0; i < this.chartOptionsDifficulty.labels.length; i++) {
-                min = 40
-                max = 80
-                if (this.seriesDifficulty[i] >= min && this.seriesDifficulty[i] <= max) {
-                    tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
-                } else if (this.seriesDifficulty[i] < min) {
-                    tmpCol = 'to-red-300 via-red-500 from-red-700'
-                } else {
-                    tmpCol = 'to-green-300 via-green-500 from-green-700'
-                }
-                this.chartOptionsDifficulty.colors.push(tmpCol)
-            }
-            this.show = true
+        this.infoMiniCards = {
+            keys: [
+                'Sentences',
+                'Tokens',
+                'Words',
+                'Content words',
+                'Text length (letters only)',
+                'Text length (all characters)',
+                'Text length (no spaces)',
+                'Hyphen count',
+            ],
+            values: [
+                this.processedData.sentences.length,
+                this.processedData.readability.tokenCount,
+                this.processedData.readability.wordCount,
+                this.processedData.readability.contentWordSize,
+                this.processedData.readability.docLenLettersOnly,
+                this.processedData.readability.docLenWithSpaces,
+                this.processedData.readability.docLenWithoutSpaces,
+                this.processedData.readability.hyphenCount,
+            ],
         }
+        this.seriesReadability = [
+            this.processedData.readability.subordinateRatio * 100,
+            this.processedData.readability.ttrValue * 100,
+            this.processedData.readability.density * 100,
+        ]
+        this.chartOptionsReadability.labels = ['Subordinate ratio', 'Semantic richness', 'Lexical density']
+        this.seriesDifficulty = [
+            this.processedData.readability.measures.main,
+            this.processedData.readability.measures.level1,
+            this.processedData.readability.measures.level2,
+            this.processedData.readability.measures.level3,
+        ]
+        this.chartOptionsDifficulty.labels = [
+            this.processedData.readability.labels.main,
+            'Level 1',
+            'Level 2',
+            'Level 3',
+        ]
+        var tmpCol = ''
+        var min = 0
+        var max = 0
+        for (let i = 0; i < this.chartOptionsReadability.labels.length; i++) {
+            if (this.seriesReadability[i] / 100 == this.processedData.readability.subordinateRatio) {
+                min = this.processedData.readability.minYellowValues.subordinateRatio
+                max = this.processedData.readability.maxYellowValues.subordinateRatio
+            } else if (this.seriesReadability[i] / 100 == this.processedData.readability.ttrValue) {
+                min = this.processedData.readability.minYellowValues.ttrValue
+                max = this.processedData.readability.maxYellowValues.ttrValue
+            } else {
+                min = this.processedData.readability.minYellowValues.density
+                max = this.processedData.readability.maxYellowValues.density
+            }
+            if (this.seriesReadability[i] / 100 >= min && this.seriesReadability[i] / 100 <= max) {
+                tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
+            } else if (this.seriesReadability[i] / 100 < min) {
+                tmpCol = 'to-red-300 via-red-500 from-red-700'
+            } else {
+                tmpCol = 'to-green-300 via-green-500 from-green-700'
+            }
+            this.chartOptionsReadability.colors.push(tmpCol)
+        }
+        for (let i = 0; i < this.chartOptionsDifficulty.labels.length; i++) {
+            min = 40
+            max = 80
+            if (this.seriesDifficulty[i] >= min && this.seriesDifficulty[i] <= max) {
+                tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
+            } else if (this.seriesDifficulty[i] < min) {
+                tmpCol = 'to-red-300 via-red-500 from-red-700'
+            } else {
+                tmpCol = 'to-green-300 via-green-500 from-green-700'
+            }
+            this.chartOptionsDifficulty.colors.push(tmpCol)
+        }
+        this.show = true
     },
     methods: {
         sheetData(arr) {

@@ -164,16 +164,15 @@ export default {
         }
     },
     components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
-    created() {
-        if (localStorage.getItem('text') == '' || localStorage.getItem('text') == undefined) {
-            this.$router.replace({ name: 'home' })
-        }
-    },
     mounted() {
         this.sentencesNum = JSON.parse(localStorage.getItem('processedText')).sentences.length
     },
     beforeCreate() {
-        this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+        if (localStorage.getItem('text') === '' || localStorage.getItem('text') == undefined) {
+            this.$router.replace({ name: 'home' })
+        } else {
+            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+        }
     },
     beforeRouteLeave(to, from, next) {
         if (this.isEdited) {
