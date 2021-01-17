@@ -30,7 +30,7 @@
                             >{{ token.pos }}
                         </span>
                         <span
-                            class="mx-1 px-1 bg-gray-350 dark:bg-gray-600 rounded select-none text-black dark:text-white"
+                            class="mx-1 px-1 bg-gray-300 dark:bg-gray-600 rounded select-none text-black dark:text-white"
                             >{{ token.word }}</span
                         >
                     </span>

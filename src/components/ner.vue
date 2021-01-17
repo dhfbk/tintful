@@ -34,7 +34,7 @@
                                     ? 'text-black'
                                     : token.ner == 'ORG' || token.ner == 'LOC'
                                     ? 'text-white'
-                                    : 'bg-gray-350 dark:bg-gray-600 text-black dark:text-white',
+                                    : 'bg-gray-300 dark:bg-gray-600 text-black dark:text-white',
                             ]"
                             :style="{
                                 background:

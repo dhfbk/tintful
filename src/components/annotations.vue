@@ -1,7 +1,5 @@
 <template>
-    <div
-        class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-4 mb-6"
-    >
+    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-4 mb-6">
         <!-- <button
             class="text-primary  bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"
             @click="$router.push({ path: '/edit' })"
@@ -13,9 +11,9 @@
             </svg>
             Edit annotations
         </button> -->
-        <div class="text-primaryDark text-xl w-full">Annotations</div>
+        <div class="text-primaryDark text-xl w-full tracking-wide">Annotations</div>
         <div class="overflow-x-auto w-full">
-            <div class="w-full grid grid-cols-4 text-center min-w-max gap-x-6 p-3">
+            <div class="w-full grid grid-cols-4 text-center min-w-max p-2">
                 <div
                     @click=";(selectedTab = 0), $emit('opensheet')"
                     class="transition-colors  rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
@@ -60,15 +58,15 @@
                 >
                     Basic Dependencies
                 </div>
-                <!-- <div class="col-span-4">
+                <div class="col-span-4">
                     <div class="h-1 w-1/4 bg-primary" :class="tabScroll"></div>
-                </div> -->
+                </div>
             </div>
         </div>
-        <general-info v-if="selectedTab == 0" @sheet="sheet" />
-        <partOfSpeech v-else-if="selectedTab == 1" />
-        <ner v-else-if="selectedTab == 2" />
-        <dependencies v-else />
+        <general-info v-show="selectedTab == 0" @sheet="sheet" />
+        <partOfSpeech v-show="selectedTab == 1" />
+        <ner v-show="selectedTab == 2" />
+        <dependencies v-if="selectedTab == 3" />
         <br />
     </div>
 </template>

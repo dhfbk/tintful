@@ -15,7 +15,7 @@
             @confirm="confirmAction"
         />
         <div class="overflow-x-auto w-full">
-            <div class="w-full grid grid-cols-3 text-center min-w-max gap-x-6 p-3">
+            <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
                 <div
                     @click="confirmModal('graph')"
                     class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
@@ -49,9 +49,9 @@
                 >
                     Named Entity Recognition
                 </div>
-                <!-- <div class="col-span-4">
+                <div class="col-span-4">
                     <div class="h-1 w-1/3 bg-primary" :class="tabScroll"></div>
-                </div> -->
+                </div>
             </div>
         </div>
         <div class="grid grid-cols-3 mt-1">
@@ -115,7 +115,7 @@
         </div>
         <p v-html="currentData.sentences[sentenceIndex].text" class="my-1"></p>
         <brat-edit
-            v-if="selectedTab == 0"
+            v-show="selectedTab == 0"
             :sentenceIndex="sentenceIndex"
             :doc="doc"
             @showDepsModal="depsModal"
@@ -123,13 +123,13 @@
             :refresh="refreshBrat"
         />
         <table-edit
-            v-else-if="selectedTab == 1"
+            v-show="selectedTab == 1"
             :sentenceIndex="sentenceIndex"
             :currentPhrase="sentenceIndex"
             @edited="isEdited = true"
             @editFeats="featsModal"
         />
-        <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
+        <nerEdit v-show="selectedTab == 2" @edited="isEdited = true" />
     </div>
 </template>
 

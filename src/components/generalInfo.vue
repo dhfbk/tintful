@@ -15,8 +15,12 @@
                             class="flex flex-col place-items-center my-2 cursor-pointer"
                         >
                             <span
-                                class="mx-1 px-1 bg-gray-350 dark:bg-gray-600 rounded ripple select-none"
-                                :class="selected == token.characterOffsetBegin ? 'bg-primary dark:bg-primary dark:text-black text-white' : 'text-black dark:text-white'"
+                                class="mx-1 px-1 bg-gray-300 dark:bg-gray-600 rounded ripple select-none"
+                                :class="
+                                    selected == token.characterOffsetBegin
+                                        ? 'bg-primary dark:bg-primary dark:text-black text-white'
+                                        : 'text-black dark:text-white'
+                                "
                                 >{{ token.word }}</span
                             >
                         </span>
@@ -39,8 +43,9 @@
                 <!-- <div class="overflow-x-auto" id="formatter1"></div> -->
 
                 <span v-for="(i, x) in keys" :key="x">
-                    <span class="font-bold">{{ i }}</span
-                    >: {{ values[x] }}<br
+                    <span class="font-medium">{{ i }}</span
+                    >: <span style="font-family: 'Eczar', sans serif">{{ values[x] }}</span
+                    ><br
                 /></span>
             </div>
         </div>

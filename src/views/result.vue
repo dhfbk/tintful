@@ -3,13 +3,13 @@
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
         <!-- <infoCard :jsonData="processedData" /> -->
         <!--
-        <div class="col-span-8 mb-4  text-primaryDark text-xl">General Information</div>
+        <div class="col-span-8 mb-4  text-primaryDark text-xl tracking-wide">General Information</div>
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
             class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 dark:bg-dark01dp shadow-md rounded-md mb-4 p-2 md:p-3"
         >
-            <p class=" text-xl sm:text-2xl md:text-4xl" style="font-family: 'Eczar', sans-serif">{{ i }}</p>
+            <p class=" text-xl tracking-wide sm:text-2xl md:text-4xl" style="font-family: 'Eczar', sans-serif">{{ i }}</p>
             <p class="text-gray-300 text-sm overflow-ellipsis block overflow-hidden">
                 {{ infoMiniCards.keys[x] }}
             </p>
@@ -17,7 +17,7 @@
         -->
         <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mb-6">
             <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-2 md:p-4">
-                <div class="col-span-8 mb-4 text-primaryDark text-xl">General Information</div>
+                <div class="col-span-8 mb-4 text-primaryDark text-xl tracking-wide ">General Information</div>
 
                 <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
                     <span class="flex flex-row justify-between w-full items-center">
@@ -37,30 +37,26 @@
             <div class="col-span-9 lg:col-span-3 sm:col-span-5 ">
                 <div class="shadow-md rounded-lg dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
                     <div class="w-full flex flex-row mb-4">
-                        <div class="text-primaryDark text-xl w-full">Readability</div>
-                        <button
+                        <div class="text-primaryDark text-xl tracking-wide w-full">Readability</div>
+                        <div
                             @click=";(modal = !modal), (modalMode = 'readability')"
-                            class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                            class="ripple w-8 p-1 h-8 hover:bg-gray-200 bg-transparent dark:hover:bg-dark02dp rounded-full focus:outline-none transition-colors duration-100 ease-out"
                         >
-                            <svg
-                                class="fill-current text-primary"
-                                style="width: 24px; height: 24px"
-                                viewBox="0 0 24 24"
-                            >
+                            <svg class="fill-current text-primary h-6 w-6" viewBox="0 0 24 24">
                                 <path
                                     d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
                                 />
                             </svg>
                             <span class="sr-only">Open information dialog</span>
-                        </button>
+                        </div>
                     </div>
-                    <div class="flex flex-row">
+                    <div class="flex flex-row my-auto">
                         <div
                             class="w-1/3 flex flex-col place-items-center mx-1"
                             v-for="(i, x) in seriesReadability"
                             :key="x"
                         >
-                            <div class="inline-block h-48 w-4 sm:w-6 relative rounded-lg bg-dark02dp">
+                            <div class="inline-block h-40 w-4 sm:w-6 relative rounded-lg dark:bg-dark02dp bg-gray-200">
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
                                         class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
@@ -70,7 +66,7 @@
                                 </div>
                             </div>
                             <p
-                                class="text-xs font-thin w-2/3 min-w-min text-center text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
+                                class="text-xs dark:font-thin w-2/3 min-w-min text-center text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                             >
                                 {{ chartOptionsReadability.labels[x] }}
                             </p>
@@ -87,10 +83,10 @@
             <div class="lg:col-span-4 col-span-9">
                 <div class=" dark:bg-dark01dp shadow-md rounded-lg h-full p-3 md:p-4 flex flex-col w-full">
                     <div class="w-full flex flex-row mb-4">
-                        <div class=" text-primaryDark text-xl w-full">Difficulty</div>
+                        <div class=" text-primaryDark text-xl tracking-wide w-full">Difficulty</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'difficulty')"
-                            class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                            class="ripple p-2 bg-transparent dark:hover:bg-dark02dp rounded-full focus:outline-none transition-colors duration-100 ease-out"
                         >
                             <svg
                                 class="fill-current text-primary"
@@ -104,14 +100,14 @@
                             <span class="sr-only">Open information dialog</span>
                         </button>
                     </div>
-                    <div class="flex flex-row">
+                    <div class="flex flex-row my-auto">
                         <div
                             class="w-1/3 flex flex-col place-items-center items-center content-center mx-1"
                             v-for="(i, x) in seriesDifficulty"
                             :key="x"
                         >
                             <div
-                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-48 w-4 sm:w-6 relative rounded-lg bg-dark02dp"
+                                class="shadow-insetShadow dark:shadow-insetShadowDark inline-block h-40	 w-4 sm:w-6 relative rounded-lg bg-gray-200 dark:bg-dark02dp"
                             >
                                 <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                                     <div
@@ -122,7 +118,7 @@
                                 </div>
                             </div>
                             <div
-                                class="text-xs w-2/3 text-center font-thin text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
+                                class="text-xs w-2/3 text-center dark:font-thin text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                             >
                                 {{ chartOptionsDifficulty.labels[x] }}
                             </div>
