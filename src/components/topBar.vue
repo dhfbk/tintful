@@ -2,12 +2,13 @@
     <div
         class="w-full md:w-1/12 md:h-full flex flex-col sm:flex-row md:flex-col content-center items-center py-6 md:mx-2"
     >
-        <img
-            src="../assets/logoTint.png"
-            alt="Logo Tint"
-            class="inline md:block w-24 sm:w-36 md:w-2/3 mx-2 md:mx-auto"
-            @click="$router.push({ path: '/' }).catch(() => {})"
-        />
+        <router-link to="/">
+            <img
+                src="../assets/logoTint.png"
+                alt="Logo Tint"
+                class="inline md:block w-24 sm:w-36 md:w-2/3 mx-2 md:mx-auto"
+            />
+        </router-link>
         <div
             class="flex md:flex-col w-full sm:w-max content-center items-center flex-grow justify-center sm:justify-end md:flex-grow-0"
         >
@@ -72,6 +73,7 @@
                 class="group md:mx-auto md:mr-auto md:mt-4 h-4 w-8 mr-4 rounded-full bg-gray-500 focus:outline-none cursor-pointer"
                 @click="$emit('changeMode')"
             >
+                <span class="sr-only">Toggle theme</span>
                 <div
                     class="h-6 w-6 -m-1 dark:bg-primary bg-primaryDark rounded-full transition-transform transform p-1"
                     :class="$store.state.theme == 'dark' ? 'translate-x-5' : ''"
@@ -104,8 +106,8 @@ export default {
         goTo(route) {
             if (localStorage.getItem('text') !== '' && localStorage.getItem('text') !== undefined) {
                 this.$router.push({ path: route }).catch(() => {})
-            }
-            else{
+            } else {
+                this.$emit('snack', 'Error. No text to analyse')
                 //mettere un emit per avvertire che la frase è vuota o che deve avviare l'elaborazione
             }
         },

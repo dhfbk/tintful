@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow-md dark:bg-dark01dp p-4 col-span-8 rounded-lg p-4">
+    <div class="shadow-md dark:bg-dark01dp p-4 col-span-8 rounded-lg p-4 mb-6">
         <div
             class="flex w-full flex-row justify-between content-center items-center cursor-pointer"
             @click.stop=";(isOpen = !isOpen) && (selectedTab = 0)"

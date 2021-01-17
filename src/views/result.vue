@@ -1,6 +1,7 @@
 <template>
     <div v-if="show" class="grid grid-cols-8 gap-x-6">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
+        <rawData />
         <!-- <infoCard :jsonData="processedData" /> -->
         <!--
         <div class="col-span-8 mb-4  text-primaryDark text-xl tracking-wide">General Information</div>
@@ -176,7 +177,6 @@
                 /></span>
             </div>
         </swipeable-bottom-sheet>
-        <rawData />
     </div>
 </template>
 

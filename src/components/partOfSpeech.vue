@@ -25,7 +25,7 @@
               :mode="'pos'"
             /> -->
                         <span
-                            class="rounded px-1 text-sm text-gray-600 font-light max-w-min mx-1 mb-1"
+                            class="rounded px-1 text-sm text-gray-600 max-w-min mx-1 mb-1"
                             :style="{ background: legend[token.pos[0]] }"
                             >{{ token.pos }}
                         </span>

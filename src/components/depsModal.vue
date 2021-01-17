@@ -1,12 +1,12 @@
 <template>
     <transition name="fade-bg" appear>
         <div
-            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-900 bg-opacity-50 customZ"
+            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full dark:bg-black bg-gray-900 bg-opacity-25 customZ"
             @click="toggleModal"
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white dark:bg-black rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    class="bg-white dark:bg-bgDark rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
                     @click.stop
                     v-if="showDialog"
                 >
@@ -152,5 +152,8 @@ export default {
 <style scoped>
 .customZ {
     z-index: 990;
+}
+.dark .dark\:bg-black {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

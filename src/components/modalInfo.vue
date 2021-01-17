@@ -1,7 +1,7 @@
 <template>
     <transition name="fade-bg" appear>
         <div
-            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800  bg-opacity-25 customZ"
+            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full dark:bg-black bg-gray-900 bg-opacity-25 customZ"
             @click="modal"
         >
             <transition name="fade" appear>
@@ -126,5 +126,8 @@ export default {
 <style scoped>
 .customZ {
     z-index: 990;
+}
+.dark .dark\:bg-black {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 </style>
