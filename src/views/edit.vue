@@ -13,6 +13,7 @@
             @close="confirmation = !confirmation"
             :msg="confirmText"
             @confirm="confirmAction"
+            :mode="confirmationMode"
         />
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
@@ -115,7 +116,7 @@
         </div>
         <p v-html="currentData.sentences[sentenceIndex].text" class="my-1"></p>
         <brat-edit
-            v-show="selectedTab == 0"
+            v-if="selectedTab == 0"
             :sentenceIndex="sentenceIndex"
             :doc="doc"
             @showDepsModal="depsModal"
@@ -123,13 +124,13 @@
             :refresh="refreshBrat"
         />
         <table-edit
-            v-show="selectedTab == 1"
+            v-else-if="selectedTab == 1"
             :sentenceIndex="sentenceIndex"
             :currentPhrase="sentenceIndex"
             @edited="isEdited = true"
             @editFeats="featsModal"
         />
-        <nerEdit v-show="selectedTab == 2" @edited="isEdited = true" />
+        <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
     </div>
 </template>
 
@@ -161,6 +162,7 @@ export default {
             confirmText: '',
             confirmation: false,
             action: '',
+            confirmationMode: '',
         }
     },
     components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
@@ -191,6 +193,7 @@ export default {
         confirmModal(mode) {
             this.action = mode
             if (this.isEdited) {
+                this.confirmationMode = mode
                 switch (mode) {
                     case 'save':
                         this.confirmText = 'Are you sure you want to save?'
@@ -205,14 +208,19 @@ export default {
                 this.confirmAction()
             }
         },
-        confirmAction() {
+        confirmAction(mode) {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
             console.log(
                 this.currentData.sentences[0].tokens[0].ner,
                 this.$store.state.editableData.sentences[0].tokens[0].ner
             )
-            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+            if (mode == 'save') {
+                localStorage.setItem('processedText', '')
+                localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))
+            } else {
+                this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+            }
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {
@@ -244,6 +252,7 @@ export default {
             console.log(dep)
             var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
             console.log(x)
+            this.isEdited = true
 
             for (let i = 0; i < x.length; i++) {
                 if (dep.governor == x[i].governor && dep.dependent == x[i].dependent) {
@@ -263,6 +272,7 @@ export default {
         editedFeat(feats) {
             var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
             console.log(feats)
+            this.isEdited = true
             x.features = feats.newFeats
             x.pos = feats.newPos
             this.refreshBrat = true

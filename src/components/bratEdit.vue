@@ -128,6 +128,7 @@ export default {
             this.kbpRelations = []
             this.kbpRelationsSet = []
             this.currentSentences = []
+            this.isEditMode = false
         },
         isGovernor(el) {
             return el.index == this.newFatherId
@@ -156,7 +157,7 @@ export default {
                 i.parentNode.children[0].setAttribute('fill', '#688e26')
                 var infos = i.getAttribute('data-span-id').split('_')
                 this.sonId = parseInt(infos[2]) + 1
-                console.log(this.isEditMode)
+                console.log("sono nel primo")
                 this.isEditMode = true
             } else {
                 //this.isEditMode = false
@@ -164,6 +165,7 @@ export default {
                 document.getElementById('deps').className = ''
                 this.resetVariables()
                 this.loadBrat()
+                console.log("sono nel secondo")
             }
         },
         handleClick(e) {

@@ -2,15 +2,12 @@
     <div id="app" class="relative mx-auto antialiased  bg-white dark:bg-bgDark min-h-screen dark:text-gray-200">
         <div class="flex flex-col md:flex-row">
             <topBar @changeMode="changeMode" @snack="snack" />
-            <div
-                class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full"
-                style="height:min-content"
-            >
+            <div class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full" style="height:min-content">
                 <router-view @snack="snack" :sheetMode="sheetMode" />
+                <footerCustom />
             </div>
         </div>
         <notification :msg="msg" v-if="notify" @close="notify = false" />
-        <footerCustom />
     </div>
 </template>
 

@@ -12,7 +12,10 @@
                     <div class="p-4">
                         <div class="flex w-full">
                             <div class="text-primary font-bold text-lg text-primary">Confirm changes</div>
-                            <span class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1" @click="close">
+                            <span
+                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1"
+                                @click="close"
+                            >
                                 <svg
                                     class="m-auto fill-current text-gray-700 dark:text-gray-200 w-6 h-6 cursor-pointer"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -50,13 +53,13 @@
 <script>
 export default {
     name: 'confirmationModal',
-    props: { msg: String },
+    props: { msg: String, mode: String },
     methods: {
         close() {
             this.$emit('close')
         },
         ok() {
-            this.$emit('confirm')
+            this.$emit('confirm', this.mode)
         },
     },
 }
