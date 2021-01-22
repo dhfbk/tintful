@@ -77,7 +77,7 @@ export default {
         this.loadBrat()
     },
     beforeDestroy() {
-        window.onresize = function() {}
+        window.onresize = null
     },
     methods: {
         editedDep() {
@@ -157,7 +157,7 @@ export default {
                 i.parentNode.children[0].setAttribute('fill', '#688e26')
                 var infos = i.getAttribute('data-span-id').split('_')
                 this.sonId = parseInt(infos[2]) + 1
-                console.log("sono nel primo")
+                console.log('sono nel primo')
                 this.isEditMode = true
             } else {
                 //this.isEditMode = false
@@ -165,7 +165,7 @@ export default {
                 document.getElementById('deps').className = ''
                 this.resetVariables()
                 this.loadBrat()
-                console.log("sono nel secondo")
+                console.log('sono nel secondo')
             }
         },
         handleClick(e) {
@@ -242,39 +242,6 @@ export default {
                     sentences: [doc.sentences[this.sentenceIndex]],
                 })
                 console.log(this.doc.sentences[this.sentenceIndex])
-                var x = document.getElementById('deps')
-                var pos = x.getElementsByClassName('span_default')
-                var depend = x.getElementsByClassName('arcs')
-
-                x.addEventListener(
-                    'contextmenu',
-                    function(e) {
-                        e.preventDefault()
-                    },
-                    true
-                )
-                setTimeout(() => {
-                    pos.forEach(el => {
-                        //console.log(el);
-                        el.oncontextmenu = this.handleRight
-                        el.ondblclick = this.handleDbl
-                    })
-                    //console.log(depend);
-                    depend.forEach(el => {
-                        //console.log(el.children);
-                        el.children.forEach(p => {
-                            //console.log(p.children[0]);
-                            p.children[0].ondblclick = e => {
-                                let i = e.target
-                                this.$emit('showDepsModal', i)
-
-                                console.log(i.getAttribute('data-arc-role'))
-                                console.log(i.getAttribute('data-arc-origin').split('_'))
-                                console.log(i.getAttribute('data-arc-target').split('_'))
-                            }
-                        })
-                    })
-                }, 200)
             } else {
                 setTimeout(() => {
                     document.getElementById('deps').innerHTML = ''
@@ -283,6 +250,39 @@ export default {
                     this.embed('deps', this.posEntities, this.depsRelations)
                 }, 50)
             }
+            var x = document.getElementById('deps')
+            var pos = x.getElementsByClassName('span_default')
+            var depend = x.getElementsByClassName('arcs')
+
+            x.addEventListener(
+                'contextmenu',
+                function(e) {
+                    e.preventDefault()
+                },
+                true
+            )
+            setTimeout(() => {
+                pos.forEach(el => {
+                    //console.log(el);
+                    el.oncontextmenu = this.handleRight
+                    el.ondblclick = this.handleDbl
+                })
+                //console.log(depend);
+                depend.forEach(el => {
+                    //console.log(el.children);
+                    el.children.forEach(p => {
+                        //console.log(p.children[0]);
+                        p.children[0].ondblclick = e => {
+                            let i = e.target
+                            this.$emit('showDepsModal', i)
+
+                            console.log(i.getAttribute('data-arc-role'))
+                            console.log(i.getAttribute('data-arc-origin').split('_'))
+                            console.log(i.getAttribute('data-arc-target').split('_'))
+                        }
+                    })
+                })
+            }, 200)
         },
         isInt(value) {
             return (
@@ -532,6 +532,19 @@ export default {
                         let end = parseInt(token.characterOffsetEnd)
                         this.addEntityType('POS', pos)
                         this.posEntities.push([this.posID(i), pos, [[begin1, end]]])
+                    }
+                }
+
+                //Adding multiword dependencies
+                for (let i = 0; i < this.tokens.length; i++) {
+                    if (this.tokens[i].isMultiwordFirstToken) {
+                        sentence['basic-dependencies'].push({
+                            dep: 'mwe',
+                            dependent: this.tokens[i].multiwordSpan.split('-')[0],
+                            dependentGloss: this.tokens[i].lemma,
+                            governor: this.tokens[i].multiwordSpan.split('-')[1],
+                            governorGloss: this.tokens[this.tokens[i].multiwordSpan.split('-')[1] - 1].lemma,
+                        })
                     }
                 }
 

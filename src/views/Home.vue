@@ -127,7 +127,7 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from 'axios'
 import json from '../assets/test.json'
 const { required } = require('vuelidate/lib/validators')
 export default {
@@ -162,8 +162,20 @@ export default {
             this.loading = true
             this.$v.$touch()
             if (!this.$v.$invalid) {
-                localStorage.setItem('text', this.text)
-                localStorage.setItem('processedText', JSON.stringify(this.myJson))
+                axios({
+                    mode: 'get',
+                    url: 'http://dh-server.fbk.eu:8013/tint/?text=' + this.text,
+                })
+                    .then(res => {
+                        localStorage.setItem('text', this.text)
+                        localStorage.setItem('processedText', JSON.stringify(res.data))
+                        this.$router.push({ name: 'result' })
+                    })
+                    .catch(err => {
+                        this.$emit('snack', 'Error. Could not connect to the server')
+                        console.log(err)
+                    })
+                this.loading = false
                 /*
         axios({
           url:
@@ -184,8 +196,6 @@ export default {
             this.loading = false;
           });
           */
-                this.loading = false
-                this.$router.push({ name: 'result' })
             } else {
                 this.loading = false
             }

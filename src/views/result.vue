@@ -18,7 +18,7 @@
         -->
         <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mb-6">
             <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-2 md:p-4">
-                <div class="col-span-8 mb-4 text-primaryDark text-xl tracking-wide ">General Information</div>
+                <div class="col-span-8 mb-4 text-primary text-xl tracking-wide ">General Information</div>
 
                 <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
                     <span class="flex flex-row justify-between w-full items-center">
@@ -35,21 +35,25 @@
                     ></div>
                 </span>
             </div>
-            <div class="col-span-9 lg:col-span-3 sm:col-span-5 ">
+            <div class="col-span-9 lg:col-span-3 sm:col-span-5">
                 <div class="shadow-md rounded-lg dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
-                    <div class="w-full flex flex-row mb-4">
-                        <div class="text-primaryDark text-xl tracking-wide w-full">Readability</div>
-                        <div
+                    <div class="w-full flex flex-row content-center items-center mb-4">
+                        <div class="text-primary text-xl tracking-wide w-full">Readability</div>
+                        <button
                             @click=";(modal = !modal), (modalMode = 'readability')"
-                            class="ripple w-8 p-1 h-8 hover:bg-gray-200 bg-transparent dark:hover:bg-dark02dp rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                            class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                         >
-                            <svg class="fill-current text-primary h-6 w-6" viewBox="0 0 24 24">
+                            <svg
+                                class="fill-current text-primary"
+                                style="width: 24px; height: 24px"
+                                viewBox="0 0 24 24"
+                            >
                                 <path
                                     d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
                                 />
                             </svg>
                             <span class="sr-only">Open information dialog</span>
-                        </div>
+                        </button>
                     </div>
                     <div class="flex flex-row my-auto">
                         <div
@@ -83,11 +87,11 @@
             </div>
             <div class="lg:col-span-4 col-span-9">
                 <div class=" dark:bg-dark01dp shadow-md rounded-lg h-full p-3 md:p-4 flex flex-col w-full">
-                    <div class="w-full flex flex-row mb-4">
-                        <div class=" text-primaryDark text-xl tracking-wide w-full">Difficulty</div>
+                    <div class="w-full flex flex-row content-center items-center mb-4">
+                        <div class="text-primary text-xl tracking-wide w-full">Difficulty</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'difficulty')"
-                            class="ripple p-2 bg-transparent dark:hover:bg-dark02dp rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                            class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                         >
                             <svg
                                 class="fill-current text-primary"

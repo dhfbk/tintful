@@ -19,34 +19,22 @@
             <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
                 <div
                     @click="confirmModal('graph')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
-                    :class="
-                        selectedTab == 0
-                            ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
-                            : 'text-gray-500 shadow-microShadow dark:shadow-microShadowDark'
-                    "
+                    class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    :class="selectedTab == 0 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
                 >
                     Flat graph
                 </div>
                 <div
                     @click="confirmModal('table')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
-                    :class="
-                        selectedTab == 1
-                            ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
-                            : 'text-gray-500 shadow-microShadow dark:shadow-microShadowDark'
-                    "
+                    class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    :class="selectedTab == 1 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
                 >
                     Table
                 </div>
                 <div
                     @click="confirmModal('ner')"
-                    class="transition-colors rounded-lg duration-150 cursor-pointer py-2 w-full px-2"
-                    :class="
-                        selectedTab == 2
-                            ? 'text-primary shadow-insetShadow dark:shadow-insetShadowDark'
-                            : 'text-gray-500 shadow-microShadow dark:shadow-microShadowDark'
-                    "
+                    class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    :class="selectedTab == 2 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
                 >
                     Named Entity Recognition
                 </div>
@@ -59,7 +47,7 @@
             <div class="w-full col-span-1 justify-self-start flex content-center items-center justify-start">
                 <button
                     @click="modalInfo = true"
-                    class="ripple p-2 bg-transparent hover:bg-gray-200 rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                    class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                 >
                     <svg class="fill-current text-primary" style="width: 24px; height: 24px" viewBox="0 0 24 24">
                         <path
