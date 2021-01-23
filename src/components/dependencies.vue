@@ -72,6 +72,74 @@ export default {
         window.onresize = null
     },
     methods: {
+        addMultiWord() {
+            //get the brat svg
+            let svg = document.getElementById('deps').children[0]
+            //remove 4 px to the y of every background and add 2px to the last background height
+            svg.getElementsByClassName('background')[0].children.forEach(el => {
+                el.setAttribute('y', parseFloat(el.getAttribute('y')) - 4)
+            })
+            svg.getElementsByClassName('background')[0].lastChild.setAttribute(
+                'height',
+                parseFloat(svg.getElementsByClassName('background')[0].lastChild.getAttribute('height')) + 2
+            )
+            let phrase = this.$store.state.editableData.sentences[0]
+            let x1 = 0
+            let x2 = 0
+            let length = 0
+            let tmp = 0
+            let rect
+            let g
+            let y = 0
+            //choose the phrase
+            for (let x = 0; x < this.$store.state.editableData.sentences.length; x++) {
+                phrase = this.$store.state.editableData.sentences[x]
+                for (let i = 0; i < phrase.tokens.length; i++) {
+                    if (phrase.tokens[i].isMultiwordFirstToken) {
+                        // prettier-ignore
+                        x1 = parseFloat(
+                            svg
+                                .getElementsByClassName('text')[0]
+                                .getElementsByTagName('text')[x]
+                                .getElementsByTagName('tspan')[i].attributes.x.value
+                        )
+                        // prettier-ignore
+                        x2 = parseFloat(
+                            svg
+                                .getElementsByClassName('text')[0]
+                                .getElementsByTagName('text')[x]
+                                .getElementsByTagName('tspan')[i].nextSibling.attributes.x.value
+                        )
+                        // prettier-ignore
+                        tmp = svg
+                        .getElementsByClassName('text')[0]
+                        .getElementsByTagName('text')[x]
+                        .getElementsByTagName('tspan')[i].nextSibling.getComputedTextLength()
+                        // prettier-ignore
+                        y =
+                            parseFloat(
+                                svg
+                                    .getElementsByClassName('text')[0]
+                                    .getElementsByTagName('text')[x]
+                                    .getElementsByTagName('tspan')[i].attributes.y.value
+                            ) + 2
+                        length = x2 + tmp - x1
+                        console.log(length)
+                        g = this.createSvgElement('g')
+                        rect = this.createSvgElement('rect', { x: x1, y: y, width: length, height: 5, fill: 'red' })
+                        svg.appendChild(g)
+                        svg.lastChild.appendChild(rect)
+                    }
+                }
+            }
+        },
+        createSvgElement(tag, attrs) {
+            var el = document.createElementNS('http://www.w3.org/2000/svg', tag)
+            for (var k in attrs) {
+                el.setAttribute(k, attrs[k])
+            }
+            return el
+        },
         loadBrat() {
             if (this.currentText.length == 0) {
                 /**
@@ -91,6 +159,9 @@ export default {
                     this.embed('deps', this.posEntities, this.depsRelations)
                 }, 50)
             }
+            setTimeout(() => {
+                this.addMultiWord()
+            }, 200)
         },
         isInt(value) {
             return (
@@ -343,6 +414,7 @@ export default {
                     }
                 }
 
+                /*
                 //Adding multiword dependencies
                 for (let i = 0; i < this.tokens.length; i++) {
                     if (this.tokens[i].isMultiwordFirstToken) {
@@ -355,6 +427,7 @@ export default {
                         })
                     }
                 }
+                */
 
                 // Dependency parsing
                 // Actually add the dependencies

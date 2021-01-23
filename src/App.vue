@@ -44,6 +44,9 @@ export default {
             this.sheetMode = 'light'
             this.$store.state.theme = 'light'
         }
+        if (localStorage.getItem("processedText") != undefined) {
+            this.$store.state.editableData = JSON.parse(localStorage.getItem("processedText"))
+        }
     },
     methods: {
         changeMode() {

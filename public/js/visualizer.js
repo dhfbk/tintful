@@ -307,7 +307,7 @@ var Visualizer = (function($, window, undefined) {
     var markedArcSize = 2;
     var markedArcStroke = 7; // TODO XXX: this doesn't seem to do anything..?
 
-    var rowPadding = 2;
+    var rowPadding = 10;
     var nestingAdjustYStepSize = 2; // size of height adjust for nested/nesting spans
     var nestingAdjustXStepSize = 1; // size of height adjust for nested/nesting spans
 

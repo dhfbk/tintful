@@ -96,13 +96,14 @@
                         class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded-full focus:outline-none"
                         @click="process()"
                     >
+                        Process
                         <svg
-                            :class="loading ? 'animate-spin mr-1 fill-current' : 'hidden'"
+                            :class="loading ? 'animate-spin ml-1 fill-current' : 'hidden'"
                             style="width: 24px; height: 24px"
                             viewBox="0 0 24 24"
                         >
-                            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" /></svg
-                        >Process
+                            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                        </svg>
                     </button>
                 </div>
             </div>
