@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-lg shadow-md p-4 mx-auto bg-white col-span-8 lg:col-span-2 w-full">
-        <h2 class="text-primary font-bold text-lg">General information</h2>
+        <h2 class="text-primary dark:text-primaryLight font-bold text-lg">General information</h2>
         <div class="flex flex-col relative h-full">
             <div class="flex flex-row justify-between content-center items-center w-full">
                 <p>Sentences</p>

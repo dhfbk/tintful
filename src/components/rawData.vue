@@ -6,10 +6,10 @@
             @mouseenter="hoverCard = true"
             @mouseleave="hoverCard = false"
         >
-            <h3 class="text-primary text-xl w-full">Show raw text and json</h3>
+            <h3 class="text-primary dark:text-primaryLight text-xl w-full">Show raw text and json</h3>
             <button class="bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max justify-self-end">
                 <svg
-                    class="transition-transform duration-300 ease-out fill-current text-primary"
+                    class="transition-transform duration-300 ease-out fill-current text-primary dark:text-primaryLight"
                     :class="{ 'transform  rotate-180': isOpen }"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -28,14 +28,22 @@
                     <div
                         @click="selectedTab = 0"
                         class="transition-colors ease-out duration-100 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer py-2 rounded-t"
-                        :class="selectedTab == 0 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
+                        :class="
+                            selectedTab == 0
+                                ? 'text-primary dark:text-primaryLight'
+                                : 'dark:text-gray-300 text-gray-500'
+                        "
                     >
                         Raw text
                     </div>
                     <div
                         @click="selectedTab = 1"
                         class="transition-colors ease-out duration-100 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer py-2 rounded-t"
-                        :class="selectedTab == 1 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
+                        :class="
+                            selectedTab == 1
+                                ? 'text-primary dark:text-primaryLight'
+                                : 'dark:text-gray-300 text-gray-500'
+                        "
                     >
                         JSON data
                     </div>
@@ -44,11 +52,11 @@
                 <p v-if="selectedTab == 0">
                     <button
                         @click="downloadFile('downloadText', 'raw_text.txt')"
-                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
+                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
                     >
                         <span>Download text</span>
                         <svg
-                            class="fill-current text-primary ml-2"
+                            class="fill-current text-primary dark:text-primaryLight ml-2"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             width="24px"
@@ -65,11 +73,11 @@
                 <div v-else>
                     <button
                         @click="downloadFile('downloadJSON', 'processed_text.json')"
-                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
+                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
                     >
                         <span>Download JSON</span>
                         <svg
-                            class="fill-current text-primary ml-2"
+                            class="fill-current text-primary dark:text-primaryLight ml-2"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             width="24px"

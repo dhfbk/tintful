@@ -4,7 +4,7 @@
         <rawData />
         <!-- <infoCard :jsonData="processedData" /> -->
         <!--
-        <div class="col-span-8 mb-4  text-primaryDark text-xl tracking-wide">General Information</div>
+        <div class="col-span-8 mb-4  text-primary dark:text-primaryLightDark text-xl tracking-wide">General Information</div>
         <span
             v-for="(i, x) in infoMiniCards.values"
             :key="x"
@@ -18,7 +18,9 @@
         -->
         <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mb-6">
             <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-2 md:p-4">
-                <div class="col-span-8 mb-4 text-primary text-xl tracking-wide ">General Information</div>
+                <div class="col-span-8 mb-4 text-primary dark:text-primaryLight text-xl tracking-wide ">
+                    General Information
+                </div>
 
                 <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
                     <span class="flex flex-row justify-between w-full items-center">
@@ -38,13 +40,13 @@
             <div class="col-span-9 lg:col-span-3 sm:col-span-5">
                 <div class="shadow-md rounded-lg dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
                     <div class="w-full flex flex-row content-center items-center mb-4">
-                        <div class="text-primary text-xl tracking-wide w-full">Readability</div>
+                        <div class="text-primary dark:text-primaryLight text-xl tracking-wide w-full">Readability</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'readability')"
                             class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                         >
                             <svg
-                                class="fill-current text-primary"
+                                class="fill-current text-primary dark:text-primaryLight"
                                 style="width: 24px; height: 24px"
                                 viewBox="0 0 24 24"
                             >
@@ -88,13 +90,13 @@
             <div class="lg:col-span-4 col-span-9">
                 <div class=" dark:bg-dark01dp shadow-md rounded-lg h-full p-3 md:p-4 flex flex-col w-full">
                     <div class="w-full flex flex-row content-center items-center mb-4">
-                        <div class="text-primary text-xl tracking-wide w-full">Difficulty</div>
+                        <div class="text-primary dark:text-primaryLight text-xl tracking-wide w-full">Difficulty</div>
                         <button
                             @click=";(modal = !modal), (modalMode = 'difficulty')"
                             class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                         >
                             <svg
-                                class="fill-current text-primary"
+                                class="fill-current text-primary dark:text-primaryLight"
                                 style="width: 24px; height: 24px"
                                 viewBox="0 0 24 24"
                             >

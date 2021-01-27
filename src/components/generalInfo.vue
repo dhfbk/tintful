@@ -35,7 +35,7 @@
                 Click on a token for further information.
             </div>
             <div class="sticky top-0 overflow-y-auto h-screen" v-else>
-                <div class="font-light text-lg text-center text-primary">
+                <div class="font-light text-lg text-center text-primary dark:text-primaryLight">
                     Info on the token "
                     <span class="font-bold">{{ info.word }}</span>
                     "

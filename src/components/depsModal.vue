@@ -12,8 +12,13 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-medium text-lg text-primary">Edit basic dependency name</div>
-                            <span class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1" @click="toggleModal()">
+                            <div class="text-primary dark:text-primaryLight font-medium text-lg ">
+                                Edit basic dependency name
+                            </div>
+                            <span
+                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1"
+                                @click="toggleModal()"
+                            >
                                 <svg
                                     class="m-auto fill-current text-gray-700 dark:text-gray-200 w-6 h-6 cursor-pointer"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +39,7 @@
                                 from: <span class="font-medium mr-4">{{ originalDep }}</span> to:</span
                             >
                             <select
-                                class="appearance-none font-medium h-full border-b  inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                class="appearance-none font-medium h-full border-b  inline-block bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 name="depsSelect"
                                 id="depsSelect"
                                 @change="edit()"
@@ -47,13 +52,13 @@
                         </div>
                         <div class="float-right pb-4">
                             <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary dark:text-primaryLight py-2 px-4 rounded mr-2"
                                 @click="toggleModal()"
                             >
                                 CANCEL
                             </button>
                             <button
-                                class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
                                 @click="save()"
                             >
                                 SAVE

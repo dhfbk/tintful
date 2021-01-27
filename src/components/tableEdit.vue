@@ -12,7 +12,10 @@
                     :key="index"
                     class="border-b border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-500"
                 >
-                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500 overflow-x-auto" v-html="d.index"></td>
+                    <td
+                        class="p-1 px-2 border-r border-gray-300 dark:border-gray-500 overflow-x-auto"
+                        v-html="d.index"
+                    ></td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500" v-html="d.word"></td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <input
@@ -25,7 +28,7 @@
                     <td class="p-1 px-2 border-r border-gray-300 uppercase dark:border-gray-500">
                         <div class="flex content-center items-center h-full w-max">
                             <button
-                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                                class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -45,7 +48,7 @@
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <div class="flex content-center items-center h-full">
                             <button
-                                class="mr-1 text-primary bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                                class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
                                 @click="editFeats(d)"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -76,7 +79,11 @@
                             >
                         </select>
                         <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
-                            <svg class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <svg
+                                class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                            >
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
                         </div>
@@ -93,7 +100,11 @@
                             }}</option>
                         </select>
                         <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
-                            <svg class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <svg
+                                class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                            >
                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                             </svg>
                         </div>

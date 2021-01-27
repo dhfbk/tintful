@@ -2,7 +2,7 @@
     <div class="my-3 max-w-xxs">
         <span>{{ label }}: </span>
         <select
-            class="appearance-none h-full border-b-2 float-right inline-block focus:bg-gray-200 bg-gray-200 rounded-t border-gray-400 text-gray-700 py-1 pl-2 pr-10 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            class="appearance-none h-full border-b-2 float-right inline-block focus:bg-gray-200 bg-gray-200 rounded-t border-gray-400 text-gray-700 py-1 pl-2 pr-10 leading-tight focus:outline-none focus:border-gray-500"
             :name="opt[0]"
             :id="opt[0]"
             @change="send"

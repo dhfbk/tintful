@@ -7,7 +7,7 @@ module.exports = {
                 primary: '#21A1FD',
                 primaryGradient: 'linear-gradient(145deg, #23acff, #1e91e4)',
                 primaryDark: '#0284e2',
-                primaryLight: '#98ECFD',
+                primaryLight: '#63bdfd',
                 bgDark: '#33333d',
                 tokenDefault: '#ccffff',
                 'gray-350': '#c6cbd1',
@@ -18,8 +18,8 @@ module.exports = {
                 dark06dp: '#ffffff1C',
                 dark08dp: '#ffffff1F',
                 PER: '#ffbf00',
-                ORG: "#e83f6f",
-                LOC: "#2274a5",
+                ORG: '#e83f6f',
+                LOC: '#2274a5',
 
                 //                 dark02dp	7%
                 //                 dark30dp	8%

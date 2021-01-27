@@ -12,8 +12,15 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-medium text-lg text-primary">Edit token features</div>
-                            <span class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1" @click="toggleModal()">
+                            <div
+                                class="text-primary dark:text-primaryLight font-medium text-lg text-primary dark:text-primaryLight"
+                            >
+                                Edit token features
+                            </div>
+                            <span
+                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1"
+                                @click="toggleModal()"
+                            >
                                 <svg
                                     class="m-auto fill-current text-gray-700 dark:text-gray-200 w-6 h-6 cursor-pointer"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -151,13 +158,13 @@
                         </div>
                         <div>
                             <button
-                                class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
                                 @click="save()"
                             >
                                 SAVE
                             </button>
                             <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary dark:text-primaryLight py-2 px-4 rounded mr-2"
                                 @click="toggleModal()"
                             >
                                 CANCEL

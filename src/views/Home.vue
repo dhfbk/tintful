@@ -34,7 +34,7 @@
                         </div> -->
                 <div>
                     <label
-                        class="block tracking-wide text-primary text-md font-medium pb-2"
+                        class="block tracking-wide text-primary dark:text-primaryLight text-md font-medium pb-2"
                         for="textInput"
                         @mouseover="hoverText = true"
                         @mouseleave="hoverText = false"
@@ -59,7 +59,9 @@
                     </div>
                 </div>
                 <div class="my-2">
-                    <label class="block tracking-wide text-primary text-md font-medium pb-2" for="action"
+                    <label
+                        class="block tracking-wide text-primary dark:text-primaryLight text-md font-medium pb-2"
+                        for="action"
                         >You can also choose an example:</label
                     >
                     <div class="relative mb-2">

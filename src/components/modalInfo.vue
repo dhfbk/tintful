@@ -11,7 +11,7 @@
                 >
                     <div class="flex flex-col p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-medium text-lg">Help</div>
+                            <div class="text-primary dark:text-primaryLight font-medium text-lg">Help</div>
                             <span
                                 class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-dark01dp p-1"
                                 @click="modal"

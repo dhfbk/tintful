@@ -11,7 +11,7 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary font-bold text-lg text-primary">Confirm changes</div>
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg ">Confirm changes</div>
                             <span
                                 class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1"
                                 @click="close"
@@ -31,13 +31,13 @@
                         <div class="py-2" v-html="msg"></div>
                         <div class="float-right pb-4">
                             <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary py-2 px-4 rounded mr-2"
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary dark:text-primaryLight py-2 px-4 rounded mr-2"
                                 @click="close"
                             >
                                 CANCEL
                             </button>
                             <button
-                                class="font-medium text-primary ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
                                 @click="ok"
                             >
                                 PROCEED

@@ -20,21 +20,27 @@
                 <div
                     @click="confirmModal('graph')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    :class="selectedTab == 0 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
+                    :class="
+                        selectedTab == 0 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
+                    "
                 >
                     Flat graph
                 </div>
                 <div
                     @click="confirmModal('table')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    :class="selectedTab == 1 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
+                    :class="
+                        selectedTab == 1 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
+                    "
                 >
                     Table
                 </div>
                 <div
                     @click="confirmModal('ner')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    :class="selectedTab == 2 ? 'text-primary' : 'dark:text-gray-300 text-gray-500'"
+                    :class="
+                        selectedTab == 2 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
+                    "
                 >
                     Named Entity Recognition
                 </div>
@@ -49,7 +55,11 @@
                     @click="modalInfo = true"
                     class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                 >
-                    <svg class="fill-current text-primary" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+                    <svg
+                        class="fill-current text-primary dark:text-primaryLight"
+                        style="width: 24px; height: 24px"
+                        viewBox="0 0 24 24"
+                    >
                         <path
                             d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
                         />
