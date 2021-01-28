@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="deps"></div>
+        <div id="deps" class="select-none"></div>
     </div>
 </template>
 
@@ -11,6 +11,7 @@ export default {
     props: { sentenceIndex: Number, doc: Object, refresh: Boolean },
     data() {
         return {
+            screenWidth: 0,
             isEditMode: false,
             dispatcher: undefined,
             visualizer: undefined,
@@ -73,22 +74,28 @@ export default {
         }
     },
     mounted() {
-        window.onresize = debounce(this.loadBrat, 200)
+        this.screenWidth = window.innerWidth
+        window.onresize = debounce(this.checkResize, 200)
         this.loadBrat()
     },
     beforeDestroy() {
         window.onresize = null
     },
     methods: {
+        checkResize() {
+            if (this.screenWidth != window.innerWidth) {
+                this.screenWidth = window.innerWidth
+                this.loadBrat()
+            }
+        },
         addMultiWord() {
             //get the brat svg
             let svg = document.getElementById('deps').children[0]
             //remove 4 px to the y of every background and add 2px to the last background height
-            svg.getElementsByClassName('background')[0].children[0].setAttribute(
-                'y',
-                parseFloat(svg.getElementsByClassName('background')[0].lastChild.getAttribute('y')) - 4
-            )
-            svg.getElementsByClassName('background')[0].children[0].setAttribute(
+            svg.getElementsByClassName('background')[0].children.forEach(el => {
+                el.setAttribute('y', parseFloat(el.getAttribute('y')) - 4)
+            })
+            svg.getElementsByClassName('background')[0].lastChild.setAttribute(
                 'height',
                 parseFloat(svg.getElementsByClassName('background')[0].lastChild.getAttribute('height')) + 2
             )
@@ -96,19 +103,27 @@ export default {
             let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
             let x1 = 0
             let x2 = 0
-            let length = 0
+            let length1 = 0
+            let length2 = 0
             let tmp = 0
             let rect
+            let rect2
             let g
+            let g2
+            let text
             let y = 0
+            let y2 = 0
             for (let i = 0; i < phrase.tokens.length; i++) {
                 if (phrase.tokens[i].isMultiwordFirstToken) {
+                    //if there is a multitoken, calculate the coordinates for the tag
+                    // prettier-ignore
                     x1 = parseFloat(
                         svg
                             .getElementsByClassName('text')[0]
                             .getElementsByTagName('text')[0]
                             .getElementsByTagName('tspan')[i].attributes.x.value
                     )
+                    // prettier-ignore
                     x2 = parseFloat(
                         svg
                             .getElementsByClassName('text')[0]
@@ -120,19 +135,60 @@ export default {
                         .getElementsByClassName('text')[0]
                         .getElementsByTagName('text')[0]
                         .getElementsByTagName('tspan')[i].nextSibling.getComputedTextLength()
+                    // prettier-ignore
                     y =
                         parseFloat(
                             svg
                                 .getElementsByClassName('text')[0]
                                 .getElementsByTagName('text')[0]
                                 .getElementsByTagName('tspan')[i].attributes.y.value
-                        ) + 2
-                    length = x2 + tmp - x1
-                    console.log(length)
+                        ) + 6
+                    //length of the tag
+                    // prettier-ignore
+                    x1 < x2
+                        ? (length1 = x2 + tmp - x1 - 3) && (length2 = 0)
+                        : (length1 = svg.clientWidth - x1) &&
+                          (length2 =
+                              parseFloat(
+                                  svg
+                                      .getElementsByClassName('text')[0]
+                                      .getElementsByTagName('text')[0]
+                                      .getElementsByTagName('tspan')[i].nextSibling.nextSibling.attributes.x.value
+                              ) - 3)
                     g = this.createSvgElement('g')
-                    rect = this.createSvgElement('rect', { x: x1, y: y, width: length, height: 5, fill: 'red' })
+                    rect = this.createSvgElement('rect', { x: x1, y: y, width: length1, height: 5, fill: 'red' })
+                    //word under the red line
+                    text = this.createSvgElement('text', {
+                        x: x1 + 15,
+                        y: y + 15,
+                        'dominant-baseline': 'middle',
+                        'text-anchor': 'middle',
+                    })
+                    text.textContent = phrase.tokens[i].originalText
+                    if (length2 !== 0) {
+                        // prettier-ignore
+                        y2 =
+                            parseFloat(
+                                svg
+                                    .getElementsByClassName('text')[0]
+                                    .getElementsByTagName('text')[0]
+                                    .getElementsByTagName('tspan')[i].nextSibling.attributes.y.value
+                            ) + 6
+                        g2 = this.createSvgElement('g')
+                        rect2 = this.createSvgElement('rect', {
+                            x: 21,
+                            y: y2,
+                            width: length2 - 26,
+                            height: 5,
+                            fill: 'red',
+                        })
+                        g2.appendChild(rect2)
+                        svg.appendChild(g2)
+                    }
+                    //append everything
+                    g.appendChild(rect)
+                    g.appendChild(text)
                     svg.appendChild(g)
-                    svg.lastChild.appendChild(rect)
                 }
             }
         },
@@ -304,7 +360,6 @@ export default {
                 this.render({
                     sentences: [doc.sentences[this.sentenceIndex]],
                 })
-                console.log(this.doc.sentences[this.sentenceIndex])
             } else {
                 setTimeout(() => {
                     document.getElementById('deps').innerHTML = ''

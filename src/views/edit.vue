@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 md:p-4">
         <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
         <features-modal
             @closeFeatsModal="showFeatsModal = false"

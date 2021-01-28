@@ -307,7 +307,7 @@ var Visualizer = (function($, window, undefined) {
     var markedArcSize = 2;
     var markedArcStroke = 7; // TODO XXX: this doesn't seem to do anything..?
 
-    var rowPadding = 10;
+    var rowPadding = 27;
     var nestingAdjustYStepSize = 2; // size of height adjust for nested/nesting spans
     var nestingAdjustXStepSize = 1; // size of height adjust for nested/nesting spans
 
@@ -1515,7 +1515,8 @@ var Visualizer = (function($, window, undefined) {
       Util.profileEnd("measures");
       Util.profileStart("chunks");
 
-      var currentX = Configuration.visual.margin.x + sentNumMargin + rowPadding;
+      //rowPadding changed with fixed value 10, somehow using a variable didn't work
+      var currentX = Configuration.visual.margin.x + sentNumMargin + 10;
       var rows = [];
       var fragmentHeights = [];
       var sentenceToggle = 0;

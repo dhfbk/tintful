@@ -172,6 +172,7 @@ export default {
                     .then(res => {
                         localStorage.setItem('text', this.text)
                         localStorage.setItem('processedText', JSON.stringify(res.data))
+                        this.$store.state.editableData = res.data
                         this.$router.push({ name: 'result' })
                     })
                     .catch(err => {

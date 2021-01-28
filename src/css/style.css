@@ -152,12 +152,12 @@ body {
 }
 
 .cardDark {
-    background-color: #374151 !important;
+    background: #374151 !important;
     color           : #f3f4f6 !important;
 }
 
-.barDark {
-    background-color: #9ca3af !important;
+.cardDark .pan-area .bar {
+    background: #9ca3af !important;
 }
 
 /*

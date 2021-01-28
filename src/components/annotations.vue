@@ -1,5 +1,5 @@
 <template>
-    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-4">
+    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 md:p-4">
         <!-- <button
             class="text-primary dark:text-primaryLight  bg-transparent hover:bg-gray-200 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max flex content-center items-center mb-2"
             @click="$router.push({ path: '/edit' })"

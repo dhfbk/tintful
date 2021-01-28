@@ -17,7 +17,7 @@
         </span>
         -->
         <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mb-6">
-            <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-2 md:p-4">
+            <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-3 md:p-4">
                 <div class="col-span-8 mb-4 text-primary dark:text-primaryLight text-xl tracking-wide ">
                     General Information
                 </div>
@@ -220,108 +220,12 @@ export default {
             seriesReadability: [],
             seriesDifficulty: [],
             chartOptionsReadability: {
-                chart: {
-                    height: 230,
-                    type: 'radialBar',
-                },
-                stroke: {
-                    lineCap: 'round',
-                },
-                plotOptions: {
-                    radialBar: {
-                        offsetY: 0,
-                        startAngle: -90,
-                        endAngle: 90,
-                        hollow: {
-                            size: '30%',
-                        },
-                        dataLabels: {
-                            name: {
-                                show: false,
-                            },
-                            value: {
-                                show: false,
-                            },
-                        },
-                    },
-                },
                 colors: [],
                 labels: [],
-                legend: {
-                    onItemClick: {
-                        toggleDataSeries: false,
-                    },
-                    show: false,
-                    floating: false,
-                    fontSize: '16px',
-                    position: 'bottom',
-                    offsetX: 0,
-                    offsetY: 5,
-                    labels: {
-                        useSeriesColors: true,
-                    },
-                    markers: {
-                        size: 0,
-                    },
-                    formatter: function(seriesName, opts) {
-                        return seriesName + ':  ' + opts.w.globals.series[opts.seriesIndex] / 100
-                    },
-                    itemMargin: {
-                        vertical: 2,
-                    },
-                },
             },
             chartOptionsDifficulty: {
-                chart: {
-                    height: 230,
-                    type: 'radialBar',
-                },
-                stroke: {
-                    lineCap: 'round',
-                },
-                plotOptions: {
-                    radialBar: {
-                        offsetY: 0,
-                        startAngle: -90,
-                        endAngle: 90,
-                        hollow: {
-                            size: '30%',
-                        },
-                        dataLabels: {
-                            name: {
-                                show: false,
-                            },
-                            value: {
-                                show: false,
-                            },
-                        },
-                    },
-                },
                 colors: [],
                 labels: [],
-                legend: {
-                    onItemClick: {
-                        toggleDataSeries: false,
-                    },
-                    show: false,
-                    floating: false,
-                    fontSize: '16px',
-                    position: 'bottom',
-                    offsetX: 0,
-                    offsetY: 10,
-                    labels: {
-                        useSeriesColors: true,
-                    },
-                    markers: {
-                        size: 4,
-                    },
-                    formatter: function(seriesName, opts) {
-                        return seriesName + ':  ' + opts.w.globals.series[opts.seriesIndex]
-                    },
-                    itemMargin: {
-                        vertical: 2,
-                    },
-                },
             },
         }
     },
@@ -331,15 +235,12 @@ export default {
         }
     },
     mounted() {
-        if (!localStorage.theme) {
+        if (localStorage.theme == undefined || localStorage.theme == "" || localStorage.theme == "light") {
             document.querySelector('.card').classList.remove('cardDark')
-            document.querySelector('.card').classList.remove('barDark')
-        } else if (localStorage.theme === 'dark') {
+        } else if (localStorage.theme == 'dark') {
             document.querySelector('.card').classList.add('cardDark')
-            document.querySelector('.card').classList.add('barDark')
         } else {
             document.querySelector('.card').classList.remove('cardDark')
-            document.querySelector('.card').classList.remove('barDark')
         }
     },
     created() {

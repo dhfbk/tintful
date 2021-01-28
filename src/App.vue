@@ -4,7 +4,7 @@
             <topBar @changeMode="changeMode" @snack="snack" />
             <div class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full" style="height:min-content">
                 <router-view @snack="snack" :sheetMode="sheetMode" />
-                <footerCustom />
+                <footerCustom :mode="sheetMode"/>
             </div>
         </div>
         <notification :msg="msg" v-if="notify" @close="notify = false" />
@@ -44,8 +44,8 @@ export default {
             this.sheetMode = 'light'
             this.$store.state.theme = 'light'
         }
-        if (localStorage.getItem("processedText") != undefined) {
-            this.$store.state.editableData = JSON.parse(localStorage.getItem("processedText"))
+        if (localStorage.getItem('processedText') != undefined && localStorage.getItem('processedText') != '') {
+            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
         }
     },
     methods: {

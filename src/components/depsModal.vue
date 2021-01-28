@@ -6,7 +6,7 @@
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white dark:bg-bgDark rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
+                    class="bg-white dark:bg-bgDark rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none"
                     @click.stop
                     v-if="showDialog"
                 >
