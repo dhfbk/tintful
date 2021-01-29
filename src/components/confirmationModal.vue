@@ -11,9 +11,9 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary dark:text-primaryLight font-bold text-lg ">Confirm changes</div>
-                            <span
-                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1"
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg">Confirm changes</div>
+                            <button
+                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-600 p-1 focus:outline-none"
                                 @click="close"
                             >
                                 <svg
@@ -26,18 +26,18 @@
                                     />
                                 </svg>
                                 <span class="sr-only">Close dialog</span>
-                            </span>
+                            </button>
                         </div>
                         <div class="py-2" v-html="msg"></div>
                         <div class="float-right pb-4">
                             <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary dark:text-primaryLight py-2 px-4 rounded mr-2"
+                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent text-red-400 py-2 px-4 rounded mr-2"
                                 @click="close"
                             >
                                 CANCEL
                             </button>
                             <button
-                                class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent py-2 px-4 rounded"
                                 @click="ok"
                             >
                                 PROCEED

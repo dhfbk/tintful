@@ -54,6 +54,7 @@
                 <button
                     @click="modalInfo = true"
                     class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
+                    title="Info"
                 >
                     <svg
                         class="fill-current text-primary dark:text-primaryLight"

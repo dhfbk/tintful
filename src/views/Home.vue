@@ -88,11 +88,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="m-2">
-                    <p class="text-blue-500 text-lg text-center" :class="serverError ? 'block' : 'hidden'">
-                        A server error happened! Check the browser's console for more details
-                    </p>
-                </div>
                 <div class="mt-4 width-full flow-root">
                     <button
                         class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded-full focus:outline-none"
@@ -100,7 +95,7 @@
                     >
                         Process
                         <svg
-                            :class="loading ? 'animate-spin ml-1 fill-current' : 'hidden'"
+                            :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
                             style="width: 24px; height: 24px"
                             viewBox="0 0 24 24"
                         >
@@ -145,8 +140,7 @@ export default {
                 'Un picchio e una pallina si trovavano in un cassetto in mezzo agli altri giocattoli, e il picchio propose: "Visto che siamo insieme qui nel cassetto, perché non ci fidanziamo?" Ma la palla, che era di cuoio marocchino e si credeva una signorina di buona società, nemmeno volle rispondere. Il giorno dopo il bambino che possedeva tutti i giocattoli ridipinse il picchio di rosso e di giallo, e ci piantò un chiodo d&apos;ottone nel mezzo: che figurone che faceva adesso, soprattutto quando faceva la ruota. "Guardami, adesso", disse alla pallina. "Perché non ci fidanziamo? Tu salti, io ballo, siamo fatti l&apos;uno per l&apos;altra! Chi potrebbe essere più felice di noi?" "Davvero?", diceva la pallina, "ma lo sai che mio padre e mia madre erano pantofole in marocchino, e che io ho un tappo in corpo!" "E allora? Io sono fatto di mogano, ed è stato il sindaco del paese a farmi! Lui ha un tornio, e si è divertito tantissimo!" "Mah... mi devo fidare?", disse la pallina. "Che io sia frustato, se ho mai detto una bugia!", rispose il picchio. "Dici bene, tu", disse la pallina, "ma io sono già quasi fidanzata con un rondone! Ogni volta che mi lancio in aria, lui si affaccia dal nido e dice "mi vuoi? Mi vuoi?" Io ormai ho detto di sì nel mio cuore , e questo è quasi un mezzo fidanzamento! Comunque ti prometto che non ti dimenticherò mai!" "Sì, capirai!", disse il picchio, e non si rivolsero più la parola. Il giorno dopo la pallina fu tolta dal cassetto: il picchio la vide lanciarsi alta nell&apos;aria, come un uccello, finché non scompariva.',
             ],
             exampleChoice: '',
-            loading: false,
-            serverError: false,
+            loadBtn: false,
         }
     },
     validations() {
@@ -162,7 +156,7 @@ export default {
     },
     methods: {
         process() {
-            this.loading = true
+            this.loadBtn = true
             this.$v.$touch()
             if (!this.$v.$invalid) {
                 axios({
@@ -174,12 +168,13 @@ export default {
                         localStorage.setItem('processedText', JSON.stringify(res.data))
                         this.$store.state.editableData = res.data
                         this.$router.push({ name: 'result' })
+                        this.loadBtn = false
                     })
                     .catch(err => {
                         this.$emit('snack', 'Error. Could not connect to the server')
                         console.log(err)
+                        this.loadBtn = false
                     })
-                this.loading = false
                 /*
         axios({
           url:

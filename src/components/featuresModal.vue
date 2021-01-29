@@ -13,12 +13,12 @@
                     <div class="p-4">
                         <div class="flex w-full">
                             <div
-                                class="text-primary dark:text-primaryLight font-medium text-lg text-primary dark:text-primaryLight"
+                                class="text-primary dark:text-primaryLight font-bold text-lg text-primary dark:text-primaryLight"
                             >
                                 Edit token features
                             </div>
-                            <span
-                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-700 p-1"
+                            <button
+                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-600 p-1 focus:outline-none"
                                 @click="toggleModal()"
                             >
                                 <svg
@@ -31,26 +31,27 @@
                                     />
                                 </svg>
                                 <span class="sr-only">Close dialog</span>
-                            </span>
+                            </button>
+                        </div>
+                        <div class="flex content-center items-center justify-between my-2">
+                            Word: <span class="font-medium">"{{ featsToEdit.word }}"</span>
+                        </div>
+                        <div class="flex content-center items-center justify-between my-2">
+                            <span>POS: </span>
+                            <transition name="zoom">
+                                <select
+                                    class="appearance-none font-medium h-full border-b inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    name="posSelect"
+                                    id="posSelect"
+                                    v-model="pos"
+                                >
+                                    <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
+                                        {{ i.abbr }} ({{ i.full }})
+                                    </option>
+                                </select>
+                            </transition>
                         </div>
                         <div>
-                            Word: "<span class="font-medium">{{ featsToEdit.word }}</span
-                            >"
-                        </div>
-                        <span>POS: </span>
-                        <transition name="zoom">
-                            <select
-                                class="appearance-none font-medium h-full border-b inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                name="posSelect"
-                                id="posSelect"
-                                v-model="pos"
-                            >
-                                <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
-                                    {{ i.abbr }} ({{ i.full }})
-                                </option>
-                            </select>
-                        </transition>
-                        <div class="py-2">
                             <!-- <span class="">{{ featsToEdit }} </span> -->
                             <transition-group name="zoom">
                                 <featsSelect
@@ -156,19 +157,21 @@
                                 />
                             </transition-group>
                         </div>
-                        <div>
-                            <button
-                                class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent py-2 px-4 rounded"
-                                @click="save()"
-                            >
-                                SAVE
-                            </button>
-                            <button
-                                class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none bg-transparent text-text-primary dark:text-primaryLight py-2 px-4 rounded mr-2"
-                                @click="toggleModal()"
-                            >
-                                CANCEL
-                            </button>
+                        <div class="flow-root mt-4">
+                            <div class="float-right">
+                                <button
+                                    class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent text-red-400 py-2 px-4 rounded mr-2"
+                                    @click="toggleModal()"
+                                >
+                                    CANCEL
+                                </button>
+                                <button
+                                    class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                    @click="save()"
+                                >
+                                    SAVE
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

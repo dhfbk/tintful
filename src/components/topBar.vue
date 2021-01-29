@@ -13,6 +13,7 @@
             class="flex md:flex-col w-full sm:w-max content-center items-center flex-grow justify-center sm:justify-end md:flex-grow-0"
         >
             <button
+                title="Overview"
                 class="group md:mt-4 p-2 rounded-full focus:outline-none"
                 :class="
                     $route.name == 'result' ? 'dark:text-gray-300 text-gray-600' : 'dark:text-gray-500 text-gray-400'
@@ -22,6 +23,7 @@
                 <svg class="w-6 h-6 fill-current mx-auto mb-1 dark:group-hover:text-gray-100" viewBox="0 0 24 24">
                     <path d="M3,22V8H7V22H3M10,22V2H14V22H10M17,22V14H21V22H17Z" />
                 </svg>
+                <span class="sr-only">Overview</span>
                 <div>
                     <transition name="fade">
                         <div
@@ -41,6 +43,7 @@
             <button
                 class="group md:mx-auto mx-2 md:mt-2 p-2 rounded-full focus:outline-none"
                 v-if="isLogged"
+                title="Edit"
                 :class="$route.name == 'edit' ? 'dark:text-gray-300 text-gray-600' : 'dark:text-gray-500 text-gray-400'"
                 @click="goTo('/edit')"
             >
@@ -53,6 +56,7 @@
                         d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
                     />
                 </svg>
+                <span class="sr-only">Edit</span>
                 <div>
                     <transition name="fade">
                         <div

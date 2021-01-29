@@ -4,7 +4,7 @@
             <topBar @changeMode="changeMode" @snack="snack" />
             <div class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full" style="height:min-content">
                 <router-view @snack="snack" :sheetMode="sheetMode" />
-                <footerCustom :mode="sheetMode"/>
+                <footerCustom :mode="sheetMode" />
             </div>
         </div>
         <notification :msg="msg" v-if="notify" @close="notify = false" />
@@ -32,9 +32,16 @@ export default {
     created() {
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
         if (localStorage.theme == undefined) {
-            localStorage.theme = 'light'
-            this.sheetMode = 'light'
-            this.$store.state.theme = 'light'
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                localStorage.theme = 'dark'
+                document.querySelector('html').classList.add('dark')
+                this.sheetMode = 'dark'
+                this.$store.state.theme = 'dark'
+            } else {
+                localStorage.theme = 'light'
+                this.sheetMode = 'light'
+                this.$store.state.theme = 'light'
+            }
         } else if (localStorage.theme === 'dark') {
             document.querySelector('html').classList.add('dark')
             this.sheetMode = 'dark'

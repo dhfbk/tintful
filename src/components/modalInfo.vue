@@ -11,9 +11,9 @@
                 >
                     <div class="flex flex-col p-4">
                         <div class="flex w-full">
-                            <div class="text-primary dark:text-primaryLight font-medium text-lg">Help</div>
-                            <span
-                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-dark01dp p-1"
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg">Help</div>
+                            <button
+                                class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-600 p-1 focus:outline-none"
                                 @click="modal"
                             >
                                 <svg
@@ -26,7 +26,7 @@
                                     />
                                 </svg>
                                 <span class="sr-only">Close dialog</span>
-                            </span>
+                            </button>
                         </div>
                         <div class="py-2" v-if="type == 'results'">
                             <p>About the colors:</p>
