@@ -70,6 +70,12 @@
                         >
                             Edit
                         </div>
+                        <!-- <div
+                            class=" text-center text-sm uppercase tracking-widest font-bold"
+                            v-show="$route.name != 'result'"
+                        >
+                            Overview
+                        </div> -->
                     </transition>
                 </div>
             </button>
@@ -79,7 +85,7 @@
             >
                 <span class="sr-only">Toggle theme</span>
                 <div
-                    class="h-6 w-6 -m-1 dark:bg-primary bg-primaryDark rounded-full transition-transform transform p-1"
+                    class="h-6 w-6 -m-1 bg-primary rounded-full transition-transform transform p-1"
                     :class="$store.state.theme == 'dark' ? 'translate-x-5' : ''"
                 >
                     <svg

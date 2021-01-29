@@ -51,7 +51,7 @@
                     Basic Dependencies
                 </div>
                 <div class="col-span-4">
-                    <div class="h-1 w-1/4 bg-primary" :class="tabScroll"></div>
+                    <div class="h-1 w-1/4 bg-primary dark:bg-primaryLight" :class="tabScroll"></div>
                 </div>
             </div>
         </div>

@@ -48,7 +48,7 @@
                         JSON data
                     </div>
                 </div>
-                <div class="h-1 w-1/2 bg-primary" :class="tabScroll"></div>
+                <div class="h-1 w-1/2 bg-primary dark:bg-primaryLight" :class="tabScroll"></div>
                 <p v-if="selectedTab == 0">
                     <button
                         @click="downloadFile('downloadText', 'raw_text.txt')"

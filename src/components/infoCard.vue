@@ -4,25 +4,31 @@
         <div class="flex flex-col relative h-full">
             <div class="flex flex-row justify-between content-center items-center w-full">
                 <p>Sentences</p>
-                <span class="px-2 py-1 bg-primary text-white rounded-full">{{ jsonData.sentences.length }}</span>
+                <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
+                    jsonData.sentences.length
+                }}</span>
             </div>
             <div class="flex flex-row justify-between content-center items-center w-full mt-2">
                 <p>Tokens</p>
-                <span class="px-2 py-1 bg-primary text-white rounded-full">{{ jsonData.readability.tokenCount }}</span>
+                <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
+                    jsonData.readability.tokenCount
+                }}</span>
             </div>
             <div class="flex flex-row justify-between content-center items-center w-full mt-2">
                 <p>Words</p>
-                <span class="px-2 py-1 bg-primary text-white rounded-full">{{ jsonData.readability.wordCount }}</span>
+                <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
+                    jsonData.readability.wordCount
+                }}</span>
             </div>
             <div class="flex flex-row justify-between content-center items-center w-full mt-2">
                 <p>Content words</p>
-                <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
                     jsonData.readability.contentWordSize
                 }}</span>
             </div>
             <div class="flex flex-row justify-between content-center items-center w-full mt-2 mb-8 xl:hidden">
                 <p>Text length (letters only)</p>
-                <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
                     jsonData.readability.docLenLettersOnly
                 }}</span>
             </div>
@@ -30,19 +36,19 @@
                 <div v-if="isOpen" class="content w-full flex flex-wrap justify-center relative -mt-7">
                     <div class="flex-row justify-between content-center items-center w-full mb-2 hidden xl:flex">
                         <p class="w-max inline">Text length (letters only)</p>
-                        <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                        <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
                             jsonData.readability.docLenLettersOnly
                         }}</span>
                     </div>
                     <div class="flex flex-row justify-between content-center items-center w-full mt-1 xl:mt-0">
                         <p>Text length (all characters)</p>
-                        <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                        <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
                             jsonData.readability.docLenWithSpaces
                         }}</span>
                     </div>
                     <div class="flex flex-row justify-between content-center items-center w-full mt-2 mb-8">
                         <p>Text length (no spaces)</p>
-                        <span class="px-2 py-1 bg-primary text-white rounded-full">{{
+                        <span class="px-2 py-1 bg-primary dark:bg-primaryLight text-white rounded-full">{{
                             jsonData.readability.docLenWithoutSpaces
                         }}</span>
                     </div>

@@ -45,7 +45,7 @@
                     Named Entity Recognition
                 </div>
                 <div class="col-span-4">
-                    <div class="h-1 w-1/3 bg-primary" :class="tabScroll"></div>
+                    <div class="h-1 w-1/3 bg-primary dark:bg-primaryLight" :class="tabScroll"></div>
                 </div>
             </div>
         </div>
@@ -74,11 +74,11 @@
             >
                 <div
                     @click="confirmModal('prev')"
-                    class="rounded h-full flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none"
+                    class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out  select-none"
                     :class="
                         sentenceIndex == 0
                             ? 'text-white bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary hover:bg-primaryDark text-white cursor-pointer'
+                            : 'bg-primary  hover:bg-primaryDark  text-white cursor-pointer'
                     "
                 >
                     Prev.
@@ -86,11 +86,11 @@
                 <span class="mx-2">{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
                 <div
                     @click="confirmModal('next')"
-                    class="rounded h-full flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none"
+                    class="rounded h-5/6 flex items-center content-center mr-1 px-2  ripple transition-colors duration-100 ease-out  select-none"
                     :class="
                         sentenceIndex == sentencesNum - 1
                             ? 'text-white bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary hover:bg-primaryDark text-white cursor-pointer'
+                            : 'bg-primary  hover:bg-primaryDark dark:bg-primaryLightDark text-white cursor-pointer'
                     "
                 >
                     Next
@@ -113,7 +113,10 @@
                 </div>
             </div>
         </div>
-        <p v-html="currentData.sentences[sentenceIndex].text" class="my-1"></p>
+        <span class="my-2 inline-block"
+            >Sentence: <span class="font-bold">{{ currentData.sentences[sentenceIndex].text }}</span></span
+        >
+        <!-- <p class="my-1"></p> -->
         <brat-edit
             v-if="selectedTab == 0"
             :sentenceIndex="sentenceIndex"

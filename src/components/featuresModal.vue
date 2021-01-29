@@ -12,9 +12,7 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div
-                                class="text-primary dark:text-primaryLight font-bold text-lg text-primary dark:text-primaryLight"
-                            >
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg">
                                 Edit token features
                             </div>
                             <button
@@ -40,7 +38,7 @@
                             <span>POS: </span>
                             <transition name="zoom">
                                 <select
-                                    class="appearance-none font-medium h-full border-b inline-block appearance-none bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    class="appearance-none font-medium h-full border-b-2 rounded-t inline-block bg-white dark:bg-gray-600 border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     name="posSelect"
                                     id="posSelect"
                                     v-model="pos"

@@ -18,7 +18,7 @@
                                 class="mx-1 px-1 bg-gray-300 dark:bg-gray-600 rounded ripple select-none"
                                 :class="
                                     selected == token.characterOffsetBegin
-                                        ? 'bg-primary dark:bg-primary dark:text-black text-white'
+                                        ? 'bg-primary dark:bg-primaryLight dark:text-black text-white'
                                         : 'text-black dark:text-white'
                                 "
                                 >{{ token.word }}</span
