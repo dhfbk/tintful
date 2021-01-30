@@ -1,12 +1,8 @@
 <template>
     <div class="grid grid-cols-3 gap-x-2 mt-4">
         <div class="col-span-3 md:col-span-2">
-            <div class="divide-y divide-primary divide-opacity-75">
+            <div class="divide-y dark:divide-primaryLight divide-primary">
                 <div v-for="sen in processedData.sentences" :key="sen.index" class="">
-                    <!-- <div class="flex flex-row"> -->
-                    <!-- <div style="min-width: 48px;" class="h-full bg-gray-100">
-              {{ sen.index }}
-            </div> -->
                     <div class="flex flex-row flex-wrap">
                         <span
                             v-for="token in sen.tokens"
@@ -25,7 +21,144 @@
                             >
                         </span>
                     </div>
-                    <div>info</div>
+                    <div
+                        class="px-1 mx-1 my-2 bg-gray-300 dark:bg-gray-600 rounded select-none text-black dark:text-white flex flex-row flex-wrap"
+                    >
+                        <span class="p-1 mr-2">
+                            Length:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.length[sen.index] > 25
+                                        ? 'bg-yellow-500 text-black'
+                                        : 'bg-green-500 text-black'
+                                "
+                            >
+                                {{ infoData.length[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Level 1:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.level_1[sen.index] < gaugeLevelsOptions.yellowFrom
+                                        ? 'bg-red-500 text-black'
+                                        : infoData.level_1[sen.index] > gaugeLevelsOptions.yellowTo
+                                        ? 'bg-green-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.level_1[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Level 2:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.level_2[sen.index] < gaugeLevelsOptions.yellowFrom
+                                        ? 'bg-red-500 text-black'
+                                        : infoData.level_2[sen.index] > gaugeLevelsOptions.yellowTo
+                                        ? 'bg-green-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.level_2[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Level 3:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.level_3[sen.index] < gaugeLevelsOptions.yellowFrom
+                                        ? 'bg-red-500 text-black'
+                                        : infoData.level_3[sen.index] > gaugeLevelsOptions.yellowTo
+                                        ? 'bg-green-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.level_3[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Sentences:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.sentences[sen.index] <
+                                    processedData.readability.minYellowValues.propositionsAvg
+                                        ? 'bg-green-500 text-black'
+                                        : infoData.sentences[sen.index] >
+                                          processedData.readability.maxYellowValues.propositionsAvg
+                                        ? 'bg-red-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.sentences[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Lexical density:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.lexical_density[sen.index] <
+                                    processedData.readability.minYellowValues.density
+                                        ? 'bg-green-500 text-black'
+                                        : infoData.lexical_density[sen.index] >
+                                          processedData.readability.maxYellowValues.density
+                                        ? 'bg-red-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.lexical_density[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Words per sentence:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.words_per_sentence[sen.index] <
+                                    processedData.readability.minYellowValues.wordsAvg
+                                        ? 'bg-green-500 text-black'
+                                        : infoData.words_per_sentence[sen.index] >
+                                          processedData.readability.maxYellowValues.wordsAvg
+                                        ? 'bg-red-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.words_per_sentence[sen.index] }}
+                            </span>
+                        </span>
+                        <span class="p-1 mr-2">
+                            Syntactic depth:
+                            <span
+                                style="font-family: 'Eczar', sans-serif"
+                                class="px-2 rounded-full"
+                                :class="
+                                    infoData.syntactic_depth[sen.index] <
+                                    processedData.readability.minYellowValues.deepAvg
+                                        ? 'bg-green-500 text-black'
+                                        : infoData.syntactic_depth[sen.index] >
+                                          processedData.readability.maxYellowValues.deepAvg
+                                        ? 'bg-red-500 text-black'
+                                        : 'bg-yellow-500 text-black'
+                                "
+                            >
+                                {{ infoData.syntactic_depth[sen.index] }}
+                            </span>
+                        </span>
+                    </div>
                     <!-- </div> -->
                 </div>
             </div>
@@ -70,27 +203,102 @@ export default {
             // legend: {},
             processedData: JSON.parse(localStorage.getItem('processedText')),
             selected: null,
+            infoData: {
+                length: [],
+                level_1: [],
+                level_2: [],
+                level_3: [],
+                sentences: [],
+                lexical_density: [],
+                words_per_sentence: [],
+                syntactic_depth: [],
+            },
+            //verificare se vanno bene
+            gaugeLevelsOptions: {
+                redFrom: 0,
+                redTo: 40,
+                yellowFrom: 40,
+                yellowTo: 80,
+                greenFrom: 80,
+                greenTo: 100,
+                minorTicks: 5,
+                width: 110,
+                height: 110,
+            },
         }
     },
     created() {
-        //console.log(this.posDesc);
-        // for (var i = 0; i < this.processedData.sentences.length; i++) {
-        //   for (var x = 0; x < this.processedData.sentences[i].tokens.length; x++) {
-        //     this.poses.includes(this.processedData.sentences[i].tokens[x].pos)
-        //       ? ""
-        //       : this.poses.push(this.processedData.sentences[i].tokens[x].pos[0]);
-        //   }
-        // }
-        // this.poses.sort();
-        // for (let i = 0; i < this.poses.length; i++) {
-        //   this.legend[this.poses[i]] = this.getColor();
-        // }
-        //console.log(this.legend);
+        let litWord = 0,
+            lv1 = 0,
+            lv2 = 0,
+            sen = 0,
+            ld = 0,
+            wps = 0,
+            //sd = 0,
+            diff = [0, 0, 0]
+        for (let i = 0; i < this.processedData.sentences.length; i++) {
+            for (let x = 0; x < this.processedData.sentences[i].tokens.length; x++) {
+                if (this.processedData.sentences[i].tokens[x].literalWord) {
+                    litWord++
+                }
+                if (this.processedData.sentences[i].tokens[x].easyWord) {
+                    lv1++
+                }
+                if (this.processedData.sentences[i].tokens[x].difficultyLevel == 1) {
+                    diff[0]++
+                    diff[1]++
+                    diff[2]++
+                } else if (this.processedData.sentences[i].tokens[x].difficultyLevel == 2) {
+                    diff[1]++
+                    diff[2]++
+                } else if (this.processedData.sentences[i].tokens[x].difficultyLevel == 3) {
+                    diff[2]++
+                }
+                if (this.processedData.sentences[i].tokens[x].contentWord) {
+                    lv2++
+                }
+            }
+            sen = this.processedData.sentences[i].verbs.length
+            ld = (1.0 * lv2) / litWord
+            if (sen == 0) {
+                wps = litWord
+            } else {
+                wps = (1.0 * litWord) / sen
+            }
+            this.infoData.length.push(litWord)
+            this.infoData.level_1.push(this.roundNumber((100 * diff[0]) / lv1, 2))
+            this.infoData.level_2.push(this.roundNumber((100 * diff[1]) / lv2, 2))
+            this.infoData.level_3.push(this.roundNumber((100 * diff[2]) / lv2, 2))
+            this.infoData.sentences.push(sen)
+            this.infoData.lexical_density.push(this.roundNumber(ld, 2))
+            this.infoData.words_per_sentence.push(this.roundNumber(wps, 2))
+            litWord = 0
+            wps = 0
+            ld = 0
+            lv1 = 0
+            lv2 = 0
+            diff = [0, 0, 0]
+            sen = 0
+            //depth manca????
+        }
+        console.log(this.infoData)
     },
     methods: {
         sheet() {
             var arr = [this.info, this.keys, this.values]
             this.$emit('sheet', arr)
+        },
+        roundNumber(num, scale) {
+            if (!('' + num).includes('e')) {
+                return +(Math.round(num + 'e+' + scale) + 'e-' + scale)
+            } else {
+                var arr = ('' + num).split('e')
+                var sig = ''
+                if (+arr[1] + scale > 0) {
+                    sig = '+'
+                }
+                return +(Math.round(+arr[0] + 'e' + sig + (+arr[1] + scale)) + 'e-' + scale)
+            }
         },
     },
     watch: {

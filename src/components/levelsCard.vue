@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <p
-                    class="text-xs dark:font-thin w-2/3 min-w-min text-center text-gray-600  tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
+                    class="text-xs dark:font-thin w-2/3 min-w-min text-center text-gray-600 tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                 >
                     {{ options.labels[x] }}
                 </p>

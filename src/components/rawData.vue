@@ -49,10 +49,10 @@
                     </div>
                 </div>
                 <div class="h-1 w-1/2 bg-primary dark:bg-primaryLight" :class="tabScroll"></div>
-                <p v-if="selectedTab == 0">
+                <div v-if="selectedTab == 0">
                     <button
                         @click="downloadFile('downloadText', 'raw_text.txt')"
-                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
+                        class="my-2 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
                     >
                         <span>Download text</span>
                         <svg
@@ -69,11 +69,11 @@
                     </button>
                     <a id="downloadText" style="display: none"></a>
                     {{ text }}
-                </p>
+                </div>
                 <div v-else>
                     <button
                         @click="downloadFile('downloadJSON', 'processed_text.json')"
-                        class="my-1 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
+                        class="my-2 bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
                     >
                         <span>Download JSON</span>
                         <svg

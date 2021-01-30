@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+//import axios from 'axios'
 import json from '../assets/test.json'
 const { required } = require('vuelidate/lib/validators')
 export default {
@@ -157,6 +157,14 @@ export default {
     methods: {
         process() {
             this.loadBtn = true
+            //rimuovere questo blocco quando le api tornano online
+            localStorage.setItem('text', this.text)
+            localStorage.setItem('processedText', JSON.stringify(this.myJson))
+            this.$store.state.editableData = this.myJson
+            this.$router.push({ name: 'result' })
+            this.loading = false
+            //
+            /*
             this.$v.$touch()
             if (!this.$v.$invalid) {
                 axios({
@@ -167,37 +175,19 @@ export default {
                         localStorage.setItem('text', this.text)
                         localStorage.setItem('processedText', JSON.stringify(res.data))
                         this.$store.state.editableData = res.data
-                        this.$router.push({ name: 'result' })
                         this.loadBtn = false
+                        this.$router.push({ name: 'result' })
                     })
                     .catch(err => {
                         this.$emit('snack', 'Error. Could not connect to the server')
                         console.log(err)
                         this.loadBtn = false
                     })
-                /*
-        axios({
-          url:
-            "https://cors-anywhere.herokuapp.com/https://dh.fbk.eu/tint-server",
-          method: "POST",
-          data: {
-            text: this.$store.state.text,
-          },
-        })
-          .then((res) => {
-            this.$store.state.processedData = res.data;
-            console.log(res.data);
-            this.loading = false;
-          })
-          .catch((err) => {
-            console.error(err);
-            this.serverError = true;
-            this.loading = false;
-          });
-          */
+                
             } else {
                 this.loading = false
             }
+            */
         },
         decodeEntities(string) {
             return string
