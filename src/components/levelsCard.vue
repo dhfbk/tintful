@@ -20,7 +20,7 @@
             </button>
         </div>
         <div class="flex flex-row my-auto">
-            <div class="w-1/3 flex flex-col place-items-center mx-1" v-for="(i, x) in series" :key="x">
+            <div class="w-1/3 flex flex-col place-items-center mx-2" v-for="(i, x) in series" :key="x">
                 <div class="inline-block h-40 w-4 sm:w-6 relative rounded-lg dark:bg-dark02dp bg-gray-200">
                     <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
                         <div
@@ -31,13 +31,13 @@
                     </div>
                 </div>
                 <p
-                    class="text-xs dark:font-thin w-2/3 min-w-min text-center text-gray-600 tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
+                    class="text-md dark:font-thin min-w-min text-center text-gray-600 tracking-wider dark:text-gray-300 mt-2 overflow-ellipsis block overflow-hidden"
                 >
                     {{ options.labels[x] }}
                 </p>
                 <p
-                    class="w-2/3 text-center  tracking-widest text-gray-600 dark:text-gray-300 inline mt-1"
-                    style="font-family: 'Eczar', sans-serif"
+                    class="w-2/3 text-center tracking-widest dark:text-gray-300 inline mt-1 text-lg font-semibold"
+                    style="font-family: 'Barlow', sans-serif"
                 >
                     {{ i.toFixed(2) }}
                 </p>

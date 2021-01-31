@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-3 gap-x-2 mt-4">
+    <div class="grid grid-cols-3 gap-x-2 mt-4 md:divide-x dark:divide-primaryLight divide-primary">
         <div class="col-span-3 md:col-span-2">
             <div class="divide-y dark:divide-primaryLight divide-primary">
                 <div v-for="sen in processedData.sentences" :key="sen.index" class="">
@@ -27,8 +27,8 @@
                         <span class="p-1 mr-2">
                             Length:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.length[sen.index] > 25
                                         ? 'bg-yellow-500 text-black'
@@ -41,8 +41,8 @@
                         <span class="p-1 mr-2">
                             Level 1:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.level_1[sen.index] < gaugeLevelsOptions.yellowFrom
                                         ? 'bg-red-500 text-black'
@@ -57,8 +57,8 @@
                         <span class="p-1 mr-2">
                             Level 2:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.level_2[sen.index] < gaugeLevelsOptions.yellowFrom
                                         ? 'bg-red-500 text-black'
@@ -73,8 +73,8 @@
                         <span class="p-1 mr-2">
                             Level 3:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.level_3[sen.index] < gaugeLevelsOptions.yellowFrom
                                         ? 'bg-red-500 text-black'
@@ -89,8 +89,8 @@
                         <span class="p-1 mr-2">
                             Sentences:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.sentences[sen.index] <
                                     processedData.readability.minYellowValues.propositionsAvg
@@ -107,8 +107,8 @@
                         <span class="p-1 mr-2">
                             Lexical density:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.lexical_density[sen.index] <
                                     processedData.readability.minYellowValues.density
@@ -125,8 +125,8 @@
                         <span class="p-1 mr-2">
                             Words per sentence:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.words_per_sentence[sen.index] <
                                     processedData.readability.minYellowValues.wordsAvg
@@ -143,8 +143,8 @@
                         <span class="p-1 mr-2">
                             Syntactic depth:
                             <span
-                                style="font-family: 'Eczar', sans-serif"
-                                class="px-2 rounded-full"
+                                style="font-family: 'Barlow', sans-serif"
+                                class="px-2 rounded-full font-medium"
                                 :class="
                                     infoData.syntactic_depth[sen.index] <
                                     processedData.readability.minYellowValues.deepAvg
@@ -163,7 +163,7 @@
                 </div>
             </div>
         </div>
-        <div class="hidden md:block md:col-span-1">
+        <div class="hidden md:block md:col-span-1 pl-2">
             <div v-if="!info" class="font-bold text-lg text-center sticky top-1/2">
                 Click on a token for further information.
             </div>
@@ -176,10 +176,15 @@
                 <!-- <div class="overflow-x-auto" id="formatter1"></div> -->
 
                 <span v-for="(i, x) in keys" :key="x">
-                    <span class="font-medium">{{ i }}</span
-                    >: <span style="font-family: 'Eczar', sans serif">{{ values[x] }}</span
-                    ><br
-                /></span>
+                    <span class="font-medium dark:text-primaryLight text-primary">
+                        {{ i }}
+                    </span>
+                    :
+                    <span style="font-family: 'Barlow', sans serif">
+                        {{ values[x] }}
+                    </span>
+                    <br />
+                </span>
             </div>
         </div>
     </div>

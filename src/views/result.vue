@@ -10,7 +10,7 @@
             :key="x"
             class="cursor-default select-none col-span-4 md:col-span-2 2xl:col-span-1 dark:bg-dark01dp shadow-md rounded-md mb-4 p-2 md:p-3"
         >
-            <p class=" text-xl tracking-wide sm:text-2xl md:text-4xl" style="font-family: 'Eczar', sans-serif">{{ i }}</p>
+            <p class=" text-xl tracking-wide sm:text-2xl md:text-4xl" style="font-family: 'Barlow', sans-serif">{{ i }}</p>
             <p class="text-gray-300 text-sm overflow-ellipsis block overflow-hidden">
                 {{ infoMiniCards.keys[x] }}
             </p>
@@ -24,10 +24,10 @@
 
                 <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
                     <span class="flex flex-row justify-between w-full items-center">
-                        <p class="dark:text-gray-300 text-gray-600 text-sm overflow-ellipsis overflow-hidden">
+                        <p class="dark:text-gray-300 text-gray-600 text-md overflow-ellipsis overflow-hidden">
                             {{ infoMiniCards.keys[x] }}
                         </p>
-                        <p class="text-xl sm:text-2xl tracking-widest ml-2" style="font-family: 'Eczar', sans-serif">
+                        <p class="text-xl sm:text-2xl tracking-widest ml-2 font-semibold" style="font-family: 'Barlow', sans-serif">
                             {{ i }}
                         </p></span
                     >
