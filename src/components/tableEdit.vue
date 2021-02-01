@@ -110,8 +110,31 @@
                         </div>
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">-</td>
-                    <!--no NER ma solo spaceAfter-->
-                    <td class="p-1 px-2">NER: {{ d.ner == 'O' ? '-' : d.ner }}</td>
+                    <!--implementare logica-->
+                    <td class="p-1 px-2">
+                        spaceAfter:
+                        <div class="relative">
+                            <select
+                                :name="'space' + d.index"
+                                :id="'space' + d.index"
+                                class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            >
+                                <option selected>false</option>
+                                <option>true</option>
+                            </select>
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900">
+                                <svg
+                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

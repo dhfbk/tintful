@@ -27,7 +27,10 @@
                         <p class="dark:text-gray-300 text-gray-600 text-md overflow-ellipsis overflow-hidden">
                             {{ infoMiniCards.keys[x] }}
                         </p>
-                        <p class="text-xl sm:text-2xl tracking-widest ml-2 font-semibold" style="font-family: 'Barlow', sans-serif">
+                        <p
+                            class="text-xl sm:text-2xl tracking-widest ml-2 font-semibold"
+                            style="font-family: 'Barlow', sans-serif"
+                        >
                             {{ i }}
                         </p></span
                     >
@@ -120,7 +123,7 @@ export default {
         rawData,
         modalInfo,
         SwipeableBottomSheet,
-        levelsCard
+        levelsCard,
     },
     data() {
         return {

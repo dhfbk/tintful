@@ -1,8 +1,8 @@
 <template>
-    <div class="my-2 flex content-center items-center justify-between">
+    <div class="flex content-center items-center justify-between my-2">
         <span>{{ label }}: </span>
         <select
-            class="appearance-none h-full border-b-2 inline-block focus:bg-gray-200 bg-gray-200 dark:bg-gray-600  rounded-t border-gray-400 text-gray-700 dark:text-gray-100 py-1 pl-2 pr-10 leading-tight focus:outline-none focus:border-gray-500"
+            class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             :name="opt[0]"
             :id="opt[0]"
             @change="send"

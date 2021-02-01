@@ -36,18 +36,16 @@
                         </div>
                         <div class="flex content-center items-center justify-between my-2">
                             <span>POS: </span>
-                            <transition name="zoom">
-                                <select
-                                    class="appearance-none font-medium h-full border-b-2 rounded-t inline-block bg-white dark:bg-gray-600 border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    name="posSelect"
-                                    id="posSelect"
-                                    v-model="pos"
-                                >
-                                    <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
-                                        {{ i.abbr }} ({{ i.full }})
-                                    </option>
-                                </select>
-                            </transition>
+                            <select
+                                class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                name="posSelect"
+                                id="posSelect"
+                                v-model="pos"
+                            >
+                                <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
+                                    {{ i.abbr }} ({{ i.full }})
+                                </option>
+                            </select>
                         </div>
                         <div>
                             <!-- <span class="">{{ featsToEdit }} </span> -->

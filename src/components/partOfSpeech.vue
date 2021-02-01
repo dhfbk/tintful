@@ -25,7 +25,7 @@
               :mode="'pos'"
             /> -->
                         <span
-                            class="rounded px-1 text-sm text-gray-600 max-w-min mx-1 mb-1"
+                            class="rounded px-1 text-sm text-black max-w-min mx-1 mb-1"
                             :style="{ background: legend[token.pos[0]] }"
                             >{{ token.pos }}
                         </span>
@@ -56,21 +56,21 @@ export default {
             legend: {},
             posDesc: [],
             colors: [
-                '#72A1E5',
-                '#7977E8',
-                '#AD7CEA',
-                '#DF80EC',
-                '#EE85CE',
-                '#F08BA6',
-                '#F2A090',
-                '#F4CD95',
-                '#F4F69B',
-                '#D0F7A0',
-                '#B0F8A6',
-                '#ACFAC4',
-                '#B2FBE7',
-                '#B8F1FC',
-                '#BFD8FD',
+                '#FFFFF0',
+                '#FFD3E3',
+                '#97be9f',
+                '#82FEC3',
+                '#F7AE8C',
+                '#c293a0',
+                '#6efff7',
+                '#b5a7ff',
+                '#eecd39',
+                '#abff4a',
+                '#bcc7b2',
+                '#ff43d3',
+                '#f09471',
+                '#77b2cc',
+                '#ff6e87',
             ].reverse(),
             processedData: JSON.parse(localStorage.getItem('processedText')),
         }

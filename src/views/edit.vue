@@ -113,9 +113,15 @@
                 </div>
             </div>
         </div>
-        <span class="my-2 inline-block"
-            >Sentence: <span class="font-bold">{{ currentData.sentences[sentenceIndex].text }}</span></span
-        >
+        <span class="my-2 inline-block" v-if="selectedTab != 2">
+            Sentence:
+            <span class="font-bold">{{ currentData.sentences[sentenceIndex].text }}</span>
+        </span>
+        <!--inserire paginazione-->
+        <span class="my-2 inline-block" v-else>
+            Sentences:<br>
+            <span class="font-bold" v-for="phrase in currentData.sentences" :key="phrase.index">{{phrase.index + 1}}. {{ phrase.text }}<br></span>
+        </span>
         <!-- <p class="my-1"></p> -->
         <brat-edit
             v-if="selectedTab == 0"

@@ -104,20 +104,20 @@ export default {
             this.text =
                 '<p class="font-medium">Dependencies actions:</p>' +
                 '<ul class="list-disc px-4">' +
-                '<li>to change the head of a current dependency, right click on the dependent and then left click on the new head</li>' +
-                '<li>to add a new dependency, right click on the element that should become the dependent and then left click on the new head</li>' +
-                "<li>to edit the type of a dependency, double click on the dependency's type in the middle of the arrow and use the modal to choose the new one</li>" +
+                '<li>to change the head of a current dependency, right click (long press on mobile) on the dependent and then left click (tap on mobile) on the new head</li>' +
+                '<li>to add a new dependency, right click (long press on mobile) on the element that should become the dependent and then left click (tap on mobile) on the new head</li>' +
+                "<li>to edit the type of a dependency, double click (double tap on mobile) on the dependency's type in the middle of the arrow and use the modal to choose the new one</li>" +
                 '</ul>' +
                 '<br/><p class="font-medium">Features\' actions:</p>' +
                 '<ul class="list-disc px-4">' +
-                "<li>to edit a token's features double click on the token's Part Of Speech label and use the modal to do your editing</li>" +
+                "<li>to edit a token's features double click (double tap on mobile) on the token's Part Of Speech label and use the modal to do your editing</li>" +
                 '</ul>'
         } else if (this.type == 'table') {
             this.text =
                 "To edit values in the table, simply change the text where the field is an open one, select another option in the dropdown fields, or use the modal where it's needed"
         } else {
             this.text =
-                'To change the NER value of a certain token, simply click on it and the color will change according to the new value. You can check the legend to see what value each color refers to.'
+                'To change the NER value of a certain token, simply click/tap on it and the color will change according to the new value. You can check the legend to see what value each color refers to.'
         }
     },
 }

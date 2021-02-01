@@ -66,7 +66,7 @@
                     >
                     <div class="relative mb-2">
                         <select
-                            class="block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-full bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-800 w-full py-2 pl-4 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary dark:focus:border-primary dark:hover:border-primary"
+                            class="cursor-pointer block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-full bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-800 w-full py-2 pl-4 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary dark:focus:border-primary dark:hover:border-primary"
                             id="action"
                             name="action"
                             v-model="exampleChoice"
@@ -125,14 +125,14 @@
 </template>
 
 <script>
-//import axios from 'axios'
-import json from '../assets/test.json'
+import axios from 'axios'
+//import json from '../assets/test.json'
 const { required } = require('vuelidate/lib/validators')
 export default {
     name: 'home',
     data() {
         return {
-            myJson: json,
+            //myJson: json,
             hoverText: false,
             text: '',
             examples: [
@@ -157,19 +157,11 @@ export default {
     methods: {
         process() {
             this.loadBtn = true
-            //rimuovere questo blocco quando le api tornano online
-            localStorage.setItem('text', this.text)
-            localStorage.setItem('processedText', JSON.stringify(this.myJson))
-            this.$store.state.editableData = this.myJson
-            this.$router.push({ name: 'result' })
-            this.loading = false
-            //
-            /*
             this.$v.$touch()
             if (!this.$v.$invalid) {
                 axios({
                     mode: 'get',
-                    url: 'http://dh-server.fbk.eu:8013/tint/?text=' + this.text,
+                    url: 'http://dh-server.fbk.eu:8013/tint/?text=' + encodeURIComponent(this.text),
                 })
                     .then(res => {
                         localStorage.setItem('text', this.text)
@@ -183,11 +175,9 @@ export default {
                         console.log(err)
                         this.loadBtn = false
                     })
-                
             } else {
                 this.loading = false
             }
-            */
         },
         decodeEntities(string) {
             return string
