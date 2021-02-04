@@ -88,6 +88,36 @@ export default {
                 this.loadBrat()
             }
         },
+        addRoot() {
+            let svg = document.getElementById('deps').children[0]
+            let tokens = svg.getElementsByClassName('span_default')
+            let sen = this.$store.state.editableData.sentences[this.sentenceIndex]
+            for (let p = 0; p < sen['basic-dependencies'].length; p++) {
+                if (sen['basic-dependencies'][p].governorGloss == 'ROOT') {
+                    for (let l = 0; l < tokens.length; l++) {
+                        if (
+                            tokens[l].getAttribute('data-span-id') ==
+                            'POS_' + this.sentenceIndex + '_' + (sen['basic-dependencies'][p].dependent - 1)
+                        ) {
+                            tokens[l].parentElement.append(
+                                this.createSvgElement('rect', {
+                                    x:
+                                        parseFloat(tokens[l].attributes.x.value) +
+                                        parseFloat(tokens[l].getAttribute('width')) / 2,
+                                    y: parseFloat(tokens[l].attributes.y.value) - 52,
+                                    'dominant-baseline': 'middle',
+                                    'text-anchor': 'middle',
+                                    class: 'root',
+                                    height: 50,
+                                    width: 1,
+                                })
+                            )
+                        }
+                    }
+                    break
+                }
+            }
+        },
         addMultiWord() {
             //get the brat svg
             let svg = document.getElementById('deps').children[0]
@@ -155,11 +185,11 @@ export default {
                                       .getElementsByTagName('text')[0]
                                       .getElementsByTagName('tspan')[i].nextSibling.nextSibling.attributes.x.value
                               ) - 3)
-                    g = this.createSvgElement('g')
+                    g = this.createSvgElement('g', { class: 'multiWord' })
                     rect = this.createSvgElement('rect', { x: x1, y: y, width: length1, height: 5, fill: 'red' })
                     //word under the red line
                     text = this.createSvgElement('text', {
-                        x: x1 + 15,
+                        x: x1 + 13,
                         y: y + 15,
                         'dominant-baseline': 'middle',
                         'text-anchor': 'middle',
@@ -266,7 +296,7 @@ export default {
             infoToEdit.lemma = feat.lemma
             infoToEdit.pos = feat.pos
             infoToEdit.word = feat.word
-            this.$emit('showFeatsModal', infoToEdit)
+            this.$emit('showFeatsModal', infoToEdit, 'brat')
             console.log(infoToEdit)
         },
         handleRight(e) {
@@ -327,6 +357,7 @@ export default {
             this.isEditMode = false
 
             console.log('son: ' + this.sonId, 'new father: ' + this.newFatherId)
+            this.$emit("edited")
         },
         addEvents() {
             console.log('siamo dentro la funzione che inserisce gli eventi')
@@ -400,6 +431,7 @@ export default {
                     })
                 })
                 this.addMultiWord()
+                this.addRoot()
             }, 200)
         },
         isInt(value) {

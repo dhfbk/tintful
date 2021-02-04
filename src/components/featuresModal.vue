@@ -34,20 +34,24 @@
                         <div class="flex content-center items-center justify-between my-2">
                             Word: <span class="font-medium">"{{ featsToEdit.word }}"</span>
                         </div>
-                        <div class="flex content-center items-center justify-between my-2">
+                        <div
+                            class="flex content-center items-center justify-between my-2"
+                            v-if="mode == 'brat' || mode == 'upos'"
+                        >
                             <span>POS: </span>
                             <select
                                 class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 name="posSelect"
                                 id="posSelect"
                                 v-model="pos"
+                                @change="changePos"
                             >
                                 <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
                                     {{ i.abbr }} ({{ i.full }})
                                 </option>
                             </select>
                         </div>
-                        <div>
+                        <div v-if="mode == 'brat' || mode == 'feats'">
                             <!-- <span class="">{{ featsToEdit }} </span> -->
                             <transition-group name="zoom">
                                 <featsSelect
@@ -181,6 +185,7 @@ import featsSelect from '../components/featsSelect'
 export default {
     props: {
         featsToEdit: Object,
+        mode: String,
     },
     components: { featsSelect },
     data() {
@@ -271,6 +276,12 @@ export default {
         toggleModal() {
             this.$emit('closeFeatsModal')
         },
+        changePos() {
+            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                this.featsToEdit.tokIndex
+            ].pos = this.featsToEdit.pos
+            this.$emit('edited', 'noBrat')
+        },
         save() {
             let toCheck = {
                 Gender: [this.gen],
@@ -295,8 +306,6 @@ export default {
                     newFeatures[keys[i]] = values[i]
                 }
             }
-            console.log(newFeatures)
-            console.log(this.featsToEdit.tokIndex)
             let dataToSend = {
                 senIndex: this.featsToEdit.senIndex,
                 tokIndex: parseInt(this.featsToEdit.tokIndex),

@@ -82,34 +82,32 @@ export default {
             }
         },
         addRoot() {
-            var deps = document.getElementById('deps').children[0]
-
-            // deps.forEach(el=>if(el.hasAttribute))
-            // eslint-disable-next-line no-unused-vars
-            var token = deps.getElementsByClassName('span_default')
-            console.log(token)
-
+            let svg = document.getElementById('deps').children[0]
+            let tokens = svg.getElementsByClassName('span_default')
             let sen = this.$store.state.editableData.sentences
-            //console.log(sen)
             for (let i = 0; i < sen.length; i++) {
                 for (let p = 0; p < sen[i]['basic-dependencies'].length; p++) {
                     if (sen[i]['basic-dependencies'][p].governorGloss == 'ROOT') {
-                        console.log('la root è ' + sen[i]['basic-dependencies'][p].dependentGloss)
-
-                        for (let l = 0; l < token.length; l++) {
-                            if (token[l].getAttribute('data-span-id') == 'POS_' + i + '_' + p) {
-                                // console.log(token[l].attributes.x.value, token[l].attributes.y.value)
-                                // token[l].outerHTML +=
-                                //     '<rect x="' +
-                                //     token[l].attributes.x.value +
-                                //     '" y="' +
-                                //     token[l].attributes.y.value +
-                                //     10 +
-                                //     '" stroke="#555555" height="100" width="5"></rect>'
+                        for (let l = 0; l < tokens.length; l++) {
+                            if (
+                                tokens[l].getAttribute('data-span-id') ==
+                                'POS_' + i + '_' + (sen[i]['basic-dependencies'][p].dependent - 1)
+                            ) {
+                                tokens[l].parentElement.append(
+                                    this.createSvgElement('rect', {
+                                        x: parseFloat(tokens[l].attributes.x.value) + parseFloat(tokens[l].getAttribute("width"))/2,
+                                        y: parseFloat(tokens[l].attributes.y.value) - 52,
+                                        'dominant-baseline': 'middle',
+                                        'text-anchor': 'middle',
+                                        class: 'root',
+                                        height: 50,
+                                        width: 1,
+                                    })
+                                )
                             }
                         }
+                        break
                     }
-                    break
                 }
             }
         },
@@ -183,11 +181,11 @@ export default {
                                           .getElementsByTagName('tspan')[i].nextSibling.nextSibling.attributes.x
                                           .value
                                   ) - 3)
-                        g = this.createSvgElement('g')
+                        g = this.createSvgElement('g', { class: 'multiWord' })
                         rect = this.createSvgElement('rect', { x: x1, y: y, width: length1, height: 5, fill: 'red' })
                         //word under the red line
                         text = this.createSvgElement('text', {
-                            x: x1 + 15,
+                            x: x1 + 13,
                             y: y + 15,
                             'dominant-baseline': 'middle',
                             'text-anchor': 'middle',

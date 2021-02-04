@@ -6,6 +6,7 @@
             v-if="showFeatsModal"
             :featsToEdit="featsToEdit"
             @edited="editedFeat"
+            :mode="featsMode"
         />
         <modalInfo v-if="modalInfo" @modal="modalInfo = !modalInfo" :type="type" />
         <confirmationModal
@@ -72,45 +73,45 @@
                 v-if="selectedTab == 0 || selectedTab == 1"
                 class="flex content-center items-center col-span-2 sm:col-span-1 justify-end sm:justify-center"
             >
-                <div
+                <button
                     @click="confirmModal('prev')"
-                    class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out  select-none"
+                    class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out focus:outline-none select-none"
                     :class="
                         sentenceIndex == 0
-                            ? 'text-white bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary  hover:bg-primaryDark  text-white cursor-pointer'
+                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
                     Prev.
-                </div>
+                </button>
                 <span class="mx-2">{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
-                <div
+                <button
                     @click="confirmModal('next')"
-                    class="rounded h-5/6 flex items-center content-center mr-1 px-2  ripple transition-colors duration-100 ease-out  select-none"
+                    class="rounded h-5/6 flex items-center content-center mr-1 px-2  ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                     :class="
                         sentenceIndex == sentencesNum - 1
-                            ? 'text-white bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary  hover:bg-primaryDark dark:bg-primaryLightDark text-white cursor-pointer'
+                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
                     Next
-                </div>
+                </button>
             </div>
             <div
                 class="w-full mt-1 sm:mt-0 col-span-3 sm:col-span-1 justify-self-end flex content-center items-center justify-start sm:justify-end"
                 :class="selectedTab == 2 ? 'sm:col-span-2' : ''"
             >
-                <div
+                <button
                     :class="
                         isEdited
-                            ? 'bg-primary hover:bg-primaryDark cursor-pointer'
-                            : 'bg-gray-400 hover:bg-gray-600 cursor-not-allowed'
+                            ? 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
                     "
                     @click="confirmModal('save')"
-                    class="rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none text-white"
+                    class="rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
                 >
                     Save changes
-                </div>
+                </button>
             </div>
         </div>
         <span class="my-2 inline-block" v-if="selectedTab != 2">
@@ -118,11 +119,34 @@
             <span class="font-bold">{{ currentData.sentences[sentenceIndex].text }}</span>
         </span>
         <!--inserire paginazione-->
-        <span class="my-2 inline-block" v-else>
+        <span class="my-2 inline-block w-full" v-else>
             Sentences:<br />
-            <span class="font-bold" v-for="phrase in currentData.sentences" :key="phrase.index"
-                >{{ phrase.index + 1 }}. {{ phrase.text }}<br
-            /></span>
+            <span class="font-bold" v-for="(phrase, n) in nerPhrases" :key="n"> {{ n }}. {{ phrase }}<br /> </span>
+            <div class="flex flex-row content-center items-center justify-center mt-2" v-if="this.$store.state.editableData.sentences.length > 10">
+                <button
+                    class="rounded flex items-center content-center mr-1 px-2 py-1 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
+                    :class="
+                        startNerPages == 0
+                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                    "
+                    @click="startNerPages--"
+                >
+                    Prev.
+                </button>
+                <span class="mx-2">{{ startNerPages + 1 }}/{{ endNerPages }}</span>
+                <button
+                    class="rounded flex items-center content-center mr-1 px-2 py-1 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
+                    :class="
+                        startNerPages == endNerPages - 1
+                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                    "
+                    @click="startNerPages++"
+                >
+                    Next
+                </button>
+            </div>
         </span>
         <!-- <p class="my-1"></p> -->
         <brat-edit
@@ -132,6 +156,7 @@
             @showDepsModal="depsModal"
             @showFeatsModal="featsModal"
             :refresh="refreshBrat"
+            @edited="isEdited = true"
         />
         <table-edit
             v-else-if="selectedTab == 1"
@@ -159,7 +184,11 @@ export default {
     data() {
         return {
             currentData: JSON.parse(localStorage.getItem('processedText')),
+            featsMode: '',
             doc: this.$store.state.editableData,
+            startNerPages: 0,
+            endNerPages: 1,
+            nerPhrases: {},
             showDepsModal: false,
             showFeatsModal: false,
             sentenceIndex: 0,
@@ -176,6 +205,19 @@ export default {
             confirmation: false,
             action: '',
             confirmationMode: '',
+        }
+    },
+    created() {
+        if (this.$store.state.editableData.sentences.length <= 10) {
+            for (let i = 0; i < this.$store.state.editableData.sentences.length; i++) {
+                this.nerPhrases[i+1] = this.$store.state.editableData.sentences[i].text
+            }
+            this.endNerPages = 1
+        } else {
+            for (let i = 0; i < 10; i++) {
+                this.nerPhrases[i+1] = this.$store.state.editableData.sentences[i].text
+            }
+            this.endNerPages = this.$store.state.editableData.sentences.length % 10
         }
     },
     components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
@@ -258,18 +300,12 @@ export default {
             }
         },
         editedDep(dep) {
-            console.log(dep)
             var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
-            console.log(x)
             this.isEdited = true
 
             for (let i = 0; i < x.length; i++) {
                 if (dep.governor == x[i].governor && dep.dependent == x[i].dependent) {
                     this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies'][i].dep = dep.dep
-                    console.log('###############################################')
-                    console.log(
-                        this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies'][i].dep
-                    )
                     break
                 }
             }
@@ -279,15 +315,18 @@ export default {
             }, 200)
         },
         editedFeat(feats) {
-            var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
-            console.log(feats)
-            this.isEdited = true
-            x.features = feats.newFeats
-            x.pos = feats.newPos
-            this.refreshBrat = true
-            setTimeout(() => {
-                this.refreshBrat = false
-            }, 200)
+            if (feats == 'noBrat') {
+                this.isEdited = true
+            } else {
+                var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
+                console.log(feats)
+                x.features = feats.newFeats
+                x.pos = feats.newPos
+                this.refreshBrat = true
+                setTimeout(() => {
+                    this.refreshBrat = false
+                }, 200)
+            }
         },
         depsModal(i) {
             this.depToEdit.dep = i.getAttribute('data-arc-role')
@@ -295,9 +334,10 @@ export default {
             this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
             this.showDepsModal = true
         },
-        featsModal(info) {
+        featsModal(info, mode) {
             console.log(info)
             this.featsToEdit = info
+            this.featsMode = mode
             this.showFeatsModal = true
         },
     },
@@ -317,6 +357,14 @@ export default {
             setTimeout(() => {
                 this.refreshBrat = false
             }, 200)
+        },
+        startNerPages() {
+            this.nerPhrases = {}
+            for (let i = ((this.startNerPages + 1) * 10) - 10; i < (this.startNerPages + 1) * 10; i++) {
+                if (this.$store.state.editableData.sentences[i] != undefined) {
+                    this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
+                }
+            }
         },
     },
 }

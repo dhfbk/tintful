@@ -29,6 +29,7 @@
                         <div class="flex content-center items-center h-full w-max">
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
+                                @click="editFeats(d, 'upos')"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -49,7 +50,7 @@
                         <div class="flex content-center items-center h-full">
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
-                                @click="editFeats(d)"
+                                @click="editFeats(d, 'feats')"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -66,6 +67,7 @@
                             :name="'head' + d.index"
                             :id="'head' + d.index"
                             v-model="headsEditable[d.index]"
+                            @change="editData('heads', d.index)"
                             class="w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option
@@ -74,7 +76,6 @@
                                 ].length + 1"
                                 :key="c"
                                 :value="c"
-                                @click="editData('heads', d.index, c)"
                                 >{{ c }}</option
                             >
                         </select>
@@ -93,11 +94,10 @@
                             :name="'dep' + d.index"
                             :id="'dep' + d.index"
                             v-model="deprelsEditable[d.index]"
+                            @change="editData('deprels', d.index)"
                             class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
-                            <option v-for="i in deps" :key="i" :value="i" @click="editData('deprels', d.index, i)">{{
-                                i
-                            }}</option>
+                            <option v-for="i in deps" :key="i" :value="i">{{ i }}</option>
                         </select>
                         <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
                             <svg
@@ -110,17 +110,18 @@
                         </div>
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">-</td>
-                    <!--implementare logica-->
                     <td class="p-1 px-2">
                         spaceAfter:
                         <div class="relative">
                             <select
                                 :name="'space' + d.index"
                                 :id="'space' + d.index"
+                                v-model="spaceAfterEditable[d.index]"
+                                @change="editData('spaceAfter', d.index)"
                                 class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                             >
-                                <option selected>false</option>
-                                <option>true</option>
+                                <option>Yes</option>
+                                <option>No</option>
                             </select>
                             <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900">
                                 <svg
@@ -194,6 +195,8 @@ export default {
             headsEditable: {},
             deprelsRef: {}, //object with the index of the token as the key and the deprel as the value
             deprelsEditable: {},
+            spaceAfterRef: {}, //object with the index of the token as the key and the spaceAfter as the value
+            spaceAfterEditable: {},
             deps: [
                 'ROOT', //aggiunta a mano
                 'acl',
@@ -244,6 +247,7 @@ export default {
                 'xcomp',
             ],
             loading: true,
+            showData: this.$store.state.editableData.sentences
         }
     },
     created() {
@@ -254,10 +258,20 @@ export default {
         }
         this.deprelsEditable = JSON.parse(JSON.stringify(this.deprelsRef))
         this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
+        for (let i = 0; i < this.$store.state.editableData.sentences[this.currentPhrase].tokens.length; i++) {
+            if (this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].spaceAfter != undefined) {
+                this.spaceAfterRef[
+                    this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].index
+                ] = this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].spaceAfter
+            } else {
+                this.spaceAfterRef[this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].index] = "Yes"
+            }
+        }
+        this.spaceAfterEditable = JSON.parse(JSON.stringify(this.spaceAfterRef))
         this.loading = false
     },
     methods: {
-        editFeats(token) {
+        editFeats(token, mode) {
             var index = token.index - 1
             var d = this.$store.state.editableData
             var feat = d.sentences[this.sentenceIndex].tokens[index]
@@ -270,10 +284,11 @@ export default {
             infoToEdit.lemma = feat.lemma
             infoToEdit.pos = feat.pos
             infoToEdit.word = feat.word
-            this.$emit('editFeats', infoToEdit)
+            this.$emit('editFeats', infoToEdit, mode)
         },
-        editData(mode, index, value) {
+        editData(mode, index) {
             if (mode == 'deprels') {
+                let value = document.getElementById('dep' + index).value
                 this.deprelsEditable[index] = value
                 for (
                     let i = 0;
@@ -297,21 +312,11 @@ export default {
                                 i
                             ].dependent
                         ]
-                        console.log(
-                            'cambiato deprel a posizione: ' +
-                                this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][i]
-                                    .dependent +
-                                '. nuovo valore: ' +
-                                this.deprelsEditable[
-                                    this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][
-                                        i
-                                    ].dependent
-                                ]
-                        )
                     }
                 }
                 this.$emit('edited')
             } else if (mode == 'heads') {
+                let value = document.getElementById('head' + index).value
                 this.headsEditable[index] = value
                 for (
                     let i = 0;
@@ -335,20 +340,16 @@ export default {
                                 i
                             ].dependent
                         ]
-                        console.log(
-                            'cambiato head a posizione: ' +
-                                this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][i]
-                                    .dependent +
-                                '. nuovo valore: ' +
-                                this.headsEditable[
-                                    this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][
-                                        i
-                                    ].dependent
-                                ]
-                        )
                     }
                 }
                 this.$emit('edited')
+            } else {
+                let value = document.getElementById('space' + index).value
+                if (this.spaceAfterRef[index] != value) {
+                    this.spaceAfterEditable[index] = value
+                    this.$store.state.editableData.sentences[this.currentPhrase].tokens[index - 1].spaceAfter = value
+                    this.$emit('edited')
+                }
             }
         },
     },

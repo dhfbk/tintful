@@ -289,7 +289,7 @@ var Visualizer = (function ($, window, undefined) {
     var arcSlant = 15; //10;
     var minArcSlant = 8;
     var arcHorizontalSpacing = 10; // min space boxes with connecting arc
-    var rowSpacing = -5; // for some funny reason approx. -10 gives "tight" packing.
+    var rowSpacing = 8; // for some funny reason approx. -10 gives "tight" packing.
     var sentNumMargin = 20;
     var smoothArcCurves = true; // whether to use curves (vs lines) in arcs
     var smoothArcSteepness = 0.5; // steepness of smooth curves (control point)
@@ -364,7 +364,6 @@ var Visualizer = (function ($, window, undefined) {
         )
       )
         return; // not needed
-      // console.log("burh");
       $svg.css("margin-bottom", 1);
       setTimeout(function () {
         $svg.css("margin-bottom", 0);
@@ -1406,7 +1405,6 @@ var Visualizer = (function ($, window, undefined) {
       var parsedSpec = spec.split(",");
       var type = parsedSpec[0];
       if (type == "none") return;
-      console.log(parsedSpec);
       var width = 5;
       var height = 5;
       var color = "black";

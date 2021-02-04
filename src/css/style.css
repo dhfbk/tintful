@@ -59,6 +59,20 @@ body {
     color: rgb(255, 255, 255) !important;
 }
 
+.dark .multiWord text, .dark .rootText{
+    fill: white;
+}
+
+.root{
+    stroke: green;
+    fill: green;
+}
+
+.dark .root{
+    stroke: limegreen;
+    fill: limegreen;
+}
+
 @keyframes fade-in {
 
     /*controllare il from, non va bene per lo sfondo che scala*/
