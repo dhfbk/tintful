@@ -1,10 +1,10 @@
 // -*- Mode: JavaScript; tab-width: 2; indent-tabs-mode: nil; -*-
 // vim:set ft=javascript ts=2 sw=2 sts=2 cindent:
 
-var Visualizer = (function($, window, undefined) {
+var Visualizer = (function ($, window, undefined) {
   var fontLoadTimeout = 1; // 1 millisecond
 
-  var DocumentData = function(text) {
+  var DocumentData = function (text) {
     this.text = text;
     this.chunks = [];
     this.spans = {};
@@ -18,7 +18,7 @@ var Visualizer = (function($, window, undefined) {
     // this.sizes = {};
   };
 
-  var Fragment = function(id, span, from, to) {
+  var Fragment = function (id, span, from, to) {
     this.id = id;
     this.span = span;
     this.from = from;
@@ -27,7 +27,7 @@ var Visualizer = (function($, window, undefined) {
     // this.drawOrder = undefined;
   };
 
-  var Span = function(id, type, offsets, generalType) {
+  var Span = function (id, type, offsets, generalType) {
     this.id = id;
     this.type = type;
     this.totalDist = 0;
@@ -68,7 +68,7 @@ var Visualizer = (function($, window, undefined) {
     this.initContainers(offsets);
   };
 
-  Span.prototype.initContainers = function() {
+  Span.prototype.initContainers = function () {
     this.incoming = [];
     this.outgoing = [];
     this.attributes = {};
@@ -80,18 +80,18 @@ var Visualizer = (function($, window, undefined) {
     this.normalizations = [];
   };
 
-  Span.prototype.copy = function(id) {
+  Span.prototype.copy = function (id) {
     var span = $.extend(new Span(), this); // clone
     span.id = id;
     span.initContainers(); // protect from shallow copy
     return span;
   };
 
-  var EventDesc = function(id, triggerId, roles, klass) {
+  var EventDesc = function (id, triggerId, roles, klass) {
     this.id = id;
     this.triggerId = triggerId;
     var roleList = (this.roles = []);
-    $.each(roles, function(roleNo, role) {
+    $.each(roles, function (roleNo, role) {
       roleList.push({ type: role[0], targetId: role[1] });
     });
     if (klass == "equiv") {
@@ -104,7 +104,7 @@ var Visualizer = (function($, window, undefined) {
     // this.annotatorNotes = undefined;
   };
 
-  var Chunk = function(index, text, from, to, space, spans) {
+  var Chunk = function (index, text, from, to, space, spans) {
     this.index = index;
     this.text = text;
     this.from = from;
@@ -123,7 +123,7 @@ var Visualizer = (function($, window, undefined) {
     // this.translation = undefined;
   };
 
-  var Arc = function(eventDesc, role, dist, eventNo) {
+  var Arc = function (eventDesc, role, dist, eventNo) {
     this.origin = eventDesc.id;
     this.target = role.targetId;
     this.dist = dist;
@@ -141,7 +141,7 @@ var Visualizer = (function($, window, undefined) {
     // this.marked = undefined;
   };
 
-  var Row = function(svg) {
+  var Row = function (svg) {
     this.group = svg.group();
     this.background = svg.group(this.group);
     this.chunks = [];
@@ -150,14 +150,14 @@ var Visualizer = (function($, window, undefined) {
     this.maxSpanHeight = 0;
   };
 
-  var Measurements = function(widths, height, y) {
+  var Measurements = function (widths, height, y) {
     this.widths = widths;
     this.height = height;
     this.y = y;
   };
 
   // A naive whitespace tokeniser
-  var tokenise = function(text) {
+  var tokenise = function (text) {
     var tokenOffsets = [];
     var tokenStart = null;
     var lastCharPos = null;
@@ -186,7 +186,7 @@ var Visualizer = (function($, window, undefined) {
   };
 
   // A naive newline sentence splitter
-  var sentenceSplit = function(text) {
+  var sentenceSplit = function (text) {
     var sentenceOffsets = [];
     var sentStart = null;
     var lastCharPos = null;
@@ -215,7 +215,7 @@ var Visualizer = (function($, window, undefined) {
   };
 
   // Sets default values for a wide range of optional attributes
-  var setSourceDataDefaults = function(sourceData) {
+  var setSourceDataDefaults = function (sourceData) {
     // The following are empty lists if not set
     $.each(
       [
@@ -229,7 +229,7 @@ var Visualizer = (function($, window, undefined) {
         "relations",
         "triggers",
       ],
-      function(attrNo, attr) {
+      function (attrNo, attr) {
         if (sourceData[attr] === undefined) {
           sourceData[attr] = [];
         }
@@ -247,7 +247,7 @@ var Visualizer = (function($, window, undefined) {
   };
 
   // Set default values for a variety of collection attributes
-  var setCollectionDefaults = function(collectionData) {
+  var setCollectionDefaults = function (collectionData) {
     // The following are empty lists if not set
     $.each(
       [
@@ -259,7 +259,7 @@ var Visualizer = (function($, window, undefined) {
         "relation_types",
         "unconfigured_types",
       ],
-      function(attrNo, attr) {
+      function (attrNo, attr) {
         if (collectionData[attr] === undefined) {
           collectionData[attr] = [];
         }
@@ -267,7 +267,7 @@ var Visualizer = (function($, window, undefined) {
     );
   };
 
-  var Visualizer = function(dispatcher, svgId, webFontURLs) {
+  var Visualizer = function (dispatcher, svgId, webFontURLs) {
     var $svgDiv = $("#" + svgId);
     if (!$svgDiv.length) {
       throw Error('Could not find container with id="' + svgId + '"');
@@ -356,7 +356,7 @@ var Visualizer = (function($, window, undefined) {
     this.arcDragOrigin = null; // TODO
 
     // due to silly Chrome bug, I have to make it pay attention
-    var forceRedraw = function() {
+    var forceRedraw = function () {
       if (
         !(
           !!window.chrome &&
@@ -366,12 +366,12 @@ var Visualizer = (function($, window, undefined) {
         return; // not needed
       // console.log("burh");
       $svg.css("margin-bottom", 1);
-      setTimeout(function() {
+      setTimeout(function () {
         $svg.css("margin-bottom", 0);
       }, 0);
     };
 
-    var rowBBox = function(span) {
+    var rowBBox = function (span) {
       var box = $.extend({}, span.rectBox); // clone
       var chunkTranslation = span.chunk.translation;
       box.x += chunkTranslation.x;
@@ -379,7 +379,7 @@ var Visualizer = (function($, window, undefined) {
       return box;
     };
 
-    var commentPriority = function(commentClass) {
+    var commentPriority = function (commentClass) {
       if (commentClass === undefined) return -1;
       var len = commentPrioLevels.length;
       for (var i = 0; i < len; i++) {
@@ -388,20 +388,20 @@ var Visualizer = (function($, window, undefined) {
       return 0;
     };
 
-    var clearSVG = function() {
+    var clearSVG = function () {
       data = null;
       sourceData = null;
       svg.clear();
       $svgDiv.hide();
     };
 
-    var setMarked = function(markedType) {
-      $.each(args[markedType] || [], function(markedNo, marked) {
+    var setMarked = function (markedType) {
+      $.each(args[markedType] || [], function (markedNo, marked) {
         if (marked[0] == "sent") {
           data.markedSent[marked[1]] = true;
         } else if (marked[0] == "equiv") {
           // [equiv, Equiv, T1]
-          $.each(sourceData.equivs, function(equivNo, equiv) {
+          $.each(sourceData.equivs, function (equivNo, equiv) {
             if (equiv[1] == marked[1]) {
               var len = equiv.length;
               for (var i = 2; i < len; i++) {
@@ -428,7 +428,7 @@ var Visualizer = (function($, window, undefined) {
           if (span) {
             if (marked.length == 3) {
               // arc
-              $.each(span.outgoing, function(arcNo, arc) {
+              $.each(span.outgoing, function (arcNo, arc) {
                 if (arc.target == marked[2] && arc.type == marked[1]) {
                   arc.marked = markedType;
                 }
@@ -442,7 +442,7 @@ var Visualizer = (function($, window, undefined) {
             if (eventDesc) {
               // relation
               var relArc = eventDesc.roles[0];
-              $.each(data.spans[eventDesc.triggerId].outgoing, function(
+              $.each(data.spans[eventDesc.triggerId].outgoing, function (
                 arcNo,
                 arc
               ) {
@@ -452,7 +452,7 @@ var Visualizer = (function($, window, undefined) {
               });
             } else {
               // try for trigger
-              $.each(data.eventDescs, function(eventDescNo, eventDesc) {
+              $.each(data.eventDescs, function (eventDescNo, eventDesc) {
                 if (eventDesc.triggerId == marked[0]) {
                   data.spans[eventDesc.id].marked = markedType;
                 }
@@ -463,7 +463,7 @@ var Visualizer = (function($, window, undefined) {
       });
     };
 
-    var fragmentComparator = function(a, b) {
+    var fragmentComparator = function (a, b) {
       var tmp;
       var aSpan = a.span;
       var bSpan = b.span;
@@ -512,14 +512,14 @@ var Visualizer = (function($, window, undefined) {
       return 0;
     };
 
-    var setData = function(_sourceData) {
+    var setData = function (_sourceData) {
       if (!args) args = {};
       sourceData = _sourceData;
       dispatcher.post("newSourceData", [sourceData]);
       data = new DocumentData(sourceData.text);
 
       // collect annotation data
-      $.each(sourceData.entities, function(entityNo, entity) {
+      $.each(sourceData.entities, function (entityNo, entity) {
         // offsets given as array of (start, end) pairs
         var span =
           //      (id,        type,      offsets,   generalType)
@@ -527,12 +527,12 @@ var Visualizer = (function($, window, undefined) {
         data.spans[entity[0]] = span;
       });
       var triggerHash = {};
-      $.each(sourceData.triggers, function(triggerNo, trigger) {
+      $.each(sourceData.triggers, function (triggerNo, trigger) {
         triggerHash[trigger[0]] =
           //       (id,         type,       offsets,    generalType), eventList
           [new Span(trigger[0], trigger[1], trigger[2], "trigger"), []];
       });
-      $.each(sourceData.events, function(eventNo, eventRow) {
+      $.each(sourceData.events, function (eventNo, eventRow) {
         var eventDesc = (data.eventDescs[eventRow[0]] =
           //           (id,          triggerId,   roles,        klass)
           new EventDesc(eventRow[0], eventRow[1], eventRow[2]));
@@ -543,19 +543,19 @@ var Visualizer = (function($, window, undefined) {
       });
 
       // XXX modifications: delete later
-      $.each(sourceData.modifications, function(modNo, mod) {
+      $.each(sourceData.modifications, function (modNo, mod) {
         // mod: [id, spanId, modification]
         if (!data.spans[mod[2]]) {
           dispatcher.post("messages", [
             [
               [
                 "<strong>ERROR</strong><br/>Event " +
-                  mod[2] +
-                  " (referenced from modification " +
-                  mod[0] +
-                  ") does not occur in document " +
-                  data.document +
-                  "<br/>(please correct the source data)",
+                mod[2] +
+                " (referenced from modification " +
+                mod[0] +
+                ") does not occur in document " +
+                data.document +
+                "<br/>(please correct the source data)",
                 "error",
                 5,
               ],
@@ -566,14 +566,14 @@ var Visualizer = (function($, window, undefined) {
         data.spans[mod[2]][mod[1]] = true;
       });
 
-      var midpointComparator = function(a, b) {
+      var midpointComparator = function (a, b) {
         var tmp = a.from + a.to - b.from - b.to;
         if (!tmp) return 0;
         return tmp < 0 ? -1 : 1;
       };
       // split spans into span fragments (for discontinuous spans)
-      $.each(data.spans, function(spanNo, span) {
-        $.each(span.offsets, function(offsetsNo, offsets) {
+      $.each(data.spans, function (spanNo, span) {
+        $.each(span.offsets, function (offsetsNo, offsets) {
           var from = parseInt(offsets[0], 10);
           var to = parseInt(offsets[1], 10);
           var fragment = new Fragment(offsetsNo, span, from, to);
@@ -587,7 +587,7 @@ var Visualizer = (function($, window, undefined) {
           span.fragments[true ? span.fragments.length - 1 : 0]; // TODO configurable!
       });
 
-      var spanComparator = function(a, b) {
+      var spanComparator = function (a, b) {
         var aSpan = data.spans[a];
         var bSpan = data.spans[b];
         var tmp =
@@ -600,13 +600,13 @@ var Visualizer = (function($, window, undefined) {
         }
         return 0;
       };
-      $.each(sourceData.equivs, function(equivNo, equiv) {
+      $.each(sourceData.equivs, function (equivNo, equiv) {
         // equiv: ['*', 'Equiv', spanId...]
         equiv[0] = "*" + equivNo;
         var equivSpans = equiv.slice(2);
         var okEquivSpans = [];
         // collect the equiv spans in an array
-        $.each(equivSpans, function(equivSpanNo, equivSpan) {
+        $.each(equivSpans, function (equivSpanNo, equivSpan) {
           if (data.spans[equivSpan]) okEquivSpans.push(equivSpan);
           // TODO: #404, inform the user with a message?
         });
@@ -627,7 +627,7 @@ var Visualizer = (function($, window, undefined) {
           eventDesc.rightSpans = okEquivSpans.slice(i);
         }
       });
-      $.each(sourceData.relations, function(relNo, rel) {
+      $.each(sourceData.relations, function (relNo, rel) {
         // rel[2] is args, rel[2][a][0] is role and rel[2][a][1] is value for a in (0,1)
         var argsDesc = relationTypesHash[rel[1]];
         argsDesc = argsDesc && argsDesc.args;
@@ -650,7 +650,7 @@ var Visualizer = (function($, window, undefined) {
       });
 
       // attributes
-      $.each(sourceData.attributes, function(attrNo, attr) {
+      $.each(sourceData.attributes, function (attrNo, attr) {
         // attr: [id, name, spanId, value, cueSpanId
 
         // TODO: might wish to check what's appropriate for the type
@@ -664,10 +664,10 @@ var Visualizer = (function($, window, undefined) {
             [
               [
                 "Annotation " +
-                  attr[2] +
-                  ", referenced from attribute " +
-                  attr[0] +
-                  ", does not exist.",
+                attr[2] +
+                ", referenced from attribute " +
+                attr[0] +
+                ", does not exist.",
                 "error",
               ],
             ],
@@ -680,8 +680,8 @@ var Visualizer = (function($, window, undefined) {
             ? attrType.name
             : attrType.name + ": " + valText
           : attr[3] == true
-          ? attr[1]
-          : attr[1] + ": " + attr[3];
+            ? attr[1]
+            : attr[1] + ": " + attr[3];
         span.attributeText.push(attrText);
         span.attributes[attr[1]] = attr[3];
         if (attr[4]) {
@@ -695,7 +695,7 @@ var Visualizer = (function($, window, undefined) {
       });
 
       // comments
-      $.each(sourceData.comments, function(commentNo, comment) {
+      $.each(sourceData.comments, function (commentNo, comment) {
         // comment: [entityId, type, text]
 
         // TODO error handling
@@ -716,11 +716,11 @@ var Visualizer = (function($, window, undefined) {
           var commentEntities = trigger
             ? trigger[1] // trigger: [span, ...]
             : id in data.spans
-            ? [data.spans[id]] // span: [span]
-            : id in data.eventDescs
-            ? [data.eventDescs[id]] // arc: [eventDesc]
-            : [];
-          $.each(commentEntities, function(entityId, entity) {
+              ? [data.spans[id]] // span: [span]
+              : id in data.eventDescs
+                ? [data.eventDescs[id]] // arc: [eventDesc]
+                : [];
+          $.each(commentEntities, function (entityId, entity) {
             // if duplicate comment for entity:
             // overwrite type, concatenate comment with a newline
             if (!entity.comment) {
@@ -744,7 +744,7 @@ var Visualizer = (function($, window, undefined) {
       });
 
       // normalizations
-      $.each(sourceData.normalizations, function(normNo, norm) {
+      $.each(sourceData.normalizations, function (normNo, norm) {
         var id = norm[0];
         var normType = norm[1];
         var target = norm[2];
@@ -759,10 +759,10 @@ var Visualizer = (function($, window, undefined) {
             [
               [
                 "Annotation " +
-                  target +
-                  ", referenced from normalization " +
-                  id +
-                  ", does not exist.",
+                target +
+                ", referenced from normalization " +
+                id +
+                ", does not exist.",
                 "error",
               ],
             ],
@@ -779,13 +779,13 @@ var Visualizer = (function($, window, undefined) {
 
       // prepare span boundaries for token containment testing
       var sortedFragments = [];
-      $.each(data.spans, function(spanNo, span) {
-        $.each(span.fragments, function(fragmentNo, fragment) {
+      $.each(data.spans, function (spanNo, span) {
+        $.each(span.fragments, function (fragmentNo, fragment) {
           sortedFragments.push(fragment);
         });
       });
       // sort fragments by beginning, then by end
-      sortedFragments.sort(function(a, b) {
+      sortedFragments.sort(function (a, b) {
         var x = a.from;
         var y = b.from;
         if (x == y) {
@@ -803,7 +803,7 @@ var Visualizer = (function($, window, undefined) {
       var space;
       var chunk = null;
       // token containment testing (chunk recognition)
-      $.each(sourceData.token_offsets, function() {
+      $.each(sourceData.token_offsets, function () {
         var from = this[0];
         var to = this[1];
         if (firstFrom === null) firstFrom = from;
@@ -858,7 +858,7 @@ var Visualizer = (function($, window, undefined) {
       chunkNo = 0;
       var sentenceNo = 0;
       var pastFirst = false;
-      $.each(sourceData.sentence_offsets, function() {
+      $.each(sourceData.sentence_offsets, function () {
         var from = this[0];
         if (chunkNo >= numChunks) return false;
         if (data.chunks[chunkNo].from > from) return;
@@ -883,7 +883,7 @@ var Visualizer = (function($, window, undefined) {
       // assign fragments to appropriate chunks
       var currentChunkId = 0;
       var chunk;
-      $.each(sortedFragments, function(fragmentId, fragment) {
+      $.each(sortedFragments, function (fragmentId, fragment) {
         while (fragment.to > (chunk = data.chunks[currentChunkId]).to)
           currentChunkId++;
         chunk.fragments.push(fragment);
@@ -895,7 +895,7 @@ var Visualizer = (function($, window, undefined) {
       });
 
       // assign arcs to spans; calculate arc distances
-      $.each(data.eventDescs, function(eventNo, eventDesc) {
+      $.each(data.eventDescs, function (eventNo, eventDesc) {
         var dist = 0;
         var origin = data.spans[eventDesc.id];
         if (!origin) {
@@ -904,10 +904,10 @@ var Visualizer = (function($, window, undefined) {
             [
               [
                 '<strong>ERROR</strong><br/>Trigger for event "' +
-                  eventDesc.id +
-                  '" not found in ' +
-                  data.document +
-                  "<br/>(please correct the source data)",
+                eventDesc.id +
+                '" not found in ' +
+                data.document +
+                "<br/>(please correct the source data)",
                 "error",
                 5,
               ],
@@ -916,19 +916,19 @@ var Visualizer = (function($, window, undefined) {
           return;
         }
         var here = origin.headFragment.from + origin.headFragment.to;
-        $.each(eventDesc.roles, function(roleNo, role) {
+        $.each(eventDesc.roles, function (roleNo, role) {
           var target = data.spans[role.targetId];
           if (!target) {
             dispatcher.post("messages", [
               [
                 [
                   '<strong>ERROR</strong><br/>"' +
-                    role.targetId +
-                    '" (referenced from "' +
-                    eventDesc.id +
-                    '") not found in ' +
-                    data.document +
-                    "<br/>(please correct the source data)",
+                  role.targetId +
+                  '" (referenced from "' +
+                  eventDesc.id +
+                  '") not found in ' +
+                  data.document +
+                  "<br/>(please correct the source data)",
                   "error",
                   5,
                 ],
@@ -960,7 +960,7 @@ var Visualizer = (function($, window, undefined) {
       setMarked("matchfocus"); // set by search process, focused match
       setMarked("match"); // set by search process, other (non-focused) match
 
-      $.each(data.spans, function(spanId, span) {
+      $.each(data.spans, function (spanId, span) {
         // calculate average arc distances
         // average distance of arcs (0 for no arcs)
         span.avgDist = span.numArcs ? span.totalDist / span.numArcs : 0;
@@ -968,7 +968,7 @@ var Visualizer = (function($, window, undefined) {
 
         // collect fragment texts into span texts
         var fragmentTexts = [];
-        $.each(span.fragments, function(fragmentNo, fragment) {
+        $.each(span.fragments, function (fragmentNo, fragment) {
           // TODO heuristics
           fragmentTexts.push(fragment.text);
         });
@@ -979,22 +979,22 @@ var Visualizer = (function($, window, undefined) {
         // preliminary sort to assign heights for basic cases
         // (first round) and cases resolved in the previous
         // round(s).
-        $.each(data.chunks, function(chunkNo, chunk) {
+        $.each(data.chunks, function (chunkNo, chunk) {
           // sort
           chunk.fragments.sort(fragmentComparator);
           // renumber
-          $.each(chunk.fragments, function(fragmentNo, fragment) {
+          $.each(chunk.fragments, function (fragmentNo, fragment) {
             fragment.indexNumber = fragmentNo;
           });
         });
         // nix the sums, so we can sum again
-        $.each(data.spans, function(spanNo, span) {
+        $.each(data.spans, function (spanNo, span) {
           span.refedIndexSum = 0;
         });
         // resolved cases will now have indexNumber set
         // to indicate their relative order. Sum those for referencing cases
         // for use in iterative resorting
-        $.each(data.arcs, function(arcNo, arc) {
+        $.each(data.arcs, function (arcNo, arc) {
           data.spans[arc.origin].refedIndexSum +=
             data.spans[arc.target].headFragment.indexNumber;
         });
@@ -1002,18 +1002,18 @@ var Visualizer = (function($, window, undefined) {
 
       // Final sort of fragments in chunks for drawing purposes
       // Also identify the marked text boundaries regarding chunks
-      $.each(data.chunks, function(chunkNo, chunk) {
+      $.each(data.chunks, function (chunkNo, chunk) {
         // and make the next sort take this into account. Note that this will
         // now resolve first-order dependencies between sort orders but not
         // second-order or higher.
         chunk.fragments.sort(fragmentComparator);
-        $.each(chunk.fragments, function(fragmentNo, fragment) {
+        $.each(chunk.fragments, function (fragmentNo, fragment) {
           fragment.drawOrder = fragmentNo;
         });
       });
 
       data.spanDrawOrderPermutation = Object.keys(data.spans);
-      data.spanDrawOrderPermutation.sort(function(a, b) {
+      data.spanDrawOrderPermutation.sort(function (a, b) {
         var spanA = data.spans[a];
         var spanB = data.spans[b];
 
@@ -1036,7 +1036,7 @@ var Visualizer = (function($, window, undefined) {
       // sort fragments into towers, calculate average arc distances
       var lastFragment = null;
       var towerId = -1;
-      $.each(sortedFragments, function(i, fragment) {
+      $.each(sortedFragments, function (i, fragment) {
         if (
           !lastFragment ||
           lastFragment.from != fragment.from ||
@@ -1049,10 +1049,10 @@ var Visualizer = (function($, window, undefined) {
       }); // sortedFragments
 
       // find curlies (only the first fragment drawn in a tower)
-      $.each(data.spanDrawOrderPermutation, function(spanIdNo, spanId) {
+      $.each(data.spanDrawOrderPermutation, function (spanIdNo, spanId) {
         var span = data.spans[spanId];
 
-        $.each(span.fragments, function(fragmentNo, fragment) {
+        $.each(span.fragments, function (fragmentNo, fragment) {
           if (!data.towers[fragment.towerId]) {
             data.towers[fragment.towerId] = [];
             fragment.drawCurly = true;
@@ -1063,11 +1063,11 @@ var Visualizer = (function($, window, undefined) {
       });
 
       var spanAnnTexts = {};
-      $.each(data.chunks, function(chunkNo, chunk) {
+      $.each(data.chunks, function (chunkNo, chunk) {
         chunk.markedTextStart = [];
         chunk.markedTextEnd = [];
 
-        $.each(chunk.fragments, function(fragmentNo, fragment) {
+        $.each(chunk.fragments, function (fragmentNo, fragment) {
           if (chunk.firstFragmentIndex == undefined) {
             chunk.firstFragmentIndex = fragment.towerId;
           }
@@ -1096,7 +1096,7 @@ var Visualizer = (function($, window, undefined) {
           var prefix = "";
           var postfix = "";
           var warning = false;
-          $.each(fragment.span.attributes, function(attrType, valType) {
+          $.each(fragment.span.attributes, function (attrType, valType) {
             // TODO: might wish to check what's appropriate for the type
             // instead of using the first attribute def found
             var attr =
@@ -1139,7 +1139,7 @@ var Visualizer = (function($, window, undefined) {
           if (postfixArray.length) {
             text += " " + postfix;
             svgtext.string(" ");
-            $.each(postfixArray, function(elNo, el) {
+            $.each(postfixArray, function (elNo, el) {
               var css = "glyph";
               if (el[0].css) css += " glyph_" + Util.escapeQuotes(el[0].css);
               svgtext.span(el[1].glyph, { class: css });
@@ -1164,10 +1164,10 @@ var Visualizer = (function($, window, undefined) {
       var currentChunk;
       // sort by "from"; we don't need to sort by "to" as well,
       // because unlike spans, chunks are disjunct
-      markedText.sort(function(a, b) {
+      markedText.sort(function (a, b) {
         return Util.cmp(a[0], b[0]);
       });
-      $.each(markedText, function(textNo, textPos) {
+      $.each(markedText, function (textNo, textPos) {
         var from = textPos[0];
         var to = textPos[1];
         var markedType = textPos[2];
@@ -1213,17 +1213,17 @@ var Visualizer = (function($, window, undefined) {
       dispatcher.post("dataReady", [data]);
     };
 
-    var resetData = function() {
+    var resetData = function () {
       setData(sourceData);
       renderData();
     };
 
-    var translate = function(element, x, y) {
+    var translate = function (element, x, y) {
       $(element.group).attr("transform", "translate(" + x + ", " + y + ")");
       element.translation = { x: x, y: y };
     };
 
-    var showMtime = function() {
+    var showMtime = function () {
       if (data.mtime) {
         // we're getting seconds and need milliseconds
         //$('#document_ctime').text("Created: " + Annotator.formatTime(1000 * data.ctime)).css("display", "inline");
@@ -1236,7 +1236,7 @@ var Visualizer = (function($, window, undefined) {
       }
     };
 
-    var addHeaderAndDefs = function() {
+    var addHeaderAndDefs = function () {
       var commentName = (coll + "/" + doc).replace("--", "-\\-");
       $svg.append("<!-- document: " + commentName + " -->");
       var defs = svg.defs();
@@ -1247,7 +1247,7 @@ var Visualizer = (function($, window, undefined) {
       return defs;
     };
 
-    var getTextMeasurements = function(textsHash, options, callback) {
+    var getTextMeasurements = function (textsHash, options, callback) {
       // make some text elements, find out the dimensions
       var textMeasureGroup = svg.group(options);
 
@@ -1262,12 +1262,12 @@ var Visualizer = (function($, window, undefined) {
       var widths = {};
       $(textMeasureGroup)
         .find("text")
-        .each(function(svgTextNo, svgText) {
+        .each(function (svgTextNo, svgText) {
           var text = $(svgText).text();
           widths[text] = this.getComputedTextLength();
 
           if (callback) {
-            $.each(textsHash[text], function(text, object) {
+            $.each(textsHash[text], function (text, object) {
               callback(object, svgText);
             });
           }
@@ -1278,10 +1278,10 @@ var Visualizer = (function($, window, undefined) {
       return new Measurements(widths, bbox.height, bbox.y);
     };
 
-    var getTextAndSpanTextMeasurements = function() {
+    var getTextAndSpanTextMeasurements = function () {
       // get the span text sizes
       var chunkTexts = {}; // set of span texts
-      $.each(data.chunks, function(chunkNo, chunk) {
+      $.each(data.chunks, function (chunkNo, chunk) {
         chunk.row = undefined; // reset
         if (!(chunk.text in chunkTexts)) chunkTexts[chunk.text] = [];
         var chunkText = chunkTexts[chunk.text];
@@ -1294,7 +1294,7 @@ var Visualizer = (function($, window, undefined) {
         chunkText.push.apply(chunkText, chunk.markedTextStart);
         chunkText.push.apply(chunkText, chunk.markedTextEnd);
       });
-      var textSizes = getTextMeasurements(chunkTexts, undefined, function(
+      var textSizes = getTextMeasurements(chunkTexts, undefined, function (
         fragment,
         text
       ) {
@@ -1308,23 +1308,23 @@ var Visualizer = (function($, window, undefined) {
               [
                 [
                   "<strong>WARNING</strong>" +
-                    "<br/> " +
-                    "The fragment [" +
-                    fragment.from +
-                    ", " +
-                    fragment.to +
-                    "] (" +
-                    fragment.text +
-                    ") is not " +
-                    "contained in its designated chunk [" +
-                    fragment.chunk.from +
-                    ", " +
-                    fragment.chunk.to +
-                    "] most likely " +
-                    "due to the fragment starting or ending with a space, please " +
-                    "verify the sanity of your data since we are unable to " +
-                    "visualise this fragment correctly and will drop leading " +
-                    "space characters",
+                  "<br/> " +
+                  "The fragment [" +
+                  fragment.from +
+                  ", " +
+                  fragment.to +
+                  "] (" +
+                  fragment.text +
+                  ") is not " +
+                  "contained in its designated chunk [" +
+                  fragment.chunk.from +
+                  ", " +
+                  fragment.chunk.to +
+                  "] most likely " +
+                  "due to the fragment starting or ending with a space, please " +
+                  "verify the sanity of your data since we are unable to " +
+                  "visualise this fragment correctly and will drop leading " +
+                  "space characters",
                   "warning",
                   15,
                 ],
@@ -1354,8 +1354,8 @@ var Visualizer = (function($, window, undefined) {
       // get the fragment annotation text sizes
       var fragmentTexts = {};
       var noSpans = true;
-      $.each(data.spans, function(spanNo, span) {
-        $.each(span.fragments, function(fragmentNo, fragment) {
+      $.each(data.spans, function (spanNo, span) {
+        $.each(span.fragments, function (fragmentNo, fragment) {
           fragmentTexts[fragment.glyphedLabelText] = true;
           noSpans = false;
         });
@@ -1369,10 +1369,10 @@ var Visualizer = (function($, window, undefined) {
       };
     };
 
-    var addArcTextMeasurements = function(sizes) {
+    var addArcTextMeasurements = function (sizes) {
       // get the arc annotation text sizes (for all labels)
       var arcTexts = {};
-      $.each(data.arcs, function(arcNo, arc) {
+      $.each(data.arcs, function (arcNo, arc) {
         var labels = Util.getArcLabels(
           spanTypes,
           data.spans[arc.origin].type,
@@ -1380,7 +1380,7 @@ var Visualizer = (function($, window, undefined) {
           relationTypesHash
         );
         if (!labels.length) labels = [arc.type];
-        $.each(labels, function(labelNo, label) {
+        $.each(labels, function (labelNo, label) {
           arcTexts[label] = true;
         });
       });
@@ -1388,25 +1388,25 @@ var Visualizer = (function($, window, undefined) {
       sizes.arcs = arcSizes;
     };
 
-    var adjustTowerAnnotationSizes = function() {
+    var adjustTowerAnnotationSizes = function () {
       // find biggest annotation in each tower
-      $.each(data.towers, function(towerNo, tower) {
+      $.each(data.towers, function (towerNo, tower) {
         var maxWidth = 0;
-        $.each(tower, function(fragmentNo, fragment) {
+        $.each(tower, function (fragmentNo, fragment) {
           var width = data.sizes.fragments.widths[fragment.glyphedLabelText];
           if (width > maxWidth) maxWidth = width;
         }); // tower
-        $.each(tower, function(fragmentNo, fragment) {
+        $.each(tower, function (fragmentNo, fragment) {
           fragment.width = maxWidth;
         }); // tower
       }); // data.towers
     };
 
-    var makeArrow = function(defs, spec) {
+    var makeArrow = function (defs, spec) {
       var parsedSpec = spec.split(",");
       var type = parsedSpec[0];
       if (type == "none") return;
-
+      console.log(parsedSpec);
       var width = 5;
       var height = 5;
       var color = "black";
@@ -1457,7 +1457,7 @@ var Visualizer = (function($, window, undefined) {
     var drawing = false;
     var redraw = false;
 
-    var renderDataReal = function(sourceData) {
+    var renderDataReal = function (sourceData) {
       Util.profileEnd("before render");
       Util.profileStart("render");
       Util.profileStart("init");
@@ -1540,7 +1540,7 @@ var Visualizer = (function($, window, undefined) {
       }
       var inf = 1.0 / 0.0;
 
-      $.each(data.spanDrawOrderPermutation, function(spanIdNo, spanId) {
+      $.each(data.spanDrawOrderPermutation, function (spanIdNo, spanId) {
         var span = data.spans[spanId];
 
         var f1 = span.fragments[0];
@@ -1582,13 +1582,13 @@ var Visualizer = (function($, window, undefined) {
           Configuration.visual.boxSpacing +
           2 * Configuration.visual.margin.y -
           3;
-        $.each(floors, function(floorNo, floor) {
+        $.each(floors, function (floorNo, floor) {
           var floorAvailable = true;
           for (var i = i1; i <= i2; i++) {
             if (!(reservations[i] && reservations[i][floor])) continue;
             var from = i == i1 ? x1 : -inf;
             var to = i == i2 ? x2 : inf;
-            $.each(reservations[i][floor], function(resNo, res) {
+            $.each(reservations[i][floor], function (resNo, res) {
               if (res[0] < to && from < res[1]) {
                 floorAvailable = false;
                 return false;
@@ -1608,7 +1608,7 @@ var Visualizer = (function($, window, undefined) {
           }
         });
         var reslen = reservations.length;
-        var makeNewFloorIfNeeded = function(floor) {
+        var makeNewFloorIfNeeded = function (floor) {
           var floorNo = $.inArray(floor, floors);
           if (floorNo == -1) {
             floors.push(floor);
@@ -1623,7 +1623,7 @@ var Visualizer = (function($, window, undefined) {
                     reservations[i][parquet] = [];
                   }
                   var footroom = floor - parquet;
-                  $.each(reservations[i][parquet], function(resNo, res) {
+                  $.each(reservations[i][parquet], function (resNo, res) {
                     if (res[2] > footroom) {
                       if (!reservations[i][floor]) {
                         reservations[i][floor] = [];
@@ -1663,7 +1663,7 @@ var Visualizer = (function($, window, undefined) {
         span.floor = carpet + thisCurlyHeight;
       });
 
-      $.each(data.chunks, function(chunkNo, chunk) {
+      $.each(data.chunks, function (chunkNo, chunk) {
         reservations = new Array();
         chunk.group = svg.group(row.group);
         chunk.highlightGroup = svg.group(chunk.group);
@@ -1679,7 +1679,7 @@ var Visualizer = (function($, window, undefined) {
         var spacingChunkId = null;
         var spacingRowBreak = 0;
 
-        $.each(chunk.fragments, function(fragmentNo, fragment) {
+        $.each(chunk.fragments, function (fragmentNo, fragment) {
           var span = fragment.span;
           var spanDesc = spanTypes[span.type];
           var bgColor =
@@ -1939,7 +1939,7 @@ var Visualizer = (function($, window, undefined) {
           if (fragment == span.headFragment) {
             // find the gap to fit the backwards arcs, but only on
             // head fragment - other fragments don't have arcs
-            $.each(span.incoming, function(arcId, arc) {
+            $.each(span.incoming, function (arcId, arc) {
               var leftSpan = data.spans[arc.origin];
               var origin = leftSpan.headFragment.chunk;
               var border;
@@ -1981,7 +1981,7 @@ var Visualizer = (function($, window, undefined) {
                 hasRightArcs = true;
               }
             });
-            $.each(span.outgoing, function(arcId, arc) {
+            $.each(span.outgoing, function (arcId, arc) {
               var leftSpan = data.spans[arc.target];
               var target = leftSpan.headFragment.chunk;
               var border;
@@ -2041,8 +2041,8 @@ var Visualizer = (function($, window, undefined) {
         var rightBorderForArcs = hasRightArcs
           ? arcHorizontalSpacing
           : hasInternalArcs
-          ? arcSlant
-          : 0;
+            ? arcSlant
+            : 0;
 
         var lastX = currentX;
         var lastRow = row;
@@ -2063,7 +2063,7 @@ var Visualizer = (function($, window, undefined) {
         if (
           chunk.sentence ||
           currentX + boxWidth + rightBorderForArcs >=
-            canvasWidth - 2 * Configuration.visual.margin.x
+          canvasWidth - 2 * Configuration.visual.margin.x
         ) {
           // the chunk does not fit
           row.arcs = svg.group(row.group, { class: "arcs" });
@@ -2076,8 +2076,8 @@ var Visualizer = (function($, window, undefined) {
             (hasLeftArcs
               ? arcHorizontalSpacing
               : hasInternalArcs
-              ? arcSlant
-              : 0);
+                ? arcSlant
+                : 0);
           if (hasLeftArcs) {
             var adjustedCurTextWidth =
               sizes.texts.widths[chunk.text] + arcHorizontalSpacing;
@@ -2101,19 +2101,19 @@ var Visualizer = (function($, window, undefined) {
           chunk.group = row.group.lastElementChild;
           $(chunk.group)
             .children("g[class='span']")
-            .each(function(index, element) {
+            .each(function (index, element) {
               chunk.fragments[index].group = element;
             });
           $(chunk.group)
             .find("rect[data-span-id]")
-            .each(function(index, element) {
+            .each(function (index, element) {
               chunk.fragments[index].rect = element;
             });
         }
 
         // break the text highlights when the row breaks
         if (row.index !== lastRow.index) {
-          $.each(openTextHighlights, function(textId, textDesc) {
+          $.each(openTextHighlights, function (textId, textDesc) {
             if (textDesc[3] != lastX) {
               var newDesc = [lastRow, textDesc[3], lastX + boxX, textDesc[4]];
               textMarkedRows.push(newDesc);
@@ -2123,13 +2123,13 @@ var Visualizer = (function($, window, undefined) {
         }
 
         // open text highlights
-        $.each(chunk.markedTextStart, function(textNo, textDesc) {
+        $.each(chunk.markedTextStart, function (textNo, textDesc) {
           textDesc[3] += currentX + boxX;
           openTextHighlights[textDesc[0]] = textDesc;
         });
 
         // close text highlights
-        $.each(chunk.markedTextEnd, function(textNo, textDesc) {
+        $.each(chunk.markedTextEnd, function (textNo, textDesc) {
           textDesc[3] += currentX + boxX;
           var startDesc = openTextHighlights[textDesc[0]];
           delete openTextHighlights[textDesc[0]];
@@ -2197,7 +2197,7 @@ var Visualizer = (function($, window, undefined) {
       }
 
       // find out how high the arcs have to go
-      $.each(data.arcs, function(arcNo, arc) {
+      $.each(data.arcs, function (arcNo, arc) {
         arc.jumpHeight = 0;
         var fromFragment = data.spans[arc.origin].headFragment;
         var toFragment = data.spans[arc.target].headFragment;
@@ -2221,7 +2221,7 @@ var Visualizer = (function($, window, undefined) {
       });
 
       // sort the arcs
-      data.arcs.sort(function(a, b) {
+      data.arcs.sort(function (a, b) {
         // first write those that have less to jump over
         var tmp = a.jumpHeight - b.jumpHeight;
         if (tmp) return tmp < 0 ? -1 : 1;
@@ -2260,7 +2260,7 @@ var Visualizer = (function($, window, undefined) {
       Util.profileStart("arcs");
 
       // add the arcs
-      $.each(data.arcs, function(arcNo, arc) {
+      $.each(data.arcs, function (arcNo, arc) {
         // separate out possible numeric suffix from type
         var noNumArcType;
         var splitArcType;
@@ -2288,7 +2288,7 @@ var Visualizer = (function($, window, undefined) {
         // of searching through the list every type
         var arcDesc;
         if (spanDesc && spanDesc.arcs) {
-          $.each(spanDesc.arcs, function(arcDescNo, arcDescIter) {
+          $.each(spanDesc.arcs, function (arcDescNo, arcDescIter) {
             if (arcDescIter.type == arc.type) {
               arcDesc = arcDescIter;
             }
@@ -2302,7 +2302,7 @@ var Visualizer = (function($, window, undefined) {
           spanDesc &&
           spanDesc.arcs
         ) {
-          $.each(spanDesc.arcs, function(arcDescNo, arcDescIter) {
+          $.each(spanDesc.arcs, function (arcDescNo, arcDescIter) {
             if (arcDescIter.type == noNumArcType) {
               arcDesc = arcDescIter;
             }
@@ -2316,10 +2316,12 @@ var Visualizer = (function($, window, undefined) {
             relationTypesHash[arc.type] || relationTypesHash[noNumArcType]
           );
         }
+        //dark mode
+        var isDark = document.querySelector("html").classList.contains("dark");
         var color =
           (arcDesc && arcDesc.color) ||
-          (spanTypes.ARC_DEFAULT && spanTypes.ARC_DEFAULT.color) ||
-          "#000000";
+            (spanTypes.ARC_DEFAULT && spanTypes.ARC_DEFAULT.color) ||
+            isDark ? "white" : 'black';
         var symmetric =
           arcDesc && arcDesc.properties && arcDesc.properties.symmetric;
         var dashArray = arcDesc && arcDesc.dashArray;
@@ -2606,7 +2608,7 @@ var Visualizer = (function($, window, undefined) {
               var controlx = ufoCatcher
                 ? cornerx + 2 * ufoCatcherMod * reverseArcControlx
                 : smoothArcSteepness * from +
-                  (1 - smoothArcSteepness) * cornerx;
+                (1 - smoothArcSteepness) * cornerx;
               var endy =
                 leftBox.y +
                 (leftToRight || arc.equiv
@@ -2629,9 +2631,9 @@ var Visualizer = (function($, window, undefined) {
                 .line(
                   from,
                   leftBox.y +
-                    (leftToRight || arc.equiv
-                      ? leftBox.height / 2
-                      : Configuration.visual.margin.y)
+                  (leftToRight || arc.equiv
+                    ? leftBox.height / 2
+                    : Configuration.visual.margin.y)
                 );
             }
           } else {
@@ -2732,9 +2734,9 @@ var Visualizer = (function($, window, undefined) {
                 .line(
                   to,
                   rightBox.y +
-                    (leftToRight && !arc.equiv
-                      ? Configuration.visual.margin.y
-                      : rightBox.height / 2)
+                  (leftToRight && !arc.equiv
+                    ? Configuration.visual.margin.y
+                    : rightBox.height / 2)
                 );
             }
           } else {
@@ -2766,7 +2768,7 @@ var Visualizer = (function($, window, undefined) {
       Util.profileEnd("arcs");
       Util.profileStart("fragmentConnectors");
 
-      $.each(data.spans, function(spanNo, span) {
+      $.each(data.spans, function (spanNo, span) {
         var numConnectors = span.fragments.length - 1;
         for (var connectorNo = 0; connectorNo < numConnectors; connectorNo++) {
           var left = span.fragments[connectorNo];
@@ -2819,9 +2821,9 @@ var Visualizer = (function($, window, undefined) {
       var y = Configuration.visual.margin.y;
       var sentNumGroup = svg.group({ class: "sentnum" });
       var currentSent;
-      $.each(rows, function(rowId, row) {
-        $.each(row.chunks, function(chunkId, chunk) {
-          $.each(chunk.fragments, function(fragmentId, fragment) {
+      $.each(rows, function (rowId, row) {
+        $.each(row.chunks, function (chunkId, chunk) {
+          $.each(chunk.fragments, function (fragmentId, fragment) {
             if (row.maxSpanHeight < fragment.height)
               row.maxSpanHeight = fragment.height;
           });
@@ -2936,7 +2938,7 @@ var Visualizer = (function($, window, undefined) {
       // by start offset, second for right-to-left pass by end
       // offset. Secondary sort by fragment length in both cases.
       var currentChunk;
-      var lrChunkComp = function(a, b) {
+      var lrChunkComp = function (a, b) {
         var ac = currentChunk.fragments[a];
         var bc = currentChunk.fragments[b];
         var startDiff = Util.cmp(ac.from, bc.from);
@@ -2944,7 +2946,7 @@ var Visualizer = (function($, window, undefined) {
           ? startDiff
           : Util.cmp(bc.to - bc.from, ac.to - ac.from);
       };
-      var rlChunkComp = function(a, b) {
+      var rlChunkComp = function (a, b) {
         var ac = currentChunk.fragments[a];
         var bc = currentChunk.fragments[b];
         var endDiff = Util.cmp(bc.to, ac.to);
@@ -2954,7 +2956,7 @@ var Visualizer = (function($, window, undefined) {
       };
 
       var sentenceText = null;
-      $.each(data.chunks, function(chunkNo, chunk) {
+      $.each(data.chunks, function (chunkNo, chunk) {
         // context for sort
         currentChunk = chunk;
 
@@ -3043,7 +3045,7 @@ var Visualizer = (function($, window, undefined) {
           }
 
           // Re-order by nesting height and draw in order
-          orderedIdx.sort(function(a, b) {
+          orderedIdx.sort(function (a, b) {
             return Util.cmp(
               chunk.fragments[b].nestingHeight,
               chunk.fragments[a].nestingHeight
@@ -3108,7 +3110,7 @@ var Visualizer = (function($, window, undefined) {
       }
 
       // draw the markedText
-      $.each(textMarkedRows, function(textRowNo, textRowDesc) {
+      $.each(textMarkedRows, function (textRowNo, textRowDesc) {
         // row, from, to
         var textHighlight = svg.rect(
           highlightGroup,
@@ -3164,7 +3166,7 @@ var Visualizer = (function($, window, undefined) {
         redraw = false;
         renderDataReal();
       }
-      $svg.find("animate").each(function() {
+      $svg.find("animate").each(function () {
         if (this.beginElement) {
           // protect against non-SMIL browsers
           this.beginElement();
@@ -3178,7 +3180,7 @@ var Visualizer = (function($, window, undefined) {
       annotationFileNotFound: true,
       isDirectoryError: true,
     };
-    var renderData = function(sourceData) {
+    var renderData = function (sourceData) {
       Util.profileEnd("invoke getDocument");
       if (sourceData && sourceData.exception) {
         if (renderErrors[sourceData.exception]) {
@@ -3194,7 +3196,7 @@ var Visualizer = (function($, window, undefined) {
 
         dispatcher.post("startedRendering", [coll, doc, args]);
         dispatcher.post("spin");
-        setTimeout(function() {
+        setTimeout(function () {
           try {
             renderDataReal(sourceData);
           } catch (e) {
@@ -3209,7 +3211,7 @@ var Visualizer = (function($, window, undefined) {
       }
     };
 
-    var renderDocument = function() {
+    var renderDocument = function () {
       Util.profileStart("invoke getDocument");
       dispatcher.post("ajax", [
         {
@@ -3225,7 +3227,7 @@ var Visualizer = (function($, window, undefined) {
       ]);
     };
 
-    var triggerRender = function() {
+    var triggerRender = function () {
       if (
         svg &&
         ((isRenderRequested && isCollectionLoaded) || requestedData) &&
@@ -3248,16 +3250,16 @@ var Visualizer = (function($, window, undefined) {
       }
     };
 
-    var requestRenderData = function(sourceData) {
+    var requestRenderData = function (sourceData) {
       requestedData = sourceData;
       triggerRender();
     };
 
-    var collectionChanged = function() {
+    var collectionChanged = function () {
       isCollectionLoaded = false;
     };
 
-    var gotCurrent = function(_coll, _doc, _args, reloadData) {
+    var gotCurrent = function (_coll, _doc, _args, reloadData) {
       coll = _coll;
       doc = _doc;
       args = _args;
@@ -3271,7 +3273,7 @@ var Visualizer = (function($, window, undefined) {
 
     var highlight, highlightArcs, highlightSpans, commentId;
 
-    var onMouseOver = function(evt) {
+    var onMouseOver = function (evt) {
       var target = $(evt.target);
       var id;
       if ((id = target.attr("data-span-id"))) {
@@ -3295,7 +3297,7 @@ var Visualizer = (function($, window, undefined) {
           (spanTypes.SPAN_DEFAULT && spanTypes.SPAN_DEFAULT.bgColor) ||
           "#ffffff";
         highlight = [];
-        $.each(span.fragments, function(fragmentNo, fragment) {
+        $.each(span.fragments, function (fragmentNo, fragment) {
           highlight.push(
             svg.rect(
               highlightGroup,
@@ -3322,13 +3324,13 @@ var Visualizer = (function($, window, undefined) {
           var spans = {};
           spans[id] = true;
           var spanIds = [];
-          $.each(span.incoming, function(arcNo, arc) {
+          $.each(span.incoming, function (arcNo, arc) {
             spans[arc.origin] = true;
           });
-          $.each(span.outgoing, function(arcNo, arc) {
+          $.each(span.outgoing, function (arcNo, arc) {
             spans[arc.target] = true;
           });
-          $.each(spans, function(spanId, dummy) {
+          $.each(spans, function (spanId, dummy) {
             spanIds.push('rect[data-span-id="' + spanId + '"]');
           });
           highlightSpans = $svg
@@ -3386,19 +3388,19 @@ var Visualizer = (function($, window, undefined) {
         highlightArcs = $svg
           .find(
             'g[data-from="' +
-              originSpanId +
-              '"][data-to="' +
-              targetSpanId +
-              '"]'
+            originSpanId +
+            '"][data-to="' +
+            targetSpanId +
+            '"]'
           )
           .addClass("highlight");
         highlightSpans = $($svg)
           .find(
             'rect[data-span-id="' +
-              originSpanId +
-              '"], rect[data-span-id="' +
-              targetSpanId +
-              '"]'
+            originSpanId +
+            '"], rect[data-span-id="' +
+            targetSpanId +
+            '"]'
           )
           .parent()
           .addClass("highlight");
@@ -3415,12 +3417,12 @@ var Visualizer = (function($, window, undefined) {
       }
     };
 
-    var onMouseOut = function(evt) {
+    var onMouseOut = function (evt) {
       var target = $(evt.target);
       target.removeClass("badTarget");
       dispatcher.post("hideComment");
       if (highlight) {
-        $.each(highlight, function() {
+        $.each(highlight, function () {
           svg.remove(this);
         });
         highlight = undefined;
@@ -3458,18 +3460,18 @@ var Visualizer = (function($, window, undefined) {
     //   console.log(e);
     // };
 
-    var setAbbrevs = function(_abbrevsOn) {
+    var setAbbrevs = function (_abbrevsOn) {
       // TODO: this is a slightly weird place to tweak the configuration
       Configuration.abbrevsOn = _abbrevsOn;
       dispatcher.post("configurationChanged");
     };
 
-    var setTextBackgrounds = function(_textBackgrounds) {
+    var setTextBackgrounds = function (_textBackgrounds) {
       Configuration.textBackgrounds = _textBackgrounds;
       dispatcher.post("configurationChanged");
     };
 
-    var setLayoutDensity = function(_density) {
+    var setLayoutDensity = function (_density) {
       //dispatcher.post('messages', [[['Setting layout density ' + _density, 'comment']]]);
       // TODO: store standard settings instead of hard-coding
       // them here (again)
@@ -3498,7 +3500,7 @@ var Visualizer = (function($, window, undefined) {
       dispatcher.post("configurationChanged");
     };
 
-    var setSvgWidth = function(_width) {
+    var setSvgWidth = function (_width) {
       $svgDiv.width(_width);
       if (Configuration.svgWidth != _width) {
         Configuration.svgWidth = _width;
@@ -3509,9 +3511,9 @@ var Visualizer = (function($, window, undefined) {
     $svgDiv = $($svgDiv).hide();
 
     // register event listeners
-    var registerHandlers = function(element, events) {
-      $.each(events, function(eventNo, eventName) {
-        element.bind(eventName, function(evt) {
+    var registerHandlers = function (element, events) {
+      $.each(events, function (eventNo, eventName) {
+        element.bind(eventName, function (evt) {
           dispatcher.post(eventName, [evt], "all");
         });
       });
@@ -3536,7 +3538,7 @@ var Visualizer = (function($, window, undefined) {
 
     // create the svg wrapper
     $svgDiv.svg({
-      onLoad: function(_svg) {
+      onLoad: function (_svg) {
         that.svg = svg = _svg;
         $svg = $(svg._svg);
 
@@ -3567,8 +3569,8 @@ var Visualizer = (function($, window, undefined) {
       },
     });
 
-    var loadSpanTypes = function(types) {
-      $.each(types, function(typeNo, type) {
+    var loadSpanTypes = function (types) {
+      $.each(types, function (typeNo, type) {
         if (type) {
           spanTypes[type.type] = type;
           var children = type.children;
@@ -3579,9 +3581,9 @@ var Visualizer = (function($, window, undefined) {
       });
     };
 
-    var loadAttributeTypes = function(response_types) {
+    var loadAttributeTypes = function (response_types) {
       var processed = {};
-      $.each(response_types, function(aTypeNo, aType) {
+      $.each(response_types, function (aTypeNo, aType) {
         processed[aType.type] = aType;
         // count the values; if only one, it's a boolean attribute
         var values = [];
@@ -3597,8 +3599,8 @@ var Visualizer = (function($, window, undefined) {
       return processed;
     };
 
-    var loadRelationTypes = function(relation_types) {
-      $.each(relation_types, function(relTypeNo, relType) {
+    var loadRelationTypes = function (relation_types) {
+      $.each(relation_types, function (relTypeNo, relType) {
         if (relType) {
           relationTypesHash[relType.type] = relType;
           var children = relType.children;
@@ -3609,7 +3611,7 @@ var Visualizer = (function($, window, undefined) {
       });
     };
 
-    var collectionLoaded = function(response) {
+    var collectionLoaded = function (response) {
       if (!response.exception) {
         setCollectionDefaults(response);
         eventAttributeTypes = loadAttributeTypes(
@@ -3627,7 +3629,7 @@ var Visualizer = (function($, window, undefined) {
         loadRelationTypes(response.unconfigured_types);
         // TODO XXX: isn't the following completely redundant with
         // loadRelationTypes?
-        $.each(response.relation_types, function(relTypeNo, relType) {
+        $.each(response.relation_types, function (relTypeNo, relType) {
           relationTypesHash[relType.type] = relType;
         });
 
@@ -3646,7 +3648,7 @@ var Visualizer = (function($, window, undefined) {
       }
     };
 
-    var isReloadOkay = function() {
+    var isReloadOkay = function () {
       // do not reload while the user is in the dialog
       return !drawing;
     };
@@ -3655,7 +3657,7 @@ var Visualizer = (function($, window, undefined) {
     if (!Visualizer.areFontsLoaded) {
       var webFontConfig = {};
       WebFont.load(webFontConfig);
-      setTimeout(function() {
+      setTimeout(function () {
         if (!Visualizer.areFontsLoaded) {
           proceedWithFonts();
         }
@@ -3684,7 +3686,7 @@ var Visualizer = (function($, window, undefined) {
 
   Visualizer.areFontsLoaded = false;
 
-  var proceedWithFonts = function() {
+  var proceedWithFonts = function () {
     Visualizer.areFontsLoaded = true;
     // Note: Enable for font debugging
     //console.log("fonts done");

@@ -119,8 +119,10 @@
         </span>
         <!--inserire paginazione-->
         <span class="my-2 inline-block" v-else>
-            Sentences:<br>
-            <span class="font-bold" v-for="phrase in currentData.sentences" :key="phrase.index">{{phrase.index + 1}}. {{ phrase.text }}<br></span>
+            Sentences:<br />
+            <span class="font-bold" v-for="phrase in currentData.sentences" :key="phrase.index"
+                >{{ phrase.index + 1 }}. {{ phrase.text }}<br
+            /></span>
         </span>
         <!-- <p class="my-1"></p> -->
         <brat-edit
@@ -151,6 +153,9 @@ import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
 import confirmationModal from '../components/confirmationModal.vue'
 export default {
+    props: {
+        sheetMode: String,
+    },
     data() {
         return {
             currentData: JSON.parse(localStorage.getItem('processedText')),
@@ -306,6 +311,12 @@ export default {
                 this.tabScroll =
                     'transition-transform ease-out transform translate-x-' + this.selectedTab.toString() + 'full'
             }
+        },
+        sheetMode() {
+            this.refreshBrat = true
+            setTimeout(() => {
+                this.refreshBrat = false
+            }, 200)
         },
     },
 }

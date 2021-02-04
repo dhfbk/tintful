@@ -6,6 +6,7 @@
 import { debounce } from 'debounce'
 export default {
     name: 'dependencies',
+    props: { refresh: Boolean },
     data() {
         return {
             screenWidth: 0,
@@ -681,6 +682,13 @@ export default {
                 },
                 { text: this.currentText, entities: entities, relations: relations }
             )
+        },
+    },
+    watch: {
+        refresh() {
+            if (this.refresh == true) {
+                this.loadBrat()
+            }
         },
     },
 }

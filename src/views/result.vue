@@ -83,6 +83,7 @@
             @sheet="sheetData"
             @closesheet="$refs.swipeableBottomSheet.setState('close')"
             @opensheet=";(info = ''), (values = []), (keys = []), sheetData('empty')"
+            :sheetMode="sheetMode"
         />
         <swipeable-bottom-sheet ref="swipeableBottomSheet" class="md:hidden">
             <h1 v-if="info == ''" class="px-4 text-center">

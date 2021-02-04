@@ -58,7 +58,7 @@
         <general-info v-show="selectedTab == 0" @sheet="sheet" />
         <partOfSpeech v-show="selectedTab == 1" />
         <ner v-show="selectedTab == 2" />
-        <dependencies v-if="selectedTab == 3" />
+        <dependencies v-if="selectedTab == 3" :refresh="refreshBrat" />
         <br />
     </div>
 </template>
@@ -69,10 +69,12 @@ import ner from './ner.vue'
 import generalInfo from './generalInfo.vue'
 import dependencies from './dependencies.vue'
 export default {
+    props: { sheetMode: String },
     data() {
         return {
             selectedTab: 0,
             tabScroll: 'transition-transform ease-out transform translate-x-0',
+            refreshBrat: false,
         }
     },
     components: {
@@ -96,6 +98,12 @@ export default {
                 this.tabScroll =
                     'transition-transform ease-out transform translate-x-' + this.selectedTab.toString() + 'full'
             }
+        },
+        sheetMode() {
+            this.refreshBrat = true
+            setTimeout(() => {
+                this.refreshBrat = false
+            }, 200)
         },
     },
 }
