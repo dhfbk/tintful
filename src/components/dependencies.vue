@@ -81,6 +81,38 @@ export default {
                 this.loadBrat()
             }
         },
+        addRoot() {
+            var deps = document.getElementById('deps').children[0]
+
+            // deps.forEach(el=>if(el.hasAttribute))
+            // eslint-disable-next-line no-unused-vars
+            var token = deps.getElementsByClassName('span_default')
+            console.log(token)
+
+            let sen = this.$store.state.editableData.sentences
+            //console.log(sen)
+            for (let i = 0; i < sen.length; i++) {
+                for (let p = 0; p < sen[i]['basic-dependencies'].length; p++) {
+                    if (sen[i]['basic-dependencies'][p].governorGloss == 'ROOT') {
+                        console.log('la root è ' + sen[i]['basic-dependencies'][p].dependentGloss)
+
+                        for (let l = 0; l < token.length; l++) {
+                            if (token[l].getAttribute('data-span-id') == 'POS_' + i + '_' + p) {
+                                // console.log(token[l].attributes.x.value, token[l].attributes.y.value)
+                                // token[l].outerHTML +=
+                                //     '<rect x="' +
+                                //     token[l].attributes.x.value +
+                                //     '" y="' +
+                                //     token[l].attributes.y.value +
+                                //     10 +
+                                //     '" stroke="#555555" height="100" width="5"></rect>'
+                            }
+                        }
+                    }
+                    break
+                }
+            }
+        },
         addMultiWord() {
             //get the brat svg
             let svg = document.getElementById('deps').children[0]
@@ -217,6 +249,7 @@ export default {
             }
             setTimeout(() => {
                 this.addMultiWord()
+                this.addRoot()
             }, 200)
         },
         isInt(value) {
