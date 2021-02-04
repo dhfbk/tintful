@@ -13,7 +13,7 @@
 /* "basic" font */
 #deps text {
     font-size: 13px;
-    font-family: 'Roboto', Verdana, Arial, Helvetica, sans-serif;
+    font-family: 'Roboto Condensed', Verdana, Arial, Helvetica, sans-serif;
 }
 
 #deps path {
@@ -343,7 +343,7 @@ fieldset legend {
 }
 
 #commentpopup {
-    font-family: 'Roboto', Verdana, Arial, Helvetica, sans-serif;
+    font-family: 'Roboto Condensed', Verdana, Arial, Helvetica, sans-serif;
     position: fixed;
     top: 0;
     left: 0;

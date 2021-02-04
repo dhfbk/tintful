@@ -81,7 +81,7 @@
             </div>
             <div class="mt-4 width-full flow-root">
                 <button
-                    class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded-md focus:outline-none"
+                    class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white py-2 px-4 rounded-md focus:outline-none"
                     @click="process()"
                 >
                     Process

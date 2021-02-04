@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto+Condensed:wght@300;400;700&family=Barlow:wght@400;500;600;700&display=swap');
 
 body {
     background-color: #f8f8f8;
@@ -160,35 +158,3 @@ body {
 .cardDark .pan-area .bar {
     background: #9ca3af !important;
 }
-
-/*
-.cardShadow {
-    border-radius: 30px;
-    box-shadow   : 20px 20px 60px #202325,
-        -20px -20px 60px #2c2f31;
-}
-
-.miniCardShadow {
-    border-radius: 20px;
-    box-shadow   : 9px 9px 10px #202325, -9px -9px 10px #2c2f31;
-}
-
-.buttonShadow {
-    border-radius: 100%;
-    background   : #26292b;
-    box-shadow   : 5px 5px 8px #202325,
-        -5px -5px 8px #2c2f31;
-}
-
-.colorCard {
-    border-radius: 10px;
-    background   : linear-gradient(145deg, #23acff, #1e91e4);
-    box-shadow   : 10px 10px 20px #202325, -10px -10px 20px #2c2f31;
-}
-
-.insetShadow {
-    border-radius: 10px;
-    //background : #E5E7EB;
-    box-shadow   : inset 5px 5px 9px #202325, inset -5px -5px 9px #2c2f31;
-}
-*/

@@ -307,7 +307,7 @@ var Visualizer = (function($, window, undefined) {
     var markedArcSize = 2;
     var markedArcStroke = 7; // TODO XXX: this doesn't seem to do anything..?
 
-    var rowPadding = 27;
+    var rowPadding = 31;
     var nestingAdjustYStepSize = 2; // size of height adjust for nested/nesting spans
     var nestingAdjustXStepSize = 1; // size of height adjust for nested/nesting spans
 
@@ -2367,7 +2367,7 @@ var Visualizer = (function($, window, undefined) {
         height += Configuration.visual.arcSpacing;
         var leftSlantBound, rightSlantBound;
         for (var i = fromIndex2; i <= toIndex2; i++) {
-          if (fragmentHeights[i] < height) fragmentHeights[i] = height;
+          if (fragmentHeights[i] < height) fragmentHeights[i] = height + 8; //added number is for arc padding
         }
 
         // Adjust the height to align with pixels when rendered
