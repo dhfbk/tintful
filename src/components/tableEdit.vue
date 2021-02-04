@@ -22,7 +22,7 @@
                             type="text"
                             class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                             v-model="d.lemma"
-                            @change="isEdited = true"
+                            @change="$emit('edited')"
                         />
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300 uppercase dark:border-gray-500">

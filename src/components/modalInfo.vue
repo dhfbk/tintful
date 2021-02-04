@@ -105,7 +105,6 @@ export default {
                 '<p class="font-medium">Dependencies actions:</p>' +
                 '<ul class="list-disc px-4">' +
                 '<li>to change the head of a current dependency, right click (long press on mobile) on the dependent and then left click (tap on mobile) on the new head</li>' +
-                '<li>to add a new dependency, right click (long press on mobile) on the element that should become the dependent and then left click (tap on mobile) on the new head</li>' +
                 "<li>to edit the type of a dependency, double click (double tap on mobile) on the dependency's type in the middle of the arrow and use the modal to choose the new one</li>" +
                 '</ul>' +
                 '<br/><p class="font-medium">Features\' actions:</p>' +

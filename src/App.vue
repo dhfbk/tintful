@@ -7,18 +7,18 @@
                 <footerCustom :mode="sheetMode" />
             </div>
         </div>
-        <notification :msg="msg" v-if="notify" @close="notify = false" />
+        <snackbar :msg="msg" v-if="notify" @close="notify = false" />
     </div>
 </template>
 
 <script>
 import footerCustom from './components/footer.vue'
-import notification from './components/toast.vue'
-import topBar from './components/topBar'
+import snackbar from './components/snackbar.vue'
+import topBar from './components/topBar.vue'
 export default {
     components: {
         footerCustom,
-        notification,
+        snackbar,
         topBar,
     },
     data() {

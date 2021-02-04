@@ -219,10 +219,6 @@ export default {
         confirmAction(mode) {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
-            console.log(
-                this.currentData.sentences[0].tokens[0].ner,
-                this.$store.state.editableData.sentences[0].tokens[0].ner
-            )
             if (mode == 'save') {
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))

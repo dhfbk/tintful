@@ -117,7 +117,7 @@ export default {
             if (localStorage.getItem('text') !== '' && localStorage.getItem('text') !== undefined) {
                 this.$router.push({ path: route }).catch(() => {})
             } else {
-                this.$emit('snack', 'Error. No text to analyse')
+                this.$emit('snack', 'No text to analyse')
                 //mettere un emit per avvertire che la frase è vuota o che deve avviare l'elaborazione
             }
         },

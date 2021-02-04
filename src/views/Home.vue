@@ -1,7 +1,6 @@
 <template>
-    <div class="">
-        <div class="m-2">
-            <!-- <button
+    <div class="dark:bg-dark01dp shadow-md rounded-lg p-3 md:p-4">
+        <!-- <button
                     class="mb-4 sm:mb-0 rounded grid grid-cols-5 mx-auto bg-blue-500 px-2 py-2 hover:bg-blue-600 transition-colors duration-100 ease-out text-white w-max cursor-pointer focus:outline-none"
                 >
                     <svg
@@ -15,111 +14,86 @@
                     </svg>
                     <span class="col-span-4 w-auto grid text-center self-center">Facebook Login</span>
                 </button> -->
-            <div class="">
-                <span class="font-medium text-red-500">Tint (The Italian NLP Tool)</span> is a Java-based pipeline for
-                Natural Language Processing (NLP) in Italian.
-                <p>
-                    It implements most of the common linguistic tools, such as part-of-speech tagging, dependency
-                    parsing, entity linking.
-                </p>
+        <div class="">
+            <span class="font-medium text-red-500">Tint (The Italian NLP Tool)</span> is a Java-based pipeline for
+            Natural Language Processing (NLP) in Italian.
+            <p>
+                It implements most of the common linguistic tools, such as part-of-speech tagging, dependency parsing,
+                entity linking.
+            </p>
+        </div>
+        <div class="h-full my-2">
+            <div>
+                <label
+                    class="block tracking-wide text-primary dark:text-primaryLight text-md font-medium pb-2"
+                    for="textInput"
+                    @mouseover="hoverText = true"
+                    @mouseleave="hoverText = false"
+                >
+                    Insert text to analyse
+                </label>
+                <div class="rounded">
+                    <textarea
+                        placeholder="Text"
+                        :class="[
+                            hoverText ? 'border border-primary dark:border-primaryLight' : '',
+                            $v.text.$error ? 'border border-red-500' : 'border border-gray-200 dark:border-gray-800',
+                        ]"
+                        class="w-full appearance-none bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary dark:hover:border-primaryLight rounded-md py-2 px-3 focus:outline-none"
+                        id="textInput"
+                        rows="8"
+                        @focus="hoverText = true"
+                        @blur="hoverText = false"
+                        v-model.trim="$v.text.$model"
+                        required
+                    ></textarea>
+                </div>
             </div>
-            <div class="h-full my-2">
-                <!-- <div class="rounded-lg  shadow-md ml-auto ">
-                            <div class="h-4 rounded-t w-full bg-black flex flex-row py-auto">
-                                <div class="h-2 ml-1 mr-1 w-2 rounded-full bg-red-500 my-auto"></div>
-                                <div class="h-2 mr-1 w-2 rounded-full bg-yellow-500 my-auto"></div>
-                                <div class="h-2 w-2 rounded-full bg-green-500 my-auto"></div>
-                            </div>
-                            <img src="../assets/demo.png" class="rounded-b" />
-                        </div> -->
-                <div>
-                    <label
-                        class="block tracking-wide text-primary dark:text-primaryLight text-md font-medium pb-2"
-                        for="textInput"
-                        @mouseover="hoverText = true"
-                        @mouseleave="hoverText = false"
+            <div class="my-2">
+                <label
+                    class="block tracking-wide text-primary dark:text-primaryLight text-md font-medium pb-2"
+                    for="action"
+                    >You can also choose an example:</label
+                >
+                <div class="relative mb-2">
+                    <select
+                        class="cursor-pointer block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-md bg-gray-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-800 w-full py-2 pl-2 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary dark:focus:border-primary dark:hover:border-primaryLight"
+                        id="action"
+                        name="action"
+                        v-model="exampleChoice"
                     >
-                        Insert text to analyse
-                    </label>
-                    <div class="rounded">
-                        <textarea
-                            placeholder="Text"
-                            :class="[
-                                hoverText ? 'border-primary' : 'border-gray-200',
-                                $v.text.$error ? 'border-primary' : 'border-gray-200',
-                            ]"
-                            class="w-full appearance-none shadow-insetShadow dark:shadow-insetShadowDark bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary rounded-md py-2 px-3 focus:outline-none"
-                            id="textInput"
-                            rows="8"
-                            @focus="hoverText = true"
-                            @blur="hoverText = false"
-                            v-model.trim="$v.text.$model"
-                            required
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="my-2">
-                    <label
-                        class="block tracking-wide text-primary dark:text-primaryLight text-md font-medium pb-2"
-                        for="action"
-                        >You can also choose an example:</label
+                        <option value="" disabled selected hidden>Choose example...</option>
+                        <option value="1">
+                            Difficult - Appostamenti di caccia realizzati secondo [...]
+                        </option>
+                        <option value="2">
+                            Easy - Un picchio e una pallina si trovavano in un cassetto [...]
+                        </option>
+                    </select>
+                    <div
+                        class="pointer-events-none absolute pin-y pin-r flex items-center px-2 mr-2 text-gray-800 dark:text-white"
                     >
-                    <div class="relative mb-2">
-                        <select
-                            class="cursor-pointer block appearance-none shadow-miniCardShadow dark:shadow-miniCardShadowDark rounded-full bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-800 w-full py-2 pl-4 pr-8 transition-colors duration-150 ease-out focus:outline-none focus:border-primary hover:border-primary dark:focus:border-primary dark:hover:border-primary"
-                            id="action"
-                            name="action"
-                            v-model="exampleChoice"
-                        >
-                            <option value="" disabled selected hidden>Choose example...</option>
-                            <option value="1">
-                                Difficult - Appostamenti di caccia realizzati secondo [...]
-                            </option>
-                            <option value="2">
-                                Easy - Un picchio e una pallina si trovavano in un cassetto [...]
-                            </option>
-                        </select>
-                        <div
-                            class="pointer-events-none absolute pin-y pin-r flex items-center px-2 mr-2 text-gray-800 dark:text-white"
-                        >
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-4 width-full flow-root">
-                    <button
-                        class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded-full focus:outline-none"
-                        @click="process()"
-                    >
-                        Process
-                        <svg
-                            :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
-                            style="width: 24px; height: 24px"
-                            viewBox="0 0 24 24"
-                        >
-                            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                         </svg>
-                    </button>
+                    </div>
                 </div>
             </div>
-            <!-- <div class="flex">
-                    <div class="w-1/2 ">
-                        <div class="rounded-lg shadow-md mr-auto ">
-                            <div class="h-4 rounded-t w-full bg-black flex flex-row py-auto">
-                                <div class="h-2 ml-1 mr-1 w-2 rounded-full bg-red-500 my-auto"></div>
-                                <div class="h-2 mr-1 w-2 rounded-full bg-yellow-500 my-auto"></div>
-                                <div class="h-2 w-2 rounded-full bg-green-500 my-auto"></div>
-                            </div>
-                            <img src="../assets/demo.png" class="rounded-b" />
-                        </div>
-                    </div>
-                    <div class="w-1/2 my-auto ml-8 text-right">
-                        It implements most of the common linguistic tools, such as part-of-speech tagging, dependency
-                        parsing, entity linking.
-                    </div>
-                </div> -->
+            <div class="mt-4 width-full flow-root">
+                <button
+                    class="ripple flex flex-row transition-colors duration-100 ease-out bg-primary hover:bg-primaryDark text-white py-2 px-4 rounded-md focus:outline-none"
+                    @click="process()"
+                >
+                    Process
+                    <svg
+                        :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
+                        style="width: 24px; height: 24px"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -171,12 +145,12 @@ export default {
                         this.$router.push({ name: 'result' })
                     })
                     .catch(err => {
-                        this.$emit('snack', 'Error. Could not connect to the server')
+                        this.$emit('snack', 'Server error. Try again')
                         console.log(err)
                         this.loadBtn = false
                     })
             } else {
-                this.loading = false
+                this.loadBtn = false
             }
         },
         decodeEntities(string) {
