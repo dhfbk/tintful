@@ -173,16 +173,61 @@ export default {
                             }
                         }
                         //length of the tag
-                        // prettier-ignore
-                        x[0] < x[x.length-1]
-                        ? (length.push(x[x.length-1] + tmp - x[0] - 3)) && (length.push(0))
+                        if (
+                            svg
+                                .getElementsByClassName('text')[0]
+                                .getElementsByTagName('text')[p]
+                                .getElementsByTagName('tspan')[i + x.length - 1] == undefined
+                        ) {
+                            if (
+                                svg
+                                    .getElementsByClassName('text')[0]
+                                    .getElementsByTagName('text')[p]
+                                    .getElementsByTagName('tspan')[i + 1] == undefined
+                            ) {
+                                // prettier-ignore
+                                y[0] == y[y.length-1]
+                            ? (length.push(x[x.length-1] + tmp - x[0] - 3)) && (length.push(0))
+                            : (length.push(svg.clientWidth - x[0])) &&
+                            (length.push(parseFloat(
+                                    svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[p]
+                                        .getElementsByTagName('tspan')[i].attributes.x.value
+                                ) + parseFloat(svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[p]
+                                        .getElementsByTagName('tspan')[i].getComputedTextLength())))
+                            } else {
+                                // prettier-ignore
+                                y[0] == y[y.length-1]
+                            ? (length.push(x[x.length-1] + tmp - x[0])) && (length.push(0))
+                            : (length.push(svg.clientWidth - x[0])) &&
+                            (length.push(parseFloat(
+                                    svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[p]
+                                        .getElementsByTagName('tspan')[i + 1].attributes.x.value
+                                ) + parseFloat(svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[p]
+                                        .getElementsByTagName('tspan')[i + 1].getComputedTextLength())))
+                            }
+                        } else {
+                            // prettier-ignore
+                            y[0] == y[y.length-1]
+                        ? (length.push(x[x.length-1] + tmp - x[0] - 2)) && (length.push(0))
                         : (length.push(svg.clientWidth - x[0])) &&
                           (length.push(parseFloat(
                                   svg
                                       .getElementsByClassName('text')[0]
                                       .getElementsByTagName('text')[p]
-                                      .getElementsByTagName('tspan')[i + x.length].attributes.x.value
-                              ) - 3))
+                                      .getElementsByTagName('tspan')[i + x.length - 1].attributes.x.value)
+                              + parseFloat(svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[p]
+                                        .getElementsByTagName('tspan')[i + x.length - 1].getComputedTextLength()) + 3))
+                        }
                         g.push(this.createSvgElement('g', { class: 'multiWord' }))
                         rect.push(
                             this.createSvgElement('rect', {

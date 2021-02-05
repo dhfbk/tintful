@@ -92,7 +92,6 @@ export default {
             let svg = document.getElementById('deps').children[0]
             let tokens = svg.getElementsByClassName('span_default')
             let sen = this.$store.state.editableData.sentences[this.sentenceIndex]
-            console.log(this.sentenceIndex)
             for (let p = 0; p < sen['basic-dependencies'].length; p++) {
                 if (sen['basic-dependencies'][p].governorGloss == 'ROOT') {
                     for (let l = 0; l < tokens.length; l++) {
@@ -178,16 +177,61 @@ export default {
                         }
                     }
                     //length of the tag
-                    // prettier-ignore
-                    x[0] < x[x.length-1]
-                        ? (length.push(x[x.length-1] + tmp - x[0] - 3)) && (length.push(0))
+                    if (
+                        svg
+                            .getElementsByClassName('text')[0]
+                            .getElementsByTagName('text')[0]
+                            .getElementsByTagName('tspan')[i + x.length - 1] == undefined
+                    ) {
+                        if (
+                            svg
+                                .getElementsByClassName('text')[0]
+                                .getElementsByTagName('text')[0]
+                                .getElementsByTagName('tspan')[i + 1] == undefined
+                        ) {
+                            // prettier-ignore
+                            y[0] == y[y.length-1]
+                            ? (length.push(x[x.length-1] + tmp - x[0] - 3)) && (length.push(0))
+                            : (length.push(svg.clientWidth - x[0])) &&
+                            (length.push(parseFloat(
+                                    svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[0]
+                                        .getElementsByTagName('tspan')[i].attributes.x.value
+                                ) + parseFloat(svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[0]
+                                        .getElementsByTagName('tspan')[i].getComputedTextLength())))
+                        } else {
+                            // prettier-ignore
+                            y[0] == y[y.length-1]
+                            ? (length.push(x[x.length-1] + tmp - x[0])) && (length.push(0))
+                            : (length.push(svg.clientWidth - x[0])) &&
+                            (length.push(parseFloat(
+                                    svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[0]
+                                        .getElementsByTagName('tspan')[i + 1].attributes.x.value
+                                ) + parseFloat(svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[0]
+                                        .getElementsByTagName('tspan')[i + 1].getComputedTextLength())))
+                        }
+                    } else {
+                        // prettier-ignore
+                        y[0] == y[y.length-1]
+                        ? (length.push(x[x.length-1] + tmp - x[0] - 2)) && (length.push(0))
                         : (length.push(svg.clientWidth - x[0])) &&
                           (length.push(parseFloat(
                                   svg
                                       .getElementsByClassName('text')[0]
                                       .getElementsByTagName('text')[0]
-                                      .getElementsByTagName('tspan')[i + x.length].attributes.x.value
-                              ) - 3))
+                                      .getElementsByTagName('tspan')[i + x.length - 1].attributes.x.value)
+                              + parseFloat(svg
+                                        .getElementsByClassName('text')[0]
+                                        .getElementsByTagName('text')[0]
+                                        .getElementsByTagName('tspan')[i + x.length - 1].getComputedTextLength()) + 3))
+                    }
                     g.push(this.createSvgElement('g', { class: 'multiWord' }))
                     rect.push(
                         this.createSvgElement('rect', { x: x[0], y: y[0], width: length[0], height: 5, fill: 'red' })
