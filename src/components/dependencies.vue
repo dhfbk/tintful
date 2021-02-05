@@ -95,7 +95,9 @@ export default {
                             ) {
                                 tokens[l].parentElement.append(
                                     this.createSvgElement('rect', {
-                                        x: parseFloat(tokens[l].attributes.x.value) + parseFloat(tokens[l].getAttribute("width"))/2,
+                                        x:
+                                            parseFloat(tokens[l].attributes.x.value) +
+                                            parseFloat(tokens[l].getAttribute('width')) / 2,
                                         y: parseFloat(tokens[l].attributes.y.value) - 52,
                                         'dominant-baseline': 'middle',
                                         'text-anchor': 'middle',
@@ -123,98 +125,102 @@ export default {
                 parseFloat(svg.getElementsByClassName('background')[0].lastChild.getAttribute('height')) + 2
             )
             let phrase = this.$store.state.editableData.sentences[0]
-            let x1 = 0
-            let x2 = 0
-            let length1 = 0
-            let length2 = 0
+            let x = []
+            let y = []
             let tmp = 0
-            let rect
-            let rect2
-            let g
-            let g2
+            let length = []
+            let rect = []
+            let g = []
             let text
-            let y = 0
-            let y2 = 0
             //choose the phrase
-            for (let x = 0; x < this.$store.state.editableData.sentences.length; x++) {
-                phrase = this.$store.state.editableData.sentences[x]
+            for (let p = 0; p < this.$store.state.editableData.sentences.length; p++) {
+                phrase = this.$store.state.editableData.sentences[p]
                 for (let i = 0; i < phrase.tokens.length; i++) {
                     if (phrase.tokens[i].isMultiwordFirstToken) {
-                        //if there is a multitoken, calculate the coordinates for the tag
-                        // prettier-ignore
-                        x1 = parseFloat(
-                            svg
-                                .getElementsByClassName('text')[0]
-                                .getElementsByTagName('text')[x]
-                                .getElementsByTagName('tspan')[i].attributes.x.value
-                        )
-                        // prettier-ignore
-                        x2 = parseFloat(
-                            svg
-                                .getElementsByClassName('text')[0]
-                                .getElementsByTagName('text')[x]
-                                .getElementsByTagName('tspan')[i].nextSibling.attributes.x.value
-                        )
-                        // prettier-ignore
-                        tmp = svg
-                        .getElementsByClassName('text')[0]
-                        .getElementsByTagName('text')[x]
-                        .getElementsByTagName('tspan')[i].nextSibling.getComputedTextLength()
-                        // prettier-ignore
-                        y =
+                        x = []
+                        y = []
+                        length = []
+                        rect = []
+                        g = []
+                        for (let j = i; j < parseInt(phrase.tokens[i].multiwordSpan.split('-')[1]); j++) {
+                            //if there is a multitoken, calculate the coordinates for the tag
+                            // prettier-ignore
+                            x.push(
                             parseFloat(
                                 svg
                                     .getElementsByClassName('text')[0]
-                                    .getElementsByTagName('text')[x]
-                                    .getElementsByTagName('tspan')[i].attributes.y.value
+                                    .getElementsByTagName('text')[p]
+                                    .getElementsByTagName('tspan')[j].attributes.x.value
+                            )
+                        )
+                            // prettier-ignore
+                            y.push(
+                            parseFloat(
+                                svg
+                                    .getElementsByClassName('text')[0]
+                                    .getElementsByTagName('text')[p]
+                                    .getElementsByTagName('tspan')[j].attributes.y.value
                             ) + 6
+                        )
+                            if (j == parseInt(phrase.tokens[i].multiwordSpan.split('-')[1]) - 1) {
+                                // prettier-ignore
+                                tmp = svg
+                                .getElementsByClassName('text')[0]
+                                .getElementsByTagName('text')[p]
+                                .getElementsByTagName('tspan')[j]
+                                .getComputedTextLength()
+                            }
+                        }
                         //length of the tag
                         // prettier-ignore
-                        x1 < x2
-                            ? (length1 = x2 + tmp - x1 - 3) && (length2 = 0)
-                            : (length1 = svg.clientWidth - x1) &&
-                              (length2 =
-                                  parseFloat(
-                                      svg
-                                          .getElementsByClassName('text')[0]
-                                          .getElementsByTagName('text')[x]
-                                          .getElementsByTagName('tspan')[i].nextSibling.nextSibling.attributes.x
-                                          .value
-                                  ) - 3)
-                        g = this.createSvgElement('g', { class: 'multiWord' })
-                        rect = this.createSvgElement('rect', { x: x1, y: y, width: length1, height: 5, fill: 'red' })
+                        x[0] < x[x.length-1]
+                        ? (length.push(x[x.length-1] + tmp - x[0] - 3)) && (length.push(0))
+                        : (length.push(svg.clientWidth - x[0])) &&
+                          (length.push(parseFloat(
+                                  svg
+                                      .getElementsByClassName('text')[0]
+                                      .getElementsByTagName('text')[p]
+                                      .getElementsByTagName('tspan')[i + x.length].attributes.x.value
+                              ) - 3))
+                        g.push(this.createSvgElement('g', { class: 'multiWord' }))
+                        rect.push(
+                            this.createSvgElement('rect', {
+                                x: x[0],
+                                y: y[0],
+                                width: length[0],
+                                height: 5,
+                                fill: 'red',
+                            })
+                        )
                         //word under the red line
                         text = this.createSvgElement('text', {
-                            x: x1 + 13,
-                            y: y + 15,
+                            x: '50%',
+                            y: 15,
                             'dominant-baseline': 'middle',
                             'text-anchor': 'middle',
                         })
                         text.textContent = phrase.tokens[i].originalText
-                        if (length2 !== 0) {
-                            // prettier-ignore
-                            y2 =
-                                parseFloat(
-                                    svg
-                                        .getElementsByClassName('text')[0]
-                                        .getElementsByTagName('text')[x]
-                                        .getElementsByTagName('tspan')[i].nextSibling.attributes.y.value
-                                ) + 6
-                            g2 = this.createSvgElement('g')
-                            rect2 = this.createSvgElement('rect', {
-                                x: 21,
-                                y: y2,
-                                width: length2 - 26,
-                                height: 5,
-                                fill: 'red',
-                            })
-                            g2.appendChild(rect2)
-                            svg.appendChild(g2)
+                        if (length[1] !== 0) {
+                            g.push(this.createSvgElement('g', { class: 'multiWord' }))
+                            rect.push(
+                                this.createSvgElement('rect', {
+                                    x: 21,
+                                    y: y[y.length - 1],
+                                    width: length[1] - 40,
+                                    height: 5,
+                                    fill: 'red',
+                                })
+                            )
+                            g[1].appendChild(rect[1])
+                            svg.appendChild(g[1])
                         }
                         //append everything
-                        g.appendChild(rect)
-                        g.appendChild(text)
-                        svg.appendChild(g)
+                        g[0].appendChild(rect[0])
+                        g[0].appendChild(
+                            this.createSvgElement('svg', { width: length[0], height: 50, x: x[0], y: y[0] })
+                        )
+                        g[0].lastChild.appendChild(text)
+                        svg.appendChild(g[0])
                     }
                 }
             }
