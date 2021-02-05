@@ -119,7 +119,7 @@
             <span class="font-bold">{{ currentData.sentences[sentenceIndex].text }}</span>
         </span>
         <!--inserire paginazione-->
-        <span class="my-2 inline-block w-full" v-else>
+        <!-- <span class="my-2 inline-block w-full" v-else>
             Sentences:<br />
             <span class="font-bold" v-for="(phrase, n) in nerPhrases" :key="n"> {{ n }}. {{ phrase }}<br /> </span>
             <div class="flex flex-row content-center items-center justify-center mt-2" v-if="this.$store.state.editableData.sentences.length > 10">
@@ -147,7 +147,7 @@
                     Next
                 </button>
             </div>
-        </span>
+        </span> -->
         <!-- <p class="my-1"></p> -->
         <brat-edit
             v-if="selectedTab == 0"
@@ -210,12 +210,12 @@ export default {
     created() {
         if (this.$store.state.editableData.sentences.length <= 10) {
             for (let i = 0; i < this.$store.state.editableData.sentences.length; i++) {
-                this.nerPhrases[i+1] = this.$store.state.editableData.sentences[i].text
+                this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
             }
             this.endNerPages = 1
         } else {
             for (let i = 0; i < 10; i++) {
-                this.nerPhrases[i+1] = this.$store.state.editableData.sentences[i].text
+                this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
             }
             this.endNerPages = this.$store.state.editableData.sentences.length % 10
         }
@@ -358,14 +358,14 @@ export default {
                 this.refreshBrat = false
             }, 200)
         },
-        startNerPages() {
-            this.nerPhrases = {}
-            for (let i = ((this.startNerPages + 1) * 10) - 10; i < (this.startNerPages + 1) * 10; i++) {
-                if (this.$store.state.editableData.sentences[i] != undefined) {
-                    this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
-                }
-            }
-        },
+        // startNerPages() {
+        //     this.nerPhrases = {}
+        //     for (let i = ((this.startNerPages + 1) * 10) - 10; i < (this.startNerPages + 1) * 10; i++) {
+        //         if (this.$store.state.editableData.sentences[i] != undefined) {
+        //             this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
+        //         }
+        //     }
+        // },
     },
 }
 </script>
