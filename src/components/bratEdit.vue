@@ -92,24 +92,27 @@ export default {
             let svg = document.getElementById('deps').children[0]
             let tokens = svg.getElementsByClassName('span_default')
             let sen = this.$store.state.editableData.sentences[this.sentenceIndex]
+            console.log(this.sentenceIndex)
             for (let p = 0; p < sen['basic-dependencies'].length; p++) {
                 if (sen['basic-dependencies'][p].governorGloss == 'ROOT') {
                     for (let l = 0; l < tokens.length; l++) {
                         if (
                             tokens[l].getAttribute('data-span-id') ==
-                            'POS_' + this.sentenceIndex + '_' + (sen['basic-dependencies'][p].dependent - 1)
+                            'POS_0' + '_' + (sen['basic-dependencies'][p].dependent - 1)
                         ) {
+                            let arrowHeight = tokens[l].parentElement.parentElement.parentElement.getBBox().height
+
                             tokens[l].parentElement.append(
                                 this.createSvgElement('rect', {
                                     x:
                                         parseFloat(tokens[l].attributes.x.value) +
                                         parseFloat(tokens[l].getAttribute('width')) / 2,
-                                    y: parseFloat(tokens[l].attributes.y.value) - 52,
+                                    y: parseFloat(tokens[l].attributes.y.value) - arrowHeight + 15,
                                     'dominant-baseline': 'middle',
                                     'text-anchor': 'middle',
                                     class: 'root',
-                                    height: 50,
-                                    width: 1,
+                                    height: arrowHeight - 15,
+                                    width: 0.5,
                                 })
                             )
                         }

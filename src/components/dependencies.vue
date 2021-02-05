@@ -93,17 +93,18 @@ export default {
                                 tokens[l].getAttribute('data-span-id') ==
                                 'POS_' + i + '_' + (sen[i]['basic-dependencies'][p].dependent - 1)
                             ) {
+                                let arrowHeight = tokens[l].parentElement.parentElement.parentElement.getBBox().height
                                 tokens[l].parentElement.append(
                                     this.createSvgElement('rect', {
                                         x:
                                             parseFloat(tokens[l].attributes.x.value) +
                                             parseFloat(tokens[l].getAttribute('width')) / 2,
-                                        y: parseFloat(tokens[l].attributes.y.value) - 52,
-                                        'dominant-baseline': 'middle',
-                                        'text-anchor': 'middle',
+                                        y: parseFloat(tokens[l].attributes.y.value) - arrowHeight + 15,
+                                        //'dominant-baseline': 'auto',
+                                        // 'text-anchor': 'middle',
                                         class: 'root',
-                                        height: 50,
-                                        width: 1,
+                                        height: arrowHeight - 15,
+                                        width: 0.5,
                                     })
                                 )
                             }
