@@ -1,6 +1,12 @@
 <template>
     <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 md:p-4">
-        <deps-modal @closeDepsModal="showDepsModal = false" @edited="editedDep" :dep="depToEdit" v-if="showDepsModal" />
+        <deps-modal
+            @closeDepsModal="showDepsModal = false"
+            @edited="editedDep"
+            :dep="depToEdit"
+            v-if="showDepsModal"
+            :checkRoot="checkRoot"
+        />
         <features-modal
             @closeFeatsModal="showFeatsModal = false"
             v-if="showFeatsModal"
@@ -148,7 +154,9 @@
                 </button>
             </div>
         </span> -->
-        <!-- <p class="my-1"></p> -->
+        <p class="my-1 text-red-500 dark:text-red-400" v-if="checkRoot">
+            No ROOT element, please select the new ROOT by double clicking/tapping on the word
+        </p>
         <brat-edit
             v-if="selectedTab == 0"
             :sentenceIndex="sentenceIndex"
@@ -157,6 +165,7 @@
             @showFeatsModal="featsModal"
             :refresh="refreshBrat"
             @edited="isEdited = true"
+            @snack="snackRoot"
         />
         <table-edit
             v-else-if="selectedTab == 1"
@@ -205,6 +214,7 @@ export default {
             confirmation: false,
             action: '',
             confirmationMode: '',
+            checkRoot: false,
         }
     },
     created() {
@@ -245,6 +255,9 @@ export default {
         }
     },
     methods: {
+        snackRoot(msg) {
+            this.$emit('snack', msg)
+        },
         confirmModal(mode) {
             this.action = mode
             if (this.isEdited) {
@@ -272,6 +285,7 @@ export default {
             } else {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             }
+            this.checkRoot = false
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {

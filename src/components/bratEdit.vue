@@ -12,6 +12,7 @@ export default {
     data() {
         return {
             screenWidth: 0,
+            editRoot: false,
             isEditMode: false,
             dispatcher: undefined,
             visualizer: undefined,
@@ -282,6 +283,7 @@ export default {
         resetVariables() {
             this.entityTypesSet = {}
             this.entityTypes = []
+            this.editRoot = false
             /**
              * Register a relation type (an arc) for Brat
              */
@@ -329,7 +331,6 @@ export default {
         handleDbl(e) {
             var i = e.target
             var infos = i.getAttribute('data-span-id').split('_')
-            console.log('sentence index:' + this.sentenceIndex, 'token index:' + infos[2])
             var d = this.$store.state.editableData
             var feat = d.sentences[this.sentenceIndex].tokens[infos[2]]
 
@@ -342,6 +343,30 @@ export default {
             infoToEdit.word = feat.word
             this.$emit('showFeatsModal', infoToEdit, 'brat')
             console.log(infoToEdit)
+        },
+        dblRoot(e) {
+            var i = e.target
+            var infos = parseInt(i.getAttribute('data-chunk-id'))
+            var text = i.textContent
+            var dep = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
+            for (let x = 0; x < dep.length; x++) {
+                if (dep[x].dep == 'ROOT') {
+                    dep[x].dependent = infos + 1
+                    dep[x].dependentGloss = text.slice(0, -1)
+                    break
+                }
+            }
+            for (let x = 0; x < dep.length; x++) {
+                if (dep[x].dependent == infos + 1 && dep[x].dep != 'ROOT') {
+                    dep.splice(x, 1)
+                }
+            }
+            document.getElementById('deps').innerHTML = ''
+            document.getElementById('deps').className = ''
+            this.resetVariables()
+            this.loadBrat()
+            this.isEditMode = false
+            this.$emit('edited')
         },
         handleRight(e) {
             if (!this.isEditMode) {
@@ -372,11 +397,14 @@ export default {
             var d = this.$store.state.editableData
 
             var dep = d.sentences[this.sentenceIndex]['basic-dependencies']
-            for (let i = 0; i < dep.length; i++) {
-                if (dep[i].dependent == this.sonId) {
-                    dep[i].governor = this.newFatherId
-                    dep[i].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
-                    console.log(dep[i].governorGloss)
+            for (var x = 0; x < dep.length; x++) {
+                if (dep[x].dependent == this.sonId) {
+                    if (dep[x].dep != 'ROOT') {
+                        dep[x].governor = this.newFatherId
+                        dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
+                        console.log(dep[x])
+                    }
+                    /*
                     console.log(
                         'new father of ' +
                             dep[i].dependent +
@@ -389,6 +417,7 @@ export default {
                             dep[i].governorGloss +
                             ')'
                     )
+                    */
                     break
                 }
             }
@@ -399,9 +428,12 @@ export default {
             this.resetVariables()
             this.loadBrat()
             this.isEditMode = false
-
+            if (dep[x].dep == 'ROOT') {
+                this.$emit('snack', "Can't change head of a ROOT element")
+            } else {
+                this.$emit('edited')
+            }
             console.log('son: ' + this.sonId, 'new father: ' + this.newFatherId)
-            this.$emit('edited')
         },
         addEvents() {
             console.log('siamo dentro la funzione che inserisce gli eventi')
@@ -445,6 +477,7 @@ export default {
             var x = document.getElementById('deps')
             var pos = x.getElementsByClassName('span_default')
             var depend = x.getElementsByClassName('arcs')
+            var words = x.getElementsByTagName('tspan')
 
             x.addEventListener(
                 'contextmenu',
@@ -458,6 +491,9 @@ export default {
                     //console.log(el);
                     el.oncontextmenu = this.handleRight
                     el.ondblclick = this.handleDbl
+                })
+                words.forEach(el => {
+                    el.ondblclick = this.dblRoot
                 })
                 //console.log(depend);
                 depend.forEach(el => {
