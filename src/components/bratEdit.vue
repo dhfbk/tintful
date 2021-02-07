@@ -117,7 +117,6 @@ export default {
                             )
                         }
                     }
-                    break
                 }
             }
         },
@@ -347,15 +346,23 @@ export default {
         dblRoot(e) {
             var i = e.target
             var infos = parseInt(i.getAttribute('data-chunk-id'))
+            // eslint-disable-next-line no-unused-vars
             var text = i.textContent
             var dep = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
-            for (let x = 0; x < dep.length; x++) {
-                if (dep[x].dep == 'ROOT') {
-                    dep[x].dependent = infos + 1
-                    dep[x].dependentGloss = text.slice(0, -1)
-                    break
-                }
-            }
+            // for (let x = 0; x < dep.length; x++) {
+            //     if (dep[x].dep == 'ROOT') {
+            dep.unshift({
+                dep: 'ROOT',
+                dependent: infos + 1,
+                dependentGloss: text.slice(0, -1),
+                governor: 0,
+                governorGloss: 'ROOT',
+            })
+            // dep[x].dependent = infos + 1
+            // dep[x].dependentGloss = text.slice(0, -1)
+            //         break
+            //     }
+            // }
             for (let x = 0; x < dep.length; x++) {
                 if (dep[x].dependent == infos + 1 && dep[x].dep != 'ROOT') {
                     dep.splice(x, 1)
@@ -387,7 +394,7 @@ export default {
             }
         },
         handleClick(e) {
-            console.log("siamo dentro l'evento click")
+            // console.log("siamo dentro l'evento click")
 
             var i = e.target
             i.parentNode.children[1].setAttribute('fill', 'white')
@@ -402,7 +409,17 @@ export default {
                     if (dep[x].dep != 'ROOT') {
                         dep[x].governor = this.newFatherId
                         dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
-                        console.log(dep[x])
+                        console.log(dep[x].dep)
+                    } else {
+                        dep[x].governor = this.newFatherId
+                        dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
+                        dep[x].dep = 'choosing...'
+                        this.$emit('showDepsModal', {
+                            gov: this.newFatherId,
+                            dep: dep[x].dependent,
+                        })
+
+                        //    console.log(dep[x].dep)
                     }
                     /*
                     console.log(
@@ -428,11 +445,12 @@ export default {
             this.resetVariables()
             this.loadBrat()
             this.isEditMode = false
-            if (dep[x].dep == 'ROOT') {
-                this.$emit('snack', "Can't change head of a ROOT element")
-            } else {
-                this.$emit('edited')
-            }
+            console.log(dep[x].dep)
+            // if (dep[x].dep == 'ROOT') {
+            //     this.$emit('snack', "Can't change head of a ROOT element")
+            // } else {
+            this.$emit('edited')
+            // }
             console.log('son: ' + this.sonId, 'new father: ' + this.newFatherId)
         },
         addEvents() {

@@ -343,10 +343,17 @@ export default {
             }
         },
         depsModal(i) {
-            this.depToEdit.dep = i.getAttribute('data-arc-role')
-            this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
-            this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
-            this.showDepsModal = true
+            if (typeof i != 'object') {
+                this.depToEdit.dep = i.getAttribute('data-arc-role')
+                this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
+                this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1
+                this.showDepsModal = true
+            } else {
+                this.depToEdit.dep = 'ROOT'
+                this.depToEdit.governor = i.gov
+                this.depToEdit.dependent = i.dep
+                this.showDepsModal = true
+            }
         },
         featsModal(info, mode) {
             console.log(info)

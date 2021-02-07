@@ -109,7 +109,6 @@ export default {
                                 )
                             }
                         }
-                        break
                     }
                 }
             }
@@ -176,14 +175,16 @@ export default {
                         if (
                             svg
                                 .getElementsByClassName('text')[0]
-                                .getElementsByTagName('text')[p]
-                                .getElementsByTagName('tspan')[i + x.length - 1] == undefined
+                                .getElementsByTagName('text')
+                                // eslint-disable-next-line no-unexpected-multiline
+                                [p].getElementsByTagName('tspan')[i + x.length - 1] == undefined
                         ) {
                             if (
                                 svg
                                     .getElementsByClassName('text')[0]
-                                    .getElementsByTagName('text')[p]
-                                    .getElementsByTagName('tspan')[i + 1] == undefined
+                                    .getElementsByTagName('text')
+                                    // eslint-disable-next-line no-unexpected-multiline
+                                    [p].getElementsByTagName('tspan')[i + 1] == undefined
                             ) {
                                 // prettier-ignore
                                 y[0] == y[y.length-1]
