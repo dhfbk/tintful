@@ -374,6 +374,7 @@ export default {
             this.loadBrat()
             this.isEditMode = false
             this.$emit('edited')
+            this.$emit('noRoot', "false")
         },
         handleRight(e) {
             if (!this.isEditMode) {
@@ -404,7 +405,7 @@ export default {
             var d = this.$store.state.editableData
 
             var dep = d.sentences[this.sentenceIndex]['basic-dependencies']
-            for (var x = 0; x < dep.length; x++) {
+            for (let x = 0; x < dep.length; x++) {
                 if (dep[x].dependent == this.sonId) {
                     if (dep[x].dep != 'ROOT') {
                         dep[x].governor = this.newFatherId
@@ -445,13 +446,19 @@ export default {
             this.resetVariables()
             this.loadBrat()
             this.isEditMode = false
-            console.log(dep[x].dep)
             // if (dep[x].dep == 'ROOT') {
             //     this.$emit('snack', "Can't change head of a ROOT element")
             // } else {
             this.$emit('edited')
             // }
-            console.log('son: ' + this.sonId, 'new father: ' + this.newFatherId)
+            d = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
+            let cont = 0
+            for (let x = 0; x < d.length; x++) {
+                if (d[x].dep == 'ROOT') {
+                    cont++
+                }
+            }
+            cont == 0 ? this.$emit('noRoot', "true") : ''
         },
         addEvents() {
             console.log('siamo dentro la funzione che inserisce gli eventi')

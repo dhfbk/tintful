@@ -5,7 +5,7 @@
             @edited="editedDep"
             :dep="depToEdit"
             v-if="showDepsModal"
-            :checkRoot="checkRoot"
+            :checkRoot="noSave"
         />
         <features-modal
             @closeFeatsModal="showFeatsModal = false"
@@ -109,7 +109,7 @@
             >
                 <button
                     :class="
-                        isEdited
+                        isEdited && !noSave
                             ? 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                             : 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
                     "
@@ -154,7 +154,7 @@
                 </button>
             </div>
         </span> -->
-        <p class="my-1 text-red-500 dark:text-red-400" v-if="checkRoot">
+        <p class="my-1 text-red-500 dark:text-red-400" v-if="noSave">
             No ROOT element, please select the new ROOT by double clicking/tapping on the word
         </p>
         <brat-edit
@@ -166,6 +166,7 @@
             :refresh="refreshBrat"
             @edited="isEdited = true"
             @snack="snackRoot"
+            @noRoot="checkRoot"
         />
         <table-edit
             v-else-if="selectedTab == 1"
@@ -214,7 +215,7 @@ export default {
             confirmation: false,
             action: '',
             confirmationMode: '',
-            checkRoot: false,
+            noSave: false,
         }
     },
     created() {
@@ -255,12 +256,15 @@ export default {
         }
     },
     methods: {
+        checkRoot(exists) {
+            exists == 'true' ? (this.noSave = true) : (this.noSave = false)
+        },
         snackRoot(msg) {
             this.$emit('snack', msg)
         },
         confirmModal(mode) {
             this.action = mode
-            if (this.isEdited) {
+            if (this.isEdited && !this.noSave) {
                 this.confirmationMode = mode
                 switch (mode) {
                     case 'save':
@@ -282,10 +286,10 @@ export default {
             if (mode == 'save') {
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))
-            } else {
+                this.noSave = false
+            } else if (!this.noSave) {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             }
-            this.checkRoot = false
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {
