@@ -406,11 +406,19 @@ export default {
             var dep = d.sentences[this.sentenceIndex]['basic-dependencies']
 
             //checking loop
+            let msg = ''
             let gov = []
             let cont = 0
             let found = false
             let stop = false
             let lastCycle = false
+            for (let i = 0; i < dep.length; i++) {
+                if (dep[i].dependent == this.sonId && dep[i].dep == 'ROOT') {
+                    cont = -1
+                    msg = "A ROOT element can't have a head"
+                    break
+                }
+            }
             while (cont != -1 && !stop) {
                 if (!found) {
                     if (dep[cont].dependent == this.newFatherId) {
@@ -469,10 +477,11 @@ export default {
                         break
                     }
                 }
-                this.$store.state.editableData = d
+                //this.$store.state.editableData = d
                 this.$emit('edited')
             } else {
-                this.$emit('snack', 'Loop detected. Choose another father')
+                msg == '' ? (msg = 'Loop detected. Choose another head') : null
+                this.$emit('snack', msg)
             }
 
             document.getElementById('deps').innerHTML = ''

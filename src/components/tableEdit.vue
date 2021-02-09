@@ -8,7 +8,7 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(d, index) in $store.state.editableData.sentences[currentPhrase].tokens"
+                    v-for="(d, index) in $store.state.editableData.sentences[sentenceIndex].tokens"
                     :key="index"
                     class="border-b border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-500"
                 >
@@ -71,7 +71,7 @@
                             class="w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option
-                                v-for="(n, c) in $store.state.editableData.sentences[currentPhrase][
+                                v-for="(n, c) in $store.state.editableData.sentences[sentenceIndex][
                                     'basic-dependencies'
                                 ].length + 1"
                                 :key="c"
@@ -94,7 +94,7 @@
                             :name="'dep' + d.index"
                             :id="'dep' + d.index"
                             v-model="deprelsEditable[d.index]"
-                            @change="editData('deprels', d.index)"
+                            @change="editData('deprels', d.index, d.word)"
                             class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option v-for="i in deps" :key="i" :value="i">{{ i }}</option>
@@ -111,30 +111,13 @@
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">-</td>
                     <td class="p-1 px-2">
-                        spaceAfter:
-                        <div class="relative">
-                            <select
-                                :name="'space' + d.index"
-                                :id="'space' + d.index"
-                                v-model="spaceAfterEditable[d.index]"
-                                @change="editData('spaceAfter', d.index)"
-                                class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                            >
-                                <option>Yes</option>
-                                <option>No</option>
-                            </select>
-                            <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900">
-                                <svg
-                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                    />
-                                </svg>
-                            </div>
-                        </div>
+                        <input
+                            :name="'space' + d.index"
+                            :id="'space' + d.index"
+                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                            @blur="editData('spaceAfter', d.index)"
+                            :value="misc[d.index].complete"
+                        />
                     </td>
                 </tr>
             </tbody>
@@ -146,7 +129,6 @@
 export default {
     name: 'tableEdit',
     props: {
-        currentPhrase: Number,
         sentenceIndex: Number,
     },
     data() {
@@ -195,8 +177,8 @@ export default {
             headsEditable: {},
             deprelsRef: {}, //object with the index of the token as the key and the deprel as the value
             deprelsEditable: {},
-            spaceAfterRef: {}, //object with the index of the token as the key and the spaceAfter as the value
-            spaceAfterEditable: {},
+            misc: {},
+            spaceAfter: {}, //object with the index of the token as the key and the spaceAfter as the value
             deps: [
                 'ROOT', //aggiunta a mano
                 'acl',
@@ -247,30 +229,39 @@ export default {
                 'xcomp',
             ],
             loading: true,
-            showData: this.$store.state.editableData.sentences
+            showData: this.$store.state.editableData.sentences,
         }
     },
     created() {
-        var phraseDependencies = this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies']
-        for (let i = 0; i < phraseDependencies.length; i++) {
-            this.headsRef[phraseDependencies[i].dependent] = phraseDependencies[i].governor
-            this.deprelsRef[phraseDependencies[i].dependent] = phraseDependencies[i].dep
-        }
-        this.deprelsEditable = JSON.parse(JSON.stringify(this.deprelsRef))
-        this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
-        for (let i = 0; i < this.$store.state.editableData.sentences[this.currentPhrase].tokens.length; i++) {
-            if (this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].spaceAfter != undefined) {
-                this.spaceAfterRef[
-                    this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].index
-                ] = this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].spaceAfter
-            } else {
-                this.spaceAfterRef[this.$store.state.editableData.sentences[this.currentPhrase].tokens[i].index] = "Yes"
-            }
-        }
-        this.spaceAfterEditable = JSON.parse(JSON.stringify(this.spaceAfterRef))
+        this.setInitialData()
         this.loading = false
     },
     methods: {
+        setInitialData() {
+            var phraseDependencies = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
+            for (let i = 0; i < phraseDependencies.length; i++) {
+                this.headsRef[phraseDependencies[i].dependent] = phraseDependencies[i].governor
+                this.deprelsRef[phraseDependencies[i].dependent] = phraseDependencies[i].dep
+            }
+            this.deprelsEditable = JSON.parse(JSON.stringify(this.deprelsRef))
+            this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
+            for (let i = 0; i < this.$store.state.editableData.sentences[this.sentenceIndex].tokens.length; i++) {
+                if (this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].spaceAfter != undefined) {
+                    this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index] = {}
+                    this.misc[
+                        this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index
+                    ].spaceAfter = this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].spaceAfter
+                    this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index].complete =
+                        'spaceAfter:' +
+                        this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index]
+                            .spaceAfter
+                } else {
+                    this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index] = {
+                        complete: '',
+                    }
+                }
+            }
+        },
         editFeats(token, mode) {
             var index = token.index - 1
             var d = this.$store.state.editableData
@@ -286,71 +277,130 @@ export default {
             infoToEdit.word = feat.word
             this.$emit('editFeats', infoToEdit, mode)
         },
-        editData(mode, index) {
+        editData(mode, index, word) {
+            let dep = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
             if (mode == 'deprels') {
                 let value = document.getElementById('dep' + index).value
+                if (value == 'ROOT') {
+                    dep.unshift({
+                        dep: 'ROOT',
+                        dependent: index,
+                        dependentGloss: word,
+                        governor: 0,
+                        governorGloss: 'ROOT',
+                    })
+                    this.headsEditable[index] = 0
+                    for (let x = 0; x < dep.length; x++) {
+                        if (dep[x].dependent == index && dep[x].dep != 'ROOT') {
+                            dep.splice(x, 1)
+                        }
+                    }
+                }
                 this.deprelsEditable[index] = value
-                for (
-                    let i = 0;
-                    i < this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'].length;
-                    i++
-                ) {
-                    if (
-                        this.deprelsRef[
-                            this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][i]
-                                .dependent
-                        ] !=
-                        this.deprelsEditable[
-                            this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][i]
-                                .dependent
-                        ]
-                    ) {
-                        this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][
-                            i
-                        ].dep = this.deprelsEditable[
-                            this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][
-                                i
-                            ].dependent
-                        ]
+                for (let i = 0; i < dep.length; i++) {
+                    if (this.deprelsRef[dep[i].dependent] != this.deprelsEditable[dep[i].dependent]) {
+                        dep[i].dep = this.deprelsEditable[dep[i].dependent]
                     }
                 }
                 this.$emit('edited')
             } else if (mode == 'heads') {
                 let value = document.getElementById('head' + index).value
-                this.headsEditable[index] = value
-                for (
-                    let i = 0;
-                    i < this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'].length;
-                    i++
-                ) {
-                    if (
-                        this.headsRef[
-                            this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][i]
-                                .dependent
-                        ] !=
-                        this.headsEditable[
-                            this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][i]
-                                .dependent
-                        ]
-                    ) {
-                        this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][
-                            i
-                        ].governor = this.headsEditable[
-                            this.$store.state.editableData.sentences[this.currentPhrase]['basic-dependencies'][
-                                i
-                            ].dependent
-                        ]
+                //checking loop
+                let msg = ''
+                let gov = []
+                let cont = 0
+                let found = false
+                let stop = false
+                let lastCycle = false
+                for (let i = 0; i < dep.length; i++) {
+                    if (dep[i].dependent == index && dep[i].dep == 'ROOT') {
+                        cont = -1
+                        msg = "A ROOT element can't have a head"
+                        break
                     }
                 }
-                this.$emit('edited')
-            } else {
-                let value = document.getElementById('space' + index).value
-                if (this.spaceAfterRef[index] != value) {
-                    this.spaceAfterEditable[index] = value
-                    this.$store.state.editableData.sentences[this.currentPhrase].tokens[index - 1].spaceAfter = value
-                    this.$emit('edited')
+                while (cont != -1 && !stop) {
+                    if (!found) {
+                        if (dep[cont].dependent == value) {
+                            gov.push(dep[cont].governor)
+                            found = true
+                            cont = 0
+                        } else {
+                            cont++
+                        }
+                    } else {
+                        gov.forEach(el => {
+                            cont = 0
+                            if (cont != -1) {
+                                while (cont < dep.length && cont != -1) {
+                                    if (el == dep[cont].dependent) {
+                                        if (dep[cont].governor == index) {
+                                            cont = -1
+                                            break
+                                        } else {
+                                            if (dep[cont].governor != 0) {
+                                                gov.push(dep[cont].governor)
+                                                break
+                                            } else {
+                                                stop = true
+                                                cont = dep.length
+                                            }
+                                        }
+                                    } else {
+                                        cont++
+                                    }
+                                }
+                            }
+                        })
+                        if (gov[gov.length - 1] == this.sonId) {
+                            lastCycle = true
+                        }
+                        lastCycle ? (stop = true) : null
+                    }
                 }
+                if (cont != -1) {
+                    this.headsEditable[index] = value
+                    for (let i = 0; i < dep.length; i++) {
+                        if (this.headsRef[dep[i].dependent] != this.headsEditable[dep[i].dependent]) {
+                            dep[i].governor = this.headsEditable[dep[i].dependent]
+                        }
+                    }
+                    this.$emit('edited')
+                } else {
+                    this.headsEditable[index] = this.headsRef[index]
+                    document.getElementById('head' + index).value = this.headsRef[index]
+                    msg == '' ? (msg = 'Loop detected. Choose another head') : null
+                    this.$emit('snack', msg)
+                }
+            } else {
+                let value = document.getElementById('space' + index).value.split('|')
+                this.misc[index] = {}
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i].split(':')[0] != undefined && value[i].split(':')[0] != '') {
+                        if (value[i].split(':')[1] != undefined && value[i].split(':')[1] != '') {
+                            this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
+                            this.$emit('edited')
+                        }
+                    }
+                }
+                this.$emit('misc', this.misc)
+                /*
+                    if (value.split(':')[0] == 'spaceAfter') {
+                        if (value.split(':')[1] != undefined && value.split(':')[1] != '') {
+                            this.spaceAfter[index] = value.split(':')[1].split(/[^A-Za-z]/g)[0]
+                            this.$store.state.editableData.sentences[this.sentenceIndex].tokens[
+                                index - 1
+                            ].spaceAfter = value.split(':')[1].split(/[^A-Za-z]/g)[0]
+                            this.$emit('edited')
+                        }
+                    }
+                    */
             }
+        },
+    },
+    watch: {
+        sentenceIndex() {
+            this.setInitialData()
         },
     },
 }

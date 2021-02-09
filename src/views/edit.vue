@@ -172,9 +172,10 @@
         <table-edit
             v-else-if="selectedTab == 1"
             :sentenceIndex="sentenceIndex"
-            :currentPhrase="sentenceIndex"
             @edited="isEdited = true"
             @editFeats="featsModal"
+            @snack="snack"
+            @misc="setMisc"
         />
         <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
     </div>
@@ -217,6 +218,8 @@ export default {
             action: '',
             confirmationMode: '',
             noSave: false,
+            misc: {},
+            tableMisc: false,
         }
     },
     created() {
@@ -257,6 +260,10 @@ export default {
         }
     },
     methods: {
+        setMisc(obj) {
+            this.misc = obj
+            this.tableMisc = true
+        },
         checkRoot(exists) {
             exists == 'true' ? (this.noSave = true) : (this.noSave = false)
         },
@@ -285,12 +292,25 @@ export default {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
             if (mode == 'save') {
+                if (this.tableMisc) {
+                    for (
+                        let i = 0;
+                        i < this.$store.state.editableData.sentences[this.sentenceIndex].tokens.length;
+                        i++
+                    ) {
+                        this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i] = Object.assign(
+                            this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i],
+                            this.misc[i + 1]
+                        )
+                    }
+                }
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))
                 this.noSave = false
             } else if (!this.noSave) {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             }
+            this.tableMisc = false
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {
