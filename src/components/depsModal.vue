@@ -16,6 +16,7 @@
                                 Edit basic dependency name
                             </div>
                             <button
+                                v-if="startingDep != 'ROOT'"
                                 class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-600 p-1 focus:outline-none"
                                 @click="toggleModal()"
                             >
@@ -52,6 +53,7 @@
                         </div>
                         <div class="float-right pb-4">
                             <button
+                                v-if="startingDep != 'ROOT'"
                                 class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent text-red-400 py-2 px-4 rounded mr-2"
                                 @click="toggleModal()"
                             >
@@ -76,24 +78,31 @@ export default {
     name: 'depsModal',
     methods: {
         toggleModal() {
-            this.showDialog = false
-            this.$emit('closeDepsModal')
+            if (this.startingDep != 'ROOT' || (this.startingDep == 'ROOT' && this.selectedDep != 'ROOT')) {
+                this.showDialog = false
+                this.$emit('closeDepsModal')
+            }
         },
         edit() {
             this.dep.dep = this.selectedDep
         },
         save() {
-            this.$emit('edited', this.dep)
-            this.toggleModal()
+            if (this.selectedDep != 'ROOT') {
+                this.$emit('edited', this.dep)
+                this.toggleModal()
+            } else {
+                this.$emit('snack', 'Choose a dependency')
+            }
         },
     },
     props: {
         dep: Object,
     },
     created() {
+        this.startingDep = this.dep.dep
         this.originalDep = this.dep.dep.slice(0)
         this.selectedDep = this.dep.dep
-        console.log(this.dep)
+        //console.log(this.dep)
         setTimeout(() => {
             this.showDialog = true
         }, 1)
@@ -101,6 +110,7 @@ export default {
     data() {
         return {
             showDialog: false,
+            startingDep: '',
             selectedDep: '',
             depsList: [
                 'acl',

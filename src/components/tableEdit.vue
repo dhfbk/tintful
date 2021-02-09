@@ -276,7 +276,7 @@ export default {
             var d = this.$store.state.editableData
             var feat = d.sentences[this.sentenceIndex].tokens[index]
 
-            console.log(token)
+            //console.log(token)
             let infoToEdit = {}
             infoToEdit.senIndex = this.sentenceIndex
             infoToEdit.tokIndex = index

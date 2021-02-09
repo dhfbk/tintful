@@ -355,12 +355,6 @@ export default {
                     break
             }
         },
-        number(i) {
-            console.log(i)
-        },
-        tense(i) {
-            console.log(i)
-        },
         checkSelects() {
             switch (this.pos) {
                 case 'A':
@@ -460,7 +454,7 @@ export default {
         setTimeout(() => {
             this.showDialog = true
         }, 1)
-        console.log(this.featsToEdit.feats)
+        //console.log(this.featsToEdit.feats)
         this.pos = this.featsToEdit.pos
         let features = this.featsToEdit.feats
         this.gen = features.Gender == undefined ? '' : features.Gender[0]
@@ -492,7 +486,7 @@ export default {
             this.showNumType = false
             this.showDef = false
             if (this.notFirstIter) {
-                console.log('entra')
+                //console.log('entra')
                 this.gen = ''
                 this.num = ''
                 this.ten = ''

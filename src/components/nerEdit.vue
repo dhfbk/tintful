@@ -91,7 +91,7 @@ export default {
         this.totalPages = Math.ceil(this.localData.sentences.length / this.senPerPage)
         for (let i = 0; i < this.senPerPage; i++) {
             this.sentencesToShow.push(this.localData.sentences[i].text)
-            console.log(i)
+            //console.log(i)
         }
         for (var i = 0; i < this.$store.state.editableData.sentences.length; i++) {
             this.ner.i = {}
@@ -129,7 +129,7 @@ export default {
             this.sentencesToShow = []
 
             for (let i = (this.page - 1) * this.senPerPage; i < (this.page - 1) * this.senPerPage + 10; i++) {
-                console.log(i)
+                //console.log(i)
 
                 if (this.localData.sentences[i] != undefined) {
                     this.sentencesToShow.push(this.localData.sentences[i].text)

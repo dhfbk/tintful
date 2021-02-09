@@ -68,7 +68,7 @@ export default {
                 document.querySelector('html').classList.add('dark')
                 this.sheetMode = 'dark'
             }
-            console.log(this.$store.state.theme)
+            //console.log(this.$store.state.theme)
         },
         snack(msg) {
             this.msg = msg

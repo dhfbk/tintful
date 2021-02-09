@@ -146,7 +146,7 @@ export default {
                     })
                     .catch(err => {
                         this.$emit('snack', 'Server error. Try again')
-                        console.log(err)
+                        console.error(err)
                         this.loadBtn = false
                     })
             } else {

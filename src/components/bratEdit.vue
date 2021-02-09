@@ -341,7 +341,7 @@ export default {
             infoToEdit.pos = feat.pos
             infoToEdit.word = feat.word
             this.$emit('showFeatsModal', infoToEdit, 'brat')
-            console.log(infoToEdit)
+            //console.log(infoToEdit)
         },
         dblRoot(e) {
             var i = e.target
@@ -374,7 +374,7 @@ export default {
             this.loadBrat()
             this.isEditMode = false
             this.$emit('edited')
-            this.$emit('noRoot', "false")
+            this.$emit('noRoot', 'false')
         },
         handleRight(e) {
             if (!this.isEditMode) {
@@ -383,7 +383,7 @@ export default {
                 i.parentNode.children[0].setAttribute('fill', '#688e26')
                 var infos = i.getAttribute('data-span-id').split('_')
                 this.sonId = parseInt(infos[2]) + 1
-                console.log('sono nel primo')
+                //('sono nel primo')
                 this.isEditMode = true
             } else {
                 //this.isEditMode = false
@@ -391,7 +391,7 @@ export default {
                 document.getElementById('deps').className = ''
                 this.resetVariables()
                 this.loadBrat()
-                console.log('sono nel secondo')
+                //console.log('sono nel secondo')
             }
         },
         handleClick(e) {
@@ -403,43 +403,77 @@ export default {
             var infos = i.getAttribute('data-span-id').split('_')
             this.newFatherId = parseInt(infos[2]) + 1
             var d = this.$store.state.editableData
-
             var dep = d.sentences[this.sentenceIndex]['basic-dependencies']
-            for (let x = 0; x < dep.length; x++) {
-                if (dep[x].dependent == this.sonId) {
-                    if (dep[x].dep != 'ROOT') {
-                        dep[x].governor = this.newFatherId
-                        dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
-                        console.log(dep[x].dep)
-                    } else {
-                        dep[x].governor = this.newFatherId
-                        dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
-                        dep[x].dep = 'choosing...'
-                        this.$emit('showDepsModal', {
-                            gov: this.newFatherId,
-                            dep: dep[x].dependent,
-                        })
 
-                        //    console.log(dep[x].dep)
+            //checking loop
+            let gov = []
+            let cont = 0
+            let found = false
+            let stop = false
+            let lastCycle = false
+            while (cont != -1 && !stop) {
+                if (!found) {
+                    if (dep[cont].dependent == this.newFatherId) {
+                        gov.push(dep[cont].governor)
+                        found = true
+                        cont = 0
+                    } else {
+                        cont++
                     }
-                    /*
-                    console.log(
-                        'new father of ' +
-                            dep[i].dependent +
-                            ' (' +
-                            dep[i].dependentGloss +
-                            ')' +
-                            ' is ' +
-                            dep[i].governor +
-                            ' (' +
-                            dep[i].governorGloss +
-                            ')'
-                    )
-                    */
-                    break
+                } else {
+                    gov.forEach(el => {
+                        cont = 0
+                        if (cont != -1) {
+                            while (cont < dep.length && cont != -1) {
+                                if (el == dep[cont].dependent) {
+                                    if (dep[cont].governor == this.sonId) {
+                                        cont = -1
+                                        break
+                                    } else {
+                                        if (dep[cont].governor != 0) {
+                                            gov.push(dep[cont].governor)
+                                            break
+                                        } else {
+                                            stop = true
+                                            cont = dep.length
+                                        }
+                                    }
+                                } else {
+                                    cont++
+                                }
+                            }
+                        }
+                    })
+                    if (gov[gov.length - 1] == this.sonId) {
+                        lastCycle = true
+                    }
+                    lastCycle ? (stop = true) : null
                 }
             }
-            this.$store.state.editableData = d
+            if (cont != -1) {
+                for (let x = 0; x < dep.length; x++) {
+                    if (dep[x].dependent == this.sonId) {
+                        if (dep[x].dep != 'ROOT') {
+                            dep[x].governor = this.newFatherId
+                            dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
+                            //console.log(dep[x].dep)
+                        } else {
+                            dep[x].governor = this.newFatherId
+                            dep[x].governorGloss = d.sentences[this.sentenceIndex].tokens.find(this.isGovernor).word
+                            dep[x].dep = 'choosing...'
+                            this.$emit('showDepsModal', {
+                                gov: this.newFatherId,
+                                dep: dep[x].dependent,
+                            })
+                        }
+                        break
+                    }
+                }
+                this.$store.state.editableData = d
+                this.$emit('edited')
+            } else {
+                this.$emit('snack', 'Loop detected. Choose another father')
+            }
 
             document.getElementById('deps').innerHTML = ''
             document.getElementById('deps').className = ''
@@ -449,30 +483,23 @@ export default {
             // if (dep[x].dep == 'ROOT') {
             //     this.$emit('snack', "Can't change head of a ROOT element")
             // } else {
-            this.$emit('edited')
             // }
             d = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
-            let cont = 0
+            let hasRoot = 0
             for (let x = 0; x < d.length; x++) {
                 if (d[x].dep == 'ROOT') {
-                    cont++
+                    hasRoot++
                 }
             }
-            cont == 0 ? this.$emit('noRoot', "true") : ''
+            hasRoot == 0 ? this.$emit('noRoot', 'true') : ''
         },
         addEvents() {
-            console.log('siamo dentro la funzione che inserisce gli eventi')
+            //console.log('siamo dentro la funzione che inserisce gli eventi')
             var x = document.getElementById('deps')
             var pos = x.getElementsByClassName('span_default')
             if (this.isEditMode) {
                 pos.forEach(el => {
                     el.onclick = this.handleClick
-                })
-            } else {
-                pos.forEach(el => {
-                    el.onclick = function(e) {
-                        console.log(e.target)
-                    }
                 })
             }
         },
@@ -529,9 +556,9 @@ export default {
                             let i = e.target
                             this.$emit('showDepsModal', i)
 
-                            console.log(i.getAttribute('data-arc-role'))
-                            console.log(i.getAttribute('data-arc-origin').split('_'))
-                            console.log(i.getAttribute('data-arc-target').split('_'))
+                            //console.log(i.getAttribute('data-arc-role'))
+                            //console.log(i.getAttribute('data-arc-origin').split('_'))
+                            //console.log(i.getAttribute('data-arc-target').split('_'))
                         }
                     })
                 })
@@ -903,7 +930,7 @@ export default {
                 // KBP
                 //
                 if (typeof sentence.kbp != 'undefined') {
-                    console.log('CI SONO')
+                    //console.log('CI SONO')
                     // Register the entities + relations we'll need
                     this.addRelationType('subject')
                     this.addRelationType('object')

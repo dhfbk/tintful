@@ -86,7 +86,7 @@ export default {
       while (cont < this.obj.connectionCategories.length) {
         if (this.obj.connectionCategories[cont].text == el.dep) {
           connCatId = this.obj.connectionCategories[cont].id;
-          console.log(connCatId);
+          //console.log(connCatId);
           cont = this.obj.connectionCategories.length;
         }
         cont++;
@@ -100,7 +100,7 @@ export default {
       this.obj.connections.push(tmp);
       connCatId++;
     });
-    console.log(this.obj);
+    //console.log(this.obj);
   },
   mounted() {
     const annotator = new Annotator(
@@ -108,7 +108,7 @@ export default {
       document.getElementsByClassName("depsContainer")[0],
       this.annConfig
     );
-    console.log(annotator);
+    //console.log(annotator);
   },
   methods: {
     /*

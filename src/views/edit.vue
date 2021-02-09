@@ -3,6 +3,7 @@
         <deps-modal
             @closeDepsModal="showDepsModal = false"
             @edited="editedDep"
+            @snack="snack"
             :dep="depToEdit"
             v-if="showDepsModal"
             :checkRoot="noSave"
@@ -165,7 +166,7 @@
             @showFeatsModal="featsModal"
             :refresh="refreshBrat"
             @edited="isEdited = true"
-            @snack="snackRoot"
+            @snack="snack"
             @noRoot="checkRoot"
         />
         <table-edit
@@ -259,7 +260,7 @@ export default {
         checkRoot(exists) {
             exists == 'true' ? (this.noSave = true) : (this.noSave = false)
         },
-        snackRoot(msg) {
+        snack(msg) {
             this.$emit('snack', msg)
         },
         confirmModal(mode) {
@@ -337,7 +338,7 @@ export default {
                 this.isEdited = true
             } else {
                 var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
-                console.log(feats)
+                //console.log(feats)
                 x.features = feats.newFeats
                 x.pos = feats.newPos
                 this.refreshBrat = true
@@ -360,7 +361,7 @@ export default {
             }
         },
         featsModal(info, mode) {
-            console.log(info)
+            //console.log(info)
             this.featsToEdit = info
             this.featsMode = mode
             this.showFeatsModal = true

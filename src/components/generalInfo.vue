@@ -276,7 +276,7 @@ export default {
             sen = 0
             sd = 0
         }
-        console.log(this.infoData)
+        //console.log(this.infoData)
     },
     methods: {
         sheet() {
