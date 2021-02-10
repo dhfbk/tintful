@@ -411,7 +411,6 @@ export default {
             let cont = 0
             let found = false
             let stop = false
-            let lastCycle = false
             for (let i = 0; i < dep.length; i++) {
                 if (dep[i].dependent == this.sonId && dep[i].dep == 'ROOT') {
                     cont = -1
@@ -429,33 +428,34 @@ export default {
                         cont++
                     }
                 } else {
-                    gov.forEach(el => {
-                        cont = 0
-                        if (cont != -1) {
-                            while (cont < dep.length && cont != -1) {
-                                if (el == dep[cont].dependent) {
-                                    if (dep[cont].governor == this.sonId) {
-                                        cont = -1
-                                        break
-                                    } else {
-                                        if (dep[cont].governor != 0) {
-                                            gov.push(dep[cont].governor)
+                    if (this.sonId == gov[gov.length - 1]) {
+                        stop = true
+                        cont = -1
+                    } else {
+                        gov.forEach(el => {
+                            cont = 0
+                            if (cont != -1) {
+                                while (cont < dep.length && cont != -1) {
+                                    if (el == dep[cont].dependent) {
+                                        if (dep[cont].governor == this.sonId) {
+                                            cont = -1
                                             break
                                         } else {
-                                            stop = true
-                                            cont = dep.length
+                                            if (dep[cont].governor != 0) {
+                                                gov.push(dep[cont].governor)
+                                                break
+                                            } else {
+                                                stop = true
+                                                cont = dep.length
+                                            }
                                         }
+                                    } else {
+                                        cont++
                                     }
-                                } else {
-                                    cont++
                                 }
                             }
-                        }
-                    })
-                    if (gov[gov.length - 1] == this.sonId) {
-                        lastCycle = true
+                        })
                     }
-                    lastCycle ? (stop = true) : null
                 }
             }
             if (cont != -1) {

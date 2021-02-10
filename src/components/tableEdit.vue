@@ -252,29 +252,6 @@ export default {
                     this.misc[phrase.tokens[i].index].complete +=
                         'spaceAfter:' + this.misc[phrase.tokens[i].index].spaceAfter + '|'
                 }
-                if (phrase.tokens[i].translit != undefined) {
-                    this.misc[phrase.tokens[i].index].translit = phrase.tokens[i].translit
-                    this.misc[phrase.tokens[i].index].complete +=
-                        'translit:' + this.misc[phrase.tokens[i].index].translit + '|'
-                }
-                if (phrase.tokens[i].lTranslit != undefined) {
-                    this.misc[phrase.tokens[i].index].lTranslit = phrase.tokens[i].lTranslit
-                    this.misc[phrase.tokens[i].index].complete +=
-                        'lTranslit:' + this.misc[phrase.tokens[i].index].lTranslit + '|'
-                }
-                if (phrase.tokens[i].gloss != undefined) {
-                    this.misc[phrase.tokens[i].index].gloss = phrase.tokens[i].gloss
-                    this.misc[phrase.tokens[i].index].complete +=
-                        'gloss:' + this.misc[phrase.tokens[i].index].gloss + '|'
-                }
-                if (phrase.tokens[i].mSeg != undefined) {
-                    this.misc[phrase.tokens[i].index].mSeg = phrase.tokens[i].mSeg
-                    this.misc[phrase.tokens[i].index].complete += 'mSeg:' + this.misc[phrase.tokens[i].index].mSeg + '|'
-                }
-                if (phrase.tokens[i].mGloss != undefined) {
-                    this.misc[phrase.tokens[i].index].mSeg = phrase.tokens[i].mGloss
-                    this.misc[phrase.tokens[i].index].complete += 'mGloss:' + this.misc[phrase.tokens[i].index].mGloss
-                }
             }
         },
         editFeats(token, mode) {
@@ -326,7 +303,6 @@ export default {
                 let cont = 0
                 let found = false
                 let stop = false
-                let lastCycle = false
                 for (let i = 0; i < dep.length; i++) {
                     if (dep[i].dependent == index && dep[i].dep == 'ROOT') {
                         cont = -1
@@ -344,33 +320,34 @@ export default {
                             cont++
                         }
                     } else {
-                        gov.forEach(el => {
-                            cont = 0
-                            if (cont != -1) {
-                                while (cont < dep.length && cont != -1) {
-                                    if (el == dep[cont].dependent) {
-                                        if (dep[cont].governor == index) {
-                                            cont = -1
-                                            break
-                                        } else {
-                                            if (dep[cont].governor != 0) {
-                                                gov.push(dep[cont].governor)
+                        if (index == gov[gov.length - 1]) {
+                            stop = true
+                            cont = -1
+                        } else {
+                            gov.forEach(el => {
+                                cont = 0
+                                if (cont != -1) {
+                                    while (cont < dep.length && cont != -1) {
+                                        if (el == dep[cont].dependent) {
+                                            if (dep[cont].governor == index) {
+                                                cont = -1
                                                 break
                                             } else {
-                                                stop = true
-                                                cont = dep.length
+                                                if (dep[cont].governor != 0) {
+                                                    gov.push(dep[cont].governor)
+                                                    break
+                                                } else {
+                                                    stop = true
+                                                    cont = dep.length
+                                                }
                                             }
+                                        } else {
+                                            cont++
                                         }
-                                    } else {
-                                        cont++
                                     }
                                 }
-                            }
-                        })
-                        if (gov[gov.length - 1] == this.sonId) {
-                            lastCycle = true
+                            })
                         }
-                        lastCycle ? (stop = true) : null
                     }
                 }
                 if (cont != -1) {
@@ -393,31 +370,9 @@ export default {
                 for (let i = 0; i < value.length; i++) {
                     if (value[i].split(':')[0] != undefined && value[i].split(':')[0] != '') {
                         if (value[i].split(':')[1] != undefined && value[i].split(':')[1] != '') {
-                            if (
-                                value[i].split(':')[0] == 'spaceAfter' ||
-                                value[i].split(':')[0] == 'translit' ||
-                                value[i].split(':')[0] == 'lTranslit' ||
-                                value[i].split(':')[0] == 'gloss' ||
-                                value[i].split(':')[0] == 'mSeg' ||
-                                value[i].split(':')[0] == 'mGloss'
-                            ) {
-                                if (value[i].split(':')[0] == 'spaceAfter' && value[i].split(':')[1] == 'no') {
-                                    this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
-                                    this.$emit('edited')
-                                    this.$emit('noSave', ['false'])
-                                } else if (value[i].split(':')[0] != 'spaceAfter') {
-                                    this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
-                                    this.$emit('edited')
-                                    this.$emit('noSave', ['false'])
-                                } else {
-                                    this.$emit('snack', 'spaceAfter can only be "no"')
-                                    this.$emit('noSave', ['true'])
-                                }
-                            } else {
-                                this.$emit('snack', 'One or more fields are incorrect')
-                                this.$emit('noSave', ['true'])
-                            }
+                            this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
                         }
+                        this.$emit('edited')
                     }
                 }
                 this.$emit('misc', this.misc)

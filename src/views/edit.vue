@@ -6,7 +6,7 @@
             @snack="snack"
             :dep="depToEdit"
             v-if="showDepsModal"
-            :checkRoot="noSave"
+            :checkRoot="noRoot"
         />
         <features-modal
             @closeFeatsModal="showFeatsModal = false"
@@ -110,7 +110,7 @@
             >
                 <button
                     :class="
-                        isEdited && !noSave && !noRoot
+                        isEdited && !noRoot
                             ? 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                             : 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
                     "
@@ -179,7 +179,6 @@
             @editFeats="featsModal"
             @snack="snack"
             @misc="setMisc"
-            @noSave="stopSave"
             @noRoot="checkRoot"
         />
         <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
@@ -222,7 +221,6 @@ export default {
             confirmation: false,
             action: '',
             confirmationMode: '',
-            noSave: false,
             misc: {},
             tableMisc: false,
             noRoot: false,
@@ -273,16 +271,12 @@ export default {
         checkRoot(value) {
             value == 'true' ? (this.noRoot = true) : (this.noRoot = false)
         },
-        stopSave(exists) {
-            exists[0] == 'true' ? (this.noSave = true) : (this.noSave = false)
-            exists[1] == 'true' ? (this.noRoot = true) : (this.noRoot = false)
-        },
         snack(msg) {
             this.$emit('snack', msg)
         },
         confirmModal(mode) {
             this.action = mode
-            if (this.isEdited && !this.noSave && !this.noRoot) {
+            if (this.isEdited && !this.noRoot) {
                 this.confirmationMode = mode
                 switch (mode) {
                     case 'save':
@@ -316,11 +310,10 @@ export default {
                 }
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))
-            } else if (!this.noSave) {
+            } else if (!this.noRoot) {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             }
             this.tableMisc = false
-            this.noSave = false
             this.noRoot = false
             switch (this.action) {
                 case 'graph':
