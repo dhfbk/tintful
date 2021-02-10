@@ -238,27 +238,42 @@ export default {
     },
     methods: {
         setInitialData() {
-            var phraseDependencies = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
-            for (let i = 0; i < phraseDependencies.length; i++) {
-                this.headsRef[phraseDependencies[i].dependent] = phraseDependencies[i].governor
-                this.deprelsRef[phraseDependencies[i].dependent] = phraseDependencies[i].dep
+            var phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+            for (let i = 0; i < phrase['basic-dependencies'].length; i++) {
+                this.headsRef[phrase['basic-dependencies'][i].dependent] = phrase['basic-dependencies'][i].governor
+                this.deprelsRef[phrase['basic-dependencies'][i].dependent] = phrase['basic-dependencies'][i].dep
             }
             this.deprelsEditable = JSON.parse(JSON.stringify(this.deprelsRef))
             this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
-            for (let i = 0; i < this.$store.state.editableData.sentences[this.sentenceIndex].tokens.length; i++) {
-                if (this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].spaceAfter != undefined) {
-                    this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index] = {}
-                    this.misc[
-                        this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index
-                    ].spaceAfter = this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].spaceAfter
-                    this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index].complete =
-                        'spaceAfter:' +
-                        this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index]
-                            .spaceAfter
-                } else {
-                    this.misc[this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i].index] = {
-                        complete: '',
-                    }
+            for (let i = 0; i < phrase.tokens.length; i++) {
+                this.misc[phrase.tokens[i].index] = { complete: '' }
+                if (phrase.tokens[i].spaceAfter != undefined) {
+                    this.misc[phrase.tokens[i].index].spaceAfter = phrase.tokens[i].spaceAfter
+                    this.misc[phrase.tokens[i].index].complete +=
+                        'spaceAfter:' + this.misc[phrase.tokens[i].index].spaceAfter + '|'
+                }
+                if (phrase.tokens[i].translit != undefined) {
+                    this.misc[phrase.tokens[i].index].translit = phrase.tokens[i].translit
+                    this.misc[phrase.tokens[i].index].complete +=
+                        'translit:' + this.misc[phrase.tokens[i].index].translit + '|'
+                }
+                if (phrase.tokens[i].lTranslit != undefined) {
+                    this.misc[phrase.tokens[i].index].lTranslit = phrase.tokens[i].lTranslit
+                    this.misc[phrase.tokens[i].index].complete +=
+                        'lTranslit:' + this.misc[phrase.tokens[i].index].lTranslit + '|'
+                }
+                if (phrase.tokens[i].gloss != undefined) {
+                    this.misc[phrase.tokens[i].index].gloss = phrase.tokens[i].gloss
+                    this.misc[phrase.tokens[i].index].complete +=
+                        'gloss:' + this.misc[phrase.tokens[i].index].gloss + '|'
+                }
+                if (phrase.tokens[i].mSeg != undefined) {
+                    this.misc[phrase.tokens[i].index].mSeg = phrase.tokens[i].mSeg
+                    this.misc[phrase.tokens[i].index].complete += 'mSeg:' + this.misc[phrase.tokens[i].index].mSeg + '|'
+                }
+                if (phrase.tokens[i].mGloss != undefined) {
+                    this.misc[phrase.tokens[i].index].mSeg = phrase.tokens[i].mGloss
+                    this.misc[phrase.tokens[i].index].complete += 'mGloss:' + this.misc[phrase.tokens[i].index].mGloss
                 }
             }
         },
@@ -378,24 +393,42 @@ export default {
                 for (let i = 0; i < value.length; i++) {
                     if (value[i].split(':')[0] != undefined && value[i].split(':')[0] != '') {
                         if (value[i].split(':')[1] != undefined && value[i].split(':')[1] != '') {
-                            this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
-                            this.$emit('edited')
+                            if (
+                                value[i].split(':')[0] == 'spaceAfter' ||
+                                value[i].split(':')[0] == 'translit' ||
+                                value[i].split(':')[0] == 'lTranslit' ||
+                                value[i].split(':')[0] == 'gloss' ||
+                                value[i].split(':')[0] == 'mSeg' ||
+                                value[i].split(':')[0] == 'mGloss'
+                            ) {
+                                if (value[i].split(':')[0] == 'spaceAfter' && value[i].split(':')[1] == 'no') {
+                                    this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
+                                    this.$emit('edited')
+                                    this.$emit('noSave', ['false'])
+                                } else if (value[i].split(':')[0] != 'spaceAfter') {
+                                    this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
+                                    this.$emit('edited')
+                                    this.$emit('noSave', ['false'])
+                                } else {
+                                    this.$emit('snack', 'spaceAfter can only be "no"')
+                                    this.$emit('noSave', ['true'])
+                                }
+                            } else {
+                                this.$emit('snack', 'One or more fields are incorrect')
+                                this.$emit('noSave', ['true'])
+                            }
                         }
                     }
                 }
                 this.$emit('misc', this.misc)
-                /*
-                    if (value.split(':')[0] == 'spaceAfter') {
-                        if (value.split(':')[1] != undefined && value.split(':')[1] != '') {
-                            this.spaceAfter[index] = value.split(':')[1].split(/[^A-Za-z]/g)[0]
-                            this.$store.state.editableData.sentences[this.sentenceIndex].tokens[
-                                index - 1
-                            ].spaceAfter = value.split(':')[1].split(/[^A-Za-z]/g)[0]
-                            this.$emit('edited')
-                        }
-                    }
-                    */
             }
+            let hasRoot = 0
+            for (let x = 0; x < dep.length; x++) {
+                if (dep[x].dep == 'ROOT') {
+                    hasRoot++
+                }
+            }
+            hasRoot == 0 ? this.$emit('noRoot', 'true') : this.$emit('noRoot', 'false')
         },
     },
     watch: {

@@ -110,7 +110,7 @@
             >
                 <button
                     :class="
-                        isEdited && !noSave
+                        isEdited && !noSave && !noRoot
                             ? 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                             : 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
                     "
@@ -155,8 +155,11 @@
                 </button>
             </div>
         </span> -->
-        <p class="my-1 text-red-500 dark:text-red-400" v-if="noSave">
-            No ROOT element, please select the new ROOT by double clicking/tapping on the word
+        <p class="my-1 text-red-500 dark:text-red-400" v-if="noRoot && (action == 'graph' || action == '')">
+            No ROOT element, please choose the new ROOT by double clicking/tapping on the word
+        </p>
+        <p class="my-1 text-red-500 dark:text-red-400" v-if="noRoot && action == 'table'">
+            No ROOT element, please choose one
         </p>
         <brat-edit
             v-if="selectedTab == 0"
@@ -176,6 +179,8 @@
             @editFeats="featsModal"
             @snack="snack"
             @misc="setMisc"
+            @noSave="stopSave"
+            @noRoot="checkRoot"
         />
         <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
     </div>
@@ -220,6 +225,7 @@ export default {
             noSave: false,
             misc: {},
             tableMisc: false,
+            noRoot: false,
         }
     },
     created() {
@@ -264,15 +270,19 @@ export default {
             this.misc = obj
             this.tableMisc = true
         },
-        checkRoot(exists) {
-            exists == 'true' ? (this.noSave = true) : (this.noSave = false)
+        checkRoot(value) {
+            value == 'true' ? (this.noRoot = true) : (this.noRoot = false)
+        },
+        stopSave(exists) {
+            exists[0] == 'true' ? (this.noSave = true) : (this.noSave = false)
+            exists[1] == 'true' ? (this.noRoot = true) : (this.noRoot = false)
         },
         snack(msg) {
             this.$emit('snack', msg)
         },
         confirmModal(mode) {
             this.action = mode
-            if (this.isEdited && !this.noSave) {
+            if (this.isEdited && !this.noSave && !this.noRoot) {
                 this.confirmationMode = mode
                 switch (mode) {
                     case 'save':
@@ -306,11 +316,12 @@ export default {
                 }
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))
-                this.noSave = false
             } else if (!this.noSave) {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             }
             this.tableMisc = false
+            this.noSave = false
+            this.noRoot = false
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {
