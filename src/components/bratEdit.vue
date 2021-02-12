@@ -140,6 +140,9 @@ export default {
             let rect = []
             let g = []
             let text
+            let n = 0
+            let p = 0
+            let f = 0
             for (let i = 0; i < phrase.tokens.length; i++) {
                 if (phrase.tokens[i].isMultiwordFirstToken) {
                     x = []
@@ -149,6 +152,7 @@ export default {
                     g = []
                     for (let j = i; j < parseInt(phrase.tokens[i].multiwordSpan.split('-')[1]); j++) {
                         //if there is a multitoken, calculate the coordinates for the tag
+                        //the number removed from the x is the same as the width in the visualizer for the span
                         // prettier-ignore
                         x.push(
                             parseFloat(
@@ -156,7 +160,7 @@ export default {
                                     .getElementsByClassName('text')[0]
                                     .getElementsByTagName('text')[0]
                                     .getElementsByTagName('tspan')[j].attributes.x.value
-                            )
+                            ) - 8
                         )
                         // prettier-ignore
                         y.push(
@@ -181,57 +185,29 @@ export default {
                         svg
                             .getElementsByClassName('text')[0]
                             .getElementsByTagName('text')[0]
-                            .getElementsByTagName('tspan')[i + x.length - 1] == undefined
+                            .getElementsByTagName('tspan')[i + x.length] == undefined
                     ) {
-                        if (
-                            svg
-                                .getElementsByClassName('text')[0]
-                                .getElementsByTagName('text')[0]
-                                .getElementsByTagName('tspan')[i + 1] == undefined
-                        ) {
-                            // prettier-ignore
-                            y[0] == y[y.length-1]
-                            ? (length.push(x[x.length-1] + tmp - x[0] - 3)) && (length.push(0))
-                            : (length.push(svg.clientWidth - x[0])) &&
-                            (length.push(parseFloat(
-                                    svg
-                                        .getElementsByClassName('text')[0]
-                                        .getElementsByTagName('text')[0]
-                                        .getElementsByTagName('tspan')[i].attributes.x.value
-                                ) + parseFloat(svg
-                                        .getElementsByClassName('text')[0]
-                                        .getElementsByTagName('text')[0]
-                                        .getElementsByTagName('tspan')[i].getComputedTextLength())))
-                        } else {
-                            // prettier-ignore
-                            y[0] == y[y.length-1]
-                            ? (length.push(x[x.length-1] + tmp - x[0])) && (length.push(0))
-                            : (length.push(svg.clientWidth - x[0])) &&
-                            (length.push(parseFloat(
-                                    svg
-                                        .getElementsByClassName('text')[0]
-                                        .getElementsByTagName('text')[0]
-                                        .getElementsByTagName('tspan')[i + 1].attributes.x.value
-                                ) + parseFloat(svg
-                                        .getElementsByClassName('text')[0]
-                                        .getElementsByTagName('text')[0]
-                                        .getElementsByTagName('tspan')[i + 1].getComputedTextLength())))
-                        }
+                        n = 16
+                        p = x.length - 1
+                        f = 13
                     } else {
-                        // prettier-ignore
-                        y[0] == y[y.length-1]
-                        ? (length.push(x[x.length-1] + tmp - x[0] - 2)) && (length.push(0))
-                        : (length.push(svg.clientWidth - x[0])) &&
-                          (length.push(parseFloat(
-                                  svg
-                                      .getElementsByClassName('text')[0]
-                                      .getElementsByTagName('text')[0]
-                                      .getElementsByTagName('tspan')[i + x.length - 1].attributes.x.value)
-                              + parseFloat(svg
-                                        .getElementsByClassName('text')[0]
-                                        .getElementsByTagName('text')[0]
-                                        .getElementsByTagName('tspan')[i + x.length - 1].getComputedTextLength()) + 3))
+                        n = 13
+                        p = x.length - 1
+                        f = 10
                     }
+                    // prettier-ignore
+                    y[0] == y[y.length-1]
+                    ? (length.push(x[x.length-1] + tmp - x[0] + n)) && (length.push(0))
+                    : (length.push(svg.clientWidth - x[0])) &&
+                        (length.push(parseFloat(
+                                svg
+                                    .getElementsByClassName('text')[0]
+                                    .getElementsByTagName('text')[0]
+                                    .getElementsByTagName('tspan')[i + p].attributes.x.value)
+                            + parseFloat(svg
+                                    .getElementsByClassName('text')[0]
+                                    .getElementsByTagName('text')[0]
+                                    .getElementsByTagName('tspan')[i + p].getComputedTextLength()) + f))
                     g.push(this.createSvgElement('g', { class: 'multiWord' }))
                     rect.push(
                         this.createSvgElement('rect', { x: x[0], y: y[0], width: length[0], height: 5, fill: 'red' })

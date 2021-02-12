@@ -1330,10 +1330,11 @@ var Visualizer = (function ($, window, undefined) {
               ],
             ]);
           }
-          var startPos = text.getStartPositionOfChar(firstChar).x;
+          //the added number (in this case 8) is to make the span around the text larger
+          var startPos = text.getStartPositionOfChar(firstChar).x - 8;
           var lastChar = fragment.to - fragment.chunk.from - 1;
           var endPos =
-            lastChar < 0 ? startPos : text.getEndPositionOfChar(lastChar).x;
+            lastChar < 0 ? startPos : text.getEndPositionOfChar(lastChar).x + 8;
           fragment.curly = {
             from: startPos,
             to: endPos,
