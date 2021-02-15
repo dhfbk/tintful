@@ -170,7 +170,7 @@ export default {
             '-' +
             phrase.tokens[phrase.tokens[this.arrPos].multiwordSpan.split('-')[1] - 1].lemma
         this.newEnd = this.end
-        for (let i = 0; i < phrase.tokens.length; i++) {
+        for (let i = this.arrPos + 1; i < phrase.tokens.length; i++) {
             this.tokens[phrase.tokens[i].index] = phrase.tokens[i].lemma
         }
         setTimeout(() => {
@@ -188,7 +188,17 @@ export default {
                 phrase.tokens[this.arrPos].originalText = this.newForm
             }
             if (this.newEnd != this.end) {
-                //migliorare questo, controllare proprietà nel nuovo end
+                //capire come risolvere per questa parte, per il discorso dell'ismultiword e delle altre proprietà
+                let startIndex = 0
+                for (let i = 0; i < phrase.tokens.length; i++) {
+                    if (phrase.tokens[i].index == this.start) {
+                        startIndex = i
+                    }
+                }
+                for (let i = startIndex; i < this.newEnd; i++) {
+                    phrase.tokens[i].isMultiwordToken = true
+                }
+                //
                 phrase.tokens[this.arrPos].multiwordSpan = this.start + '-' + this.newEnd
             }
             this.$emit('edited')
