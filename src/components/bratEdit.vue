@@ -143,6 +143,7 @@ export default {
             let n = 0
             let p = 0
             let f = 0
+            let id = 0
             for (let i = 0; i < phrase.tokens.length; i++) {
                 if (phrase.tokens[i].isMultiwordFirstToken) {
                     x = []
@@ -150,6 +151,7 @@ export default {
                     length = []
                     rect = []
                     g = []
+                    id = parseInt(phrase.tokens[i].multiwordSpan.split('-')[0])
                     for (let j = i; j < parseInt(phrase.tokens[i].multiwordSpan.split('-')[1]); j++) {
                         //if there is a multitoken, calculate the coordinates for the tag
                         //the number removed from the x is the same as the width in the visualizer for the span
@@ -236,9 +238,30 @@ export default {
                     }
                     //append everything
                     g[0].appendChild(rect[0])
-                    g[0].appendChild(this.createSvgElement('svg', { width: length[0], height: 50, x: x[0], y: y[0] }))
+                    g[0].appendChild(
+                        this.createSvgElement('svg', {
+                            width: length[0],
+                            height: 25,
+                            x: x[0],
+                            y: y[0],
+                            class: 'textSvg',
+                            'first-id': id,
+                        })
+                    )
                     g[0].lastChild.appendChild(text)
                     svg.appendChild(g[0])
+                    this.addMWEvents(svg.parentElement, id, i)
+                }
+            }
+        },
+        addMWEvents(svg, id, arrPos) {
+            var txt = svg.getElementsByClassName('textSvg')
+            var vm = this
+            for (let i = 0; i < txt.length; i++) {
+                if (txt[i].getAttribute('first-id') == id) {
+                    txt[i].onclick = function() {
+                        vm.$emit('mwModal', arrPos)
+                    }
                 }
             }
         },

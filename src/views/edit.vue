@@ -23,6 +23,13 @@
             @confirm="confirmAction"
             :mode="confirmationMode"
         />
+        <mwModal
+            v-if="showMwModal"
+            :arrPos="arrPos"
+            @close="showMwModal = false"
+            :sentenceIndex="sentenceIndex"
+            @edited="editedMW"
+        />
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
                 <div
@@ -171,6 +178,7 @@
             @edited="isEdited = true"
             @snack="snack"
             @noRoot="checkRoot"
+            @mwModal="multiwordModal"
         />
         <table-edit
             v-else-if="selectedTab == 1"
@@ -189,6 +197,7 @@
 import bratEdit from '../components/bratEdit.vue'
 import tableEdit from '../components/tableEdit.vue'
 import depsModal from '../components/depsModal.vue'
+import mwModal from '../components/mwModal.vue'
 import FeaturesModal from '../components/featuresModal.vue'
 import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
@@ -207,6 +216,7 @@ export default {
             nerPhrases: {},
             showDepsModal: false,
             showFeatsModal: false,
+            showMwModal: false,
             sentenceIndex: 0,
             sentencesNum: 0,
             selectedTab: 0,
@@ -224,6 +234,7 @@ export default {
             misc: {},
             tableMisc: false,
             noRoot: false,
+            arrPos: 0,
         }
     },
     created() {
@@ -239,7 +250,7 @@ export default {
             this.endNerPages = this.$store.state.editableData.sentences.length % 10
         }
     },
-    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal },
+    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal, mwModal },
     mounted() {
         this.sentencesNum = JSON.parse(localStorage.getItem('processedText')).sentences.length
     },
@@ -264,6 +275,10 @@ export default {
         }
     },
     methods: {
+        multiwordModal(index) {
+            this.arrPos = index
+            this.showMwModal = true
+        },
         setMisc(obj) {
             this.misc = obj
             this.tableMisc = true
@@ -342,6 +357,13 @@ export default {
                     break
             }
         },
+        editedMW() {
+            this.isEdited = true
+            this.refreshBrat = true
+            setTimeout(() => {
+                this.refreshBrat = false
+            }, 200)
+        },
         editedDep(dep) {
             var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
             this.isEdited = true
@@ -372,7 +394,7 @@ export default {
             }
         },
         depsModal(i) {
-            if (typeof i != 'object') {
+            if (i.dep == undefined || i.dep == null) {
                 this.depToEdit.dep = i.getAttribute('data-arc-role')
                 this.depToEdit.governor = parseInt(i.getAttribute('data-arc-origin').split('_')[2]) + 1
                 this.depToEdit.dependent = parseInt(i.getAttribute('data-arc-target').split('_')[2]) + 1

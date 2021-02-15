@@ -3,7 +3,7 @@
         <div class="w-full flex flex-row content-center items-center mb-4">
             <div class="text-primary dark:text-primaryLight text-xl tracking-wide w-full">{{title}}</div>
             <button
-                @click="$emit('modal', 'readability')"
+                @click="$emit('modal', title)"
                 class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
                 title="Info"
             >
