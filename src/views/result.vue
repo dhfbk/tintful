@@ -131,7 +131,7 @@ export default {
             info: '',
             values: [],
             keys: [],
-            processedData: JSON.parse(localStorage.getItem('processedText')),
+            processedData: {},
             modalMode: '',
             modal: false,
             show: false,
@@ -155,91 +155,98 @@ export default {
         }
     },
     mounted() {
-        if (localStorage.theme == undefined || localStorage.theme == '' || localStorage.theme == 'light') {
-            document.querySelector('.card').classList.remove('cardDark')
-        } else if (localStorage.theme == 'dark') {
-            document.querySelector('.card').classList.add('cardDark')
-        } else {
-            document.querySelector('.card').classList.remove('cardDark')
+        if (
+            localStorage.getItem('processedText') != null ||
+            localStorage.getItem('processedText') != undefined ||
+            localStorage.getItem('processedText') != ''
+        ) {
+            this.show = true
         }
     },
     created() {
-        this.infoMiniCards = {
-            keys: [
-                'Sentences',
-                'Tokens',
-                'Words',
-                'Content words',
-                'Text length (letters only)',
-                'Text length (all characters)',
-                'Text length (no spaces)',
-                'Hyphen count',
-            ],
-            values: [
-                this.processedData.sentences.length,
-                this.processedData.readability.tokenCount,
-                this.processedData.readability.wordCount,
-                this.processedData.readability.contentWordSize,
-                this.processedData.readability.docLenLettersOnly,
-                this.processedData.readability.docLenWithSpaces,
-                this.processedData.readability.docLenWithoutSpaces,
-                this.processedData.readability.hyphenCount,
-            ],
-        }
-        this.seriesReadability = [
-            this.processedData.readability.subordinateRatio * 100,
-            this.processedData.readability.ttrValue * 100,
-            this.processedData.readability.density * 100,
-        ]
-        this.chartOptionsReadability.labels = ['Subordinate ratio', 'Semantic richness', 'Lexical density']
-        this.seriesDifficulty = [
-            this.processedData.readability.measures.main,
-            this.processedData.readability.measures.level1,
-            this.processedData.readability.measures.level2,
-            this.processedData.readability.measures.level3,
-        ]
-        this.chartOptionsDifficulty.labels = [
-            this.processedData.readability.labels.main,
-            'Level 1',
-            'Level 2',
-            'Level 3',
-        ]
-        var tmpCol = ''
-        var min = 0
-        var max = 0
-        for (let i = 0; i < this.chartOptionsReadability.labels.length; i++) {
-            if (this.seriesReadability[i] / 100 == this.processedData.readability.subordinateRatio) {
-                min = this.processedData.readability.minYellowValues.subordinateRatio
-                max = this.processedData.readability.maxYellowValues.subordinateRatio
-            } else if (this.seriesReadability[i] / 100 == this.processedData.readability.ttrValue) {
-                min = this.processedData.readability.minYellowValues.ttrValue
-                max = this.processedData.readability.maxYellowValues.ttrValue
-            } else {
-                min = this.processedData.readability.minYellowValues.density
-                max = this.processedData.readability.maxYellowValues.density
+        if (
+            localStorage.getItem('processedText') != null ||
+            localStorage.getItem('processedText') != undefined ||
+            localStorage.getItem('processedText') != ''
+        ) {
+            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+            this.processedData = JSON.parse(localStorage.getItem('processedText'))
+            this.infoMiniCards = {
+                keys: [
+                    'Sentences',
+                    'Tokens',
+                    'Words',
+                    'Content words',
+                    'Text length (letters only)',
+                    'Text length (all characters)',
+                    'Text length (no spaces)',
+                    'Hyphen count',
+                ],
+                values: [
+                    this.processedData.sentences.length,
+                    this.processedData.readability.tokenCount,
+                    this.processedData.readability.wordCount,
+                    this.processedData.readability.contentWordSize,
+                    this.processedData.readability.docLenLettersOnly,
+                    this.processedData.readability.docLenWithSpaces,
+                    this.processedData.readability.docLenWithoutSpaces,
+                    this.processedData.readability.hyphenCount,
+                ],
             }
-            if (this.seriesReadability[i] / 100 >= min && this.seriesReadability[i] / 100 <= max) {
-                tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
-            } else if (this.seriesReadability[i] / 100 < min) {
-                tmpCol = 'to-red-300 via-red-500 from-red-700'
-            } else {
-                tmpCol = 'to-green-300 via-green-500 from-green-700'
+            this.seriesReadability = [
+                this.processedData.readability.subordinateRatio * 100,
+                this.processedData.readability.ttrValue * 100,
+                this.processedData.readability.density * 100,
+            ]
+            this.chartOptionsReadability.labels = ['Subordinate ratio', 'Semantic richness', 'Lexical density']
+            this.seriesDifficulty = [
+                this.processedData.readability.measures.main,
+                this.processedData.readability.measures.level1,
+                this.processedData.readability.measures.level2,
+                this.processedData.readability.measures.level3,
+            ]
+            this.chartOptionsDifficulty.labels = [
+                this.processedData.readability.labels.main,
+                'Level 1',
+                'Level 2',
+                'Level 3',
+            ]
+            var tmpCol = ''
+            var min = 0
+            var max = 0
+            for (let i = 0; i < this.chartOptionsReadability.labels.length; i++) {
+                if (this.seriesReadability[i] / 100 == this.processedData.readability.subordinateRatio) {
+                    min = this.processedData.readability.minYellowValues.subordinateRatio
+                    max = this.processedData.readability.maxYellowValues.subordinateRatio
+                } else if (this.seriesReadability[i] / 100 == this.processedData.readability.ttrValue) {
+                    min = this.processedData.readability.minYellowValues.ttrValue
+                    max = this.processedData.readability.maxYellowValues.ttrValue
+                } else {
+                    min = this.processedData.readability.minYellowValues.density
+                    max = this.processedData.readability.maxYellowValues.density
+                }
+                if (this.seriesReadability[i] / 100 >= min && this.seriesReadability[i] / 100 <= max) {
+                    tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
+                } else if (this.seriesReadability[i] / 100 < min) {
+                    tmpCol = 'to-red-300 via-red-500 from-red-700'
+                } else {
+                    tmpCol = 'to-green-300 via-green-500 from-green-700'
+                }
+                this.chartOptionsReadability.colors.push(tmpCol)
             }
-            this.chartOptionsReadability.colors.push(tmpCol)
-        }
-        for (let i = 0; i < this.chartOptionsDifficulty.labels.length; i++) {
-            min = 40
-            max = 80
-            if (this.seriesDifficulty[i] >= min && this.seriesDifficulty[i] <= max) {
-                tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
-            } else if (this.seriesDifficulty[i] < min) {
-                tmpCol = 'to-red-300 via-red-500 from-red-700'
-            } else {
-                tmpCol = 'to-green-300 via-green-500 from-green-700'
+            for (let i = 0; i < this.chartOptionsDifficulty.labels.length; i++) {
+                min = 40
+                max = 80
+                if (this.seriesDifficulty[i] >= min && this.seriesDifficulty[i] <= max) {
+                    tmpCol = 'to-yellow-300 via-yellow-500 from-yellow-700'
+                } else if (this.seriesDifficulty[i] < min) {
+                    tmpCol = 'to-red-300 via-red-500 from-red-700'
+                } else {
+                    tmpCol = 'to-green-300 via-green-500 from-green-700'
+                }
+                this.chartOptionsDifficulty.colors.push(tmpCol)
             }
-            this.chartOptionsDifficulty.colors.push(tmpCol)
         }
-        this.show = true
     },
     methods: {
         sheetData(arr) {
@@ -259,12 +266,14 @@ export default {
     },
     watch: {
         sheetMode() {
-            if (this.sheetMode == 'dark') {
-                document.querySelector('.card').classList.add('cardDark')
-                document.querySelector('.card').classList.add('barDark')
-            } else {
-                document.querySelector('.card').classList.remove('cardDark')
-                document.querySelector('.card').classList.remove('barDark')
+            if (this.show) {
+                if (this.sheetMode == 'dark') {
+                    document.querySelector('.card').classList.add('cardDark')
+                    document.querySelector('.card').classList.add('barDark')
+                } else {
+                    document.querySelector('.card').classList.remove('cardDark')
+                    document.querySelector('.card').classList.remove('barDark')
+                }
             }
         },
     },

@@ -77,7 +77,9 @@ export default {
     mounted() {
         this.screenWidth = window.innerWidth
         window.onresize = debounce(this.checkResize, 200)
-        this.loadBrat()
+        setTimeout(() => {
+            this.loadBrat()
+        }, 20)
     },
     beforeDestroy() {
         window.onresize = null
@@ -250,17 +252,18 @@ export default {
                     )
                     g[0].lastChild.appendChild(text)
                     svg.appendChild(g[0])
-                    this.addMWEvents(svg.parentElement, id, i)
+                    this.addMWEvents(svg.parentElement, id, i, x.length)
                 }
             }
         },
-        addMWEvents(svg, id, arrPos) {
+        addMWEvents(svg, id, arrPos, len) {
             var txt = svg.getElementsByClassName('textSvg')
             var vm = this
+            var emitArr = [arrPos, len]
             for (let i = 0; i < txt.length; i++) {
                 if (txt[i].getAttribute('first-id') == id) {
                     txt[i].onclick = function() {
-                        vm.$emit('mwModal', arrPos)
+                        vm.$emit('mwModal', emitArr)
                     }
                 }
             }

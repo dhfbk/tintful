@@ -159,6 +159,7 @@ export default {
     props: {
         arrPos: Number,
         sentenceIndex: Number,
+        arrLen: Number,
     },
     created() {
         let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
@@ -170,6 +171,7 @@ export default {
             '-' +
             phrase.tokens[phrase.tokens[this.arrPos].multiwordSpan.split('-')[1] - 1].lemma
         this.newEnd = this.end
+        //aggiungere misc
         for (let i = this.arrPos + 1; i < phrase.tokens.length; i++) {
             this.tokens[phrase.tokens[i].index] = phrase.tokens[i].lemma
         }
@@ -185,7 +187,9 @@ export default {
         save() {
             let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
             if (this.newForm != this.form) {
-                phrase.tokens[this.arrPos].originalText = this.newForm
+                for (let i = this.arrPos; i < this.arrPos + this.arrLen; i++) {
+                    phrase.tokens[i].originalText = this.newForm
+                }
             }
             if (this.newEnd != this.end) {
                 //capire come risolvere per questa parte, per il discorso dell'ismultiword e delle altre proprietà
@@ -201,6 +205,7 @@ export default {
                 //
                 phrase.tokens[this.arrPos].multiwordSpan = this.start + '-' + this.newEnd
             }
+            //aggiungere misc
             this.$emit('edited')
             this.toggleModal()
         },

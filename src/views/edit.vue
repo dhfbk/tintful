@@ -1,5 +1,5 @@
 <template>
-    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 md:p-4">
+    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 md:p-4" v-if="ready">
         <deps-modal
             @closeDepsModal="showDepsModal = false"
             @edited="editedDep"
@@ -26,6 +26,7 @@
         <mwModal
             v-if="showMwModal"
             :arrPos="arrPos"
+            :arrLen="arrLen"
             @close="showMwModal = false"
             :sentenceIndex="sentenceIndex"
             @edited="editedMW"
@@ -208,7 +209,7 @@ export default {
     },
     data() {
         return {
-            currentData: JSON.parse(localStorage.getItem('processedText')),
+            currentData: {},
             featsMode: '',
             doc: this.$store.state.editableData,
             startNerPages: 0,
@@ -235,30 +236,45 @@ export default {
             tableMisc: false,
             noRoot: false,
             arrPos: 0,
+            arrLen: 0,
+            ready: false,
         }
     },
     created() {
-        if (this.$store.state.editableData.sentences.length <= 10) {
-            for (let i = 0; i < this.$store.state.editableData.sentences.length; i++) {
-                this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
+        if (
+            localStorage.getItem('processedText') != null ||
+            localStorage.getItem('processedText') != undefined ||
+            localStorage.getItem('processedText') != ''
+        ) {
+            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+            if (this.$store.state.editableData.sentences.length <= 10) {
+                for (let i = 0; i < this.$store.state.editableData.sentences.length; i++) {
+                    this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
+                }
+                this.endNerPages = 1
+            } else {
+                for (let i = 0; i < 10; i++) {
+                    this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
+                }
+                this.endNerPages = this.$store.state.editableData.sentences.length % 10
             }
-            this.endNerPages = 1
-        } else {
-            for (let i = 0; i < 10; i++) {
-                this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
-            }
-            this.endNerPages = this.$store.state.editableData.sentences.length % 10
+            this.currentData = JSON.parse(localStorage.getItem('processedText'))
+            this.ready = true
         }
     },
     components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal, mwModal },
     mounted() {
-        this.sentencesNum = JSON.parse(localStorage.getItem('processedText')).sentences.length
+        if (
+            localStorage.getItem('processedText') != null ||
+            localStorage.getItem('processedText') != undefined ||
+            localStorage.getItem('processedText') != ''
+        ) {
+            this.sentencesNum = JSON.parse(localStorage.getItem('processedText')).sentences.length
+        }
     },
     beforeCreate() {
         if (localStorage.getItem('text') === '' || localStorage.getItem('text') == undefined) {
             this.$router.replace({ name: 'home' })
-        } else {
-            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
         }
     },
     beforeRouteLeave(to, from, next) {
@@ -275,8 +291,9 @@ export default {
         }
     },
     methods: {
-        multiwordModal(index) {
-            this.arrPos = index
+        multiwordModal(arr) {
+            this.arrPos = arr[0]
+            this.arrLen = arr[1]
             this.showMwModal = true
         },
         setMisc(obj) {
@@ -311,20 +328,46 @@ export default {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
             if (mode == 'save') {
+                let sen = this.$store.state.editableData
                 if (this.tableMisc) {
-                    for (
-                        let i = 0;
-                        i < this.$store.state.editableData.sentences[this.sentenceIndex].tokens.length;
-                        i++
-                    ) {
+                    for (let i = 0; i < sen.sentences[this.sentenceIndex].tokens.length; i++) {
                         this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i] = Object.assign(
-                            this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i],
+                            sen.sentences[this.sentenceIndex].tokens[i],
                             this.misc[i + 1]
                         )
                     }
                 }
+                let sentences = []
+                let mT = {}
+                for (let i = 0; i < sen.sentences.length; i++) {
+                    sentences.push({
+                        tokens: sen.sentences[i].tokens,
+                        multiTokens: [],
+                        deps: sen.sentences[i]['basic-dependencies'],
+                    })
+                    for (let x = 0; x < sen.sentences[i].tokens.length; x++) {
+                        if (sen.sentences[i].tokens[x].isMultiwordFirstToken) {
+                            mT = {
+                                start: parseInt(sen.sentences[i].tokens[x].multiwordSpan.split('-')[0]),
+                                end: parseInt(sen.sentences[i].tokens[x].multiwordSpan.split('-')[1]),
+                                form: sen.sentences[i].tokens[x].originalText,
+                            }
+                            if (
+                                sen.sentences[i].tokens[x].spaceAfter != undefined ||
+                                sen.sentences[i].tokens[x].spaceAfter != null
+                            ) {
+                                mT.misc = {
+                                    spaceAfter: sen.sentences[i].tokens[x].spaceAfter,
+                                }
+                            }
+                            sentences[i].multiTokens.push(mT)
+                        }
+                    }
+                }
+                let toSend = { user: '', sentences: sentences }
+                console.log(toSend)
                 localStorage.setItem('processedText', '')
-                localStorage.setItem('processedText', JSON.stringify(this.$store.state.editableData))
+                localStorage.setItem('processedText', JSON.stringify(sen))
             } else if (!this.noRoot) {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             }
