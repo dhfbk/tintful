@@ -131,7 +131,7 @@
         </div>
         <span class="my-2 inline-block" v-if="selectedTab != 2">
             Sentence:
-            <span class="font-bold">{{ currentData.sentences[sentenceIndex].text }}</span>
+            <span class="font-bold">{{ $store.state.editableData.sentences[sentenceIndex].text }}</span>
         </span>
         <!--inserire paginazione-->
         <!-- <span class="my-2 inline-block w-full" v-else>
@@ -172,7 +172,7 @@
         <brat-edit
             v-if="selectedTab == 0"
             :sentenceIndex="sentenceIndex"
-            :doc="doc"
+            :doc="$store.state.editableData"
             @showDepsModal="depsModal"
             @showFeatsModal="featsModal"
             :refresh="refreshBrat"
@@ -209,9 +209,7 @@ export default {
     },
     data() {
         return {
-            currentData: {},
             featsMode: '',
-            doc: this.$store.state.editableData,
             startNerPages: 0,
             endNerPages: 1,
             nerPhrases: {},
@@ -258,7 +256,6 @@ export default {
                 }
                 this.endNerPages = this.$store.state.editableData.sentences.length % 10
             }
-            this.currentData = JSON.parse(localStorage.getItem('processedText'))
             this.ready = true
         }
     },
@@ -358,6 +355,7 @@ export default {
                             ) {
                                 mT.misc = {
                                     spaceAfter: sen.sentences[i].tokens[x].spaceAfter,
+                                    newProps: sen.sentences[i].tokens[x].newProps,
                                 }
                             }
                             sentences[i].multiTokens.push(mT)

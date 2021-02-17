@@ -106,6 +106,18 @@
                                     />
                                 </div>
                             </div>
+                            <div>
+                                misc:
+                                <div class="relative block">
+                                    <input
+                                        v-model="newMisc"
+                                        name="misc"
+                                        id="misc"
+                                        type="text"
+                                        class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                                    />
+                                </div>
+                            </div>
                             <!--
                             <select
                                 class="appearance-none font-medium h-full border-b inline-block bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -152,6 +164,7 @@ export default {
             form: '',
             newForm: '',
             misc: '',
+            newMisc: '',
             showDialog: false,
             tokens: {},
         }
@@ -165,15 +178,19 @@ export default {
         let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
         this.form = phrase.tokens[this.arrPos].originalText
         this.newForm = phrase.tokens[this.arrPos].originalText
-        this.start = phrase.tokens[this.arrPos].multiwordSpan.split('-', 1)[0] + '-' + phrase.tokens[this.arrPos].lemma
+        this.start = phrase.tokens[this.arrPos].multiwordSpan.split('-', 1)[0] + '-' + phrase.tokens[this.arrPos].word
         this.end =
             phrase.tokens[this.arrPos].multiwordSpan.split('-')[1] +
             '-' +
-            phrase.tokens[phrase.tokens[this.arrPos].multiwordSpan.split('-')[1] - 1].lemma
+            phrase.tokens[phrase.tokens[this.arrPos].multiwordSpan.split('-')[1] - 1].word
         this.newEnd = this.end
+        if (phrase.tokens[this.arrPos].spaceAfter != undefined || phrase.tokens[this.arrPos].spaceAfter != null) {
+            this.misc = 'spaceAfter:' + phrase.tokens[this.arrPos].spaceAfter
+        }
+        this.newMisc = this.misc
         //aggiungere misc
         for (let i = this.arrPos + 1; i < phrase.tokens.length; i++) {
-            this.tokens[phrase.tokens[i].index] = phrase.tokens[i].lemma
+            this.tokens[phrase.tokens[i].index] = phrase.tokens[i].word
         }
         setTimeout(() => {
             this.showDialog = true
@@ -192,18 +209,29 @@ export default {
                 }
             }
             if (this.newEnd != this.end) {
-                //capire come risolvere per questa parte, per il discorso dell'ismultiword e delle altre proprietà
                 let startIndex = 0
                 for (let i = 0; i < phrase.tokens.length; i++) {
-                    if (phrase.tokens[i].index == this.start) {
+                    if (phrase.tokens[i].index == parseInt(this.start.split('-')[0])) {
                         startIndex = i
                     }
                 }
-                for (let i = startIndex; i < this.newEnd; i++) {
+                for (let i = startIndex; i < parseInt(this.newEnd.split('-')[0]); i++) {
                     phrase.tokens[i].isMultiwordToken = true
                 }
-                //
-                phrase.tokens[this.arrPos].multiwordSpan = this.start + '-' + this.newEnd
+                phrase.tokens[this.arrPos].multiwordSpan =
+                    parseInt(this.start.split('-')[0]) + '-' + parseInt(this.newEnd.split('-')[0])
+            }
+            if (this.newMisc != this.misc) {
+                let miscArr = this.newMisc.split('|')
+                let miscObj = { newProps: {} }
+                for (let i = 0; i < miscArr.length; i++) {
+                    if (miscArr[i].split(':')[0] == 'spaceAfter') {
+                        phrase.tokens[this.arrPos].spaceAfter = miscArr[i].split(':')[1]
+                    } else {
+                        miscObj.newProps[miscArr[i].split(':')[0]] = miscArr[i].split(':')[1]
+                    }
+                }
+                phrase.tokens[this.arrPos] = Object.assign(phrase.tokens[this.arrPos], miscObj)
             }
             //aggiungere misc
             this.$emit('edited')
