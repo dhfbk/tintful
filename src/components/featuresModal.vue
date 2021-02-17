@@ -32,7 +32,27 @@
                             </button>
                         </div>
                         <div class="flex content-center items-center justify-between my-2">
-                            Word: <span class="font-medium">"{{ featsToEdit.word }}"</span>
+                            Form:
+                            <form class="font-medium ">
+                                <input
+                                    type="text"
+                                    class="appearance-none dark:bg-gray-700 bg-gray-200 focus:outline-none p-1 rounded"
+                                    v-model="featsToEdit.word"
+                                    @change="changeForm"
+                                />
+                            </form>
+                        </div>
+                        <div class="flex content-center items-center justify-between my-2">
+                            Lemma:
+                            <form class="font-medium ">
+                                <input
+                                    type="text"
+                                    class="appearance-none dark:bg-gray-700 bg-gray-200
+                                focus:outline-none p-1 rounded"
+                                    v-model="featsToEdit.lemma"
+                                    @change="changeLemma"
+                                />
+                            </form>
                         </div>
                         <div
                             class="flex content-center items-center justify-between my-2"
@@ -40,7 +60,7 @@
                         >
                             <span>POS: </span>
                             <select
-                                class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white dark:focus:bg-gray-800 focus:border-gray-500"
                                 name="posSelect"
                                 id="posSelect"
                                 v-model="pos"
@@ -282,6 +302,22 @@ export default {
             ].pos = this.featsToEdit.pos
             this.$emit('edited', 'noBrat')
         },
+        changeForm() {
+            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                this.featsToEdit.tokIndex
+            ].word = this.featsToEdit.word
+            this.$emit('edited', 'noBrat')
+        },
+        changeLemma() {
+            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                this.featsToEdit.tokIndex
+            ].lemma = this.featsToEdit.lemma
+            console.log(
+                this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
+                    .lemma
+            )
+            this.$emit('edited', 'noBrat')
+        },
         save() {
             let toCheck = {
                 Gender: [this.gen],
@@ -451,6 +487,9 @@ export default {
         },
     },
     created() {
+        console.log(
+            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
+        )
         setTimeout(() => {
             this.showDialog = true
         }, 1)

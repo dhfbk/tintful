@@ -413,13 +413,13 @@ export default {
             let cont = 0
             let found = false
             let stop = false
-            for (let i = 0; i < dep.length; i++) {
-                if (dep[i].dependent == this.sonId && dep[i].dep == 'ROOT') {
-                    cont = -1
-                    msg = "A ROOT element can't have a head"
-                    break
-                }
-            }
+            // for (let i = 0; i < dep.length; i++) {
+            //     if (dep[i].dependent == this.sonId && dep[i].dep == 'ROOT') {
+            //         cont = -1
+            //         msg = "A ROOT element can't have a head"
+            //         break
+            //     }
+            // }
             while (cont != -1 && !stop) {
                 if (!found) {
                     if (dep[cont].dependent == this.newFatherId) {

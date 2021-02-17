@@ -2,7 +2,7 @@
     <div class="flex content-center items-center justify-between my-2">
         <span>{{ label }}: </span>
         <select
-            class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white dark:focus:bg-gray-800 focus:border-gray-500"
             :name="opt[0]"
             :id="opt[0]"
             @change="send"
