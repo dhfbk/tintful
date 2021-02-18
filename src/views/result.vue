@@ -169,7 +169,6 @@ export default {
             localStorage.getItem('processedText') != undefined ||
             localStorage.getItem('processedText') != ''
         ) {
-            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             this.processedData = JSON.parse(localStorage.getItem('processedText'))
             this.infoMiniCards = {
                 keys: [

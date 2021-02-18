@@ -252,18 +252,17 @@ export default {
                     )
                     g[0].lastChild.appendChild(text)
                     svg.appendChild(g[0])
-                    this.addMWEvents(svg.parentElement, id, i, x.length)
+                    this.addMWEvents(svg.parentElement, id, i)
                 }
             }
         },
-        addMWEvents(svg, id, arrPos, len) {
+        addMWEvents(svg, id, arrPos) {
             var txt = svg.getElementsByClassName('textSvg')
             var vm = this
-            var emitArr = [arrPos, len]
             for (let i = 0; i < txt.length; i++) {
                 if (txt[i].getAttribute('first-id') == id) {
                     txt[i].onclick = function() {
-                        vm.$emit('mwModal', emitArr)
+                        vm.$emit('mwModal', arrPos)
                     }
                 }
             }

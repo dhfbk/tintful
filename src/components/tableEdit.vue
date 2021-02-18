@@ -8,7 +8,7 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(d, index) in $store.state.editableData.sentences[sentenceIndex].tokens"
+                    v-for="(d, index) in $store.state.tableData.sentences[sentenceIndex].tokens"
                     :key="index"
                     class="border-b border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-500"
                 >
@@ -20,9 +20,11 @@
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <input
                             type="text"
-                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-max"
                             v-model="d.lemma"
                             @change="$emit('edited')"
+                            :disabled="d.lemma == '_'"
+                            :class="d.lemma == '_' ? 'cursor-not-allowed' : ''"
                         />
                     </td>
                     <td class="p-1 px-2 border-r border-gray-300 uppercase dark:border-gray-500">
@@ -30,6 +32,7 @@
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
                                 @click="editFeats(d, 'upos')"
+                                v-if="d.upos != '_'"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -40,7 +43,9 @@
                             </button>
                             {{
                                 d.pos.indexOf('+') == -1
-                                    ? upos[d.pos]
+                                    ? d.upos == '_'
+                                        ? d.upos
+                                        : upos[d.pos]
                                     : upos[d.pos.split('+')[0]] + ' + ' + upos[d.pos.split('+')[1]]
                             }}
                         </div>
@@ -51,6 +56,7 @@
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
                                 @click="editFeats(d, 'feats')"
+                                v-if="d.pos != '_'"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path
@@ -64,6 +70,16 @@
                     </td>
                     <td class="relative p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <select
+                            v-if="d.head == '_'"
+                            :name="'head' + d.index"
+                            :id="'head' + d.index"
+                            disabled
+                            class="cursor-not-allowed w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                        >
+                            <option value="_" selected>_</option>
+                        </select>
+                        <select
+                            v-else
                             :name="'head' + d.index"
                             :id="'head' + d.index"
                             v-model="headsEditable[d.index]"
@@ -71,13 +87,13 @@
                             class="w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option
-                                v-for="(n, c) in $store.state.editableData.sentences[sentenceIndex][
-                                    'basic-dependencies'
-                                ].length + 1"
+                                v-for="(n, c) in $store.state.tableData.sentences[sentenceIndex]['basic-dependencies']
+                                    .length + 1"
                                 :key="c"
                                 :value="c"
-                                >{{ c }}</option
                             >
+                                {{ c }}
+                            </option>
                         </select>
                         <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
                             <svg
@@ -91,6 +107,16 @@
                     </td>
                     <td class="relative p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <select
+                            v-if="d.deprel == '_'"
+                            :name="'dep' + d.index"
+                            :id="'dep' + d.index"
+                            disabled
+                            class="cursor-not-allowed w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                        >
+                            <option value="_" selected>_</option>
+                        </select>
+                        <select
+                            v-else
                             :name="'dep' + d.index"
                             :id="'dep' + d.index"
                             v-model="deprelsEditable[d.index]"
@@ -114,7 +140,7 @@
                         <input
                             :name="'space' + d.index"
                             :id="'space' + d.index"
-                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-max"
                             @blur="editData('spaceAfter', d.index)"
                             :value="misc[d.index].complete"
                         />
@@ -229,7 +255,6 @@ export default {
                 'xcomp',
             ],
             loading: true,
-            showData: this.$store.state.editableData.sentences,
         }
     },
     created() {
@@ -238,7 +263,7 @@ export default {
     },
     methods: {
         setInitialData() {
-            var phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+            var phrase = this.$store.state.tableData.sentences[this.sentenceIndex]
             for (let i = 0; i < phrase['basic-dependencies'].length; i++) {
                 this.headsRef[phrase['basic-dependencies'][i].dependent] = phrase['basic-dependencies'][i].governor
                 this.deprelsRef[phrase['basic-dependencies'][i].dependent] = phrase['basic-dependencies'][i].dep
@@ -247,16 +272,34 @@ export default {
             this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
             for (let i = 0; i < phrase.tokens.length; i++) {
                 this.misc[phrase.tokens[i].index] = { complete: '' }
-                if (phrase.tokens[i].spaceAfter != undefined) {
+                if (phrase.tokens[i].spaceAfter != undefined || phrase.tokens[i].spaceAfter != null) {
                     this.misc[phrase.tokens[i].index].spaceAfter = phrase.tokens[i].spaceAfter
                     this.misc[phrase.tokens[i].index].complete +=
                         'spaceAfter:' + this.misc[phrase.tokens[i].index].spaceAfter + '|'
                 }
+                if (phrase.tokens[i].misc != undefined || phrase.tokens[i].misc != null) {
+                    this.misc[phrase.tokens[i].index].complete += this.objToString(
+                        this.misc[phrase.tokens[i].index].complete,
+                        phrase.tokens[i].misc
+                    )
+                }
             }
+        },
+        objToString(ph, object) {
+            var str = ''
+            if (ph.charAt(0) != '|' && ph != '' && ph != undefined) {
+                str += '|'
+            }
+            for (var k in object) {
+                if (Object.prototype.hasOwnProperty.call(object, k)) {
+                    str += k + ':' + object[k] + '|'
+                }
+            }
+            return str
         },
         editFeats(token, mode) {
             var index = token.index - 1
-            var d = this.$store.state.editableData
+            var d = this.$store.state.tableData
             var feat = d.sentences[this.sentenceIndex].tokens[index]
 
             //console.log(token)
@@ -270,7 +313,7 @@ export default {
             this.$emit('editFeats', infoToEdit, mode)
         },
         editData(mode, index, word) {
-            let dep = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
+            let dep = this.$store.state.tableData.sentences[this.sentenceIndex]['basic-dependencies']
             if (mode == 'deprels') {
                 let value = document.getElementById('dep' + index).value
                 if (value == 'ROOT') {

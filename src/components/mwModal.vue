@@ -172,10 +172,10 @@ export default {
     props: {
         arrPos: Number,
         sentenceIndex: Number,
-        arrLen: Number,
     },
     created() {
         let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+        let phraseMisc = this.$store.state.tableData.sentences[this.sentenceIndex]
         this.form = phrase.tokens[this.arrPos].originalText
         this.newForm = phrase.tokens[this.arrPos].originalText
         this.start = phrase.tokens[this.arrPos].multiwordSpan.split('-', 1)[0] + '-' + phrase.tokens[this.arrPos].word
@@ -184,11 +184,18 @@ export default {
             '-' +
             phrase.tokens[phrase.tokens[this.arrPos].multiwordSpan.split('-')[1] - 1].word
         this.newEnd = this.end
-        if (phrase.tokens[this.arrPos].spaceAfter != undefined || phrase.tokens[this.arrPos].spaceAfter != null) {
-            this.misc = 'spaceAfter:' + phrase.tokens[this.arrPos].spaceAfter
+        this.misc = ''
+        for (let i = 0; i < phraseMisc.tokens.length; i++) {
+            if (
+                phraseMisc.tokens[i].index ==
+                parseInt(this.start.split('-')[0]) + '-' + parseInt(this.end.split('-')[0])
+            ) {
+                if (phraseMisc.tokens[i].misc != undefined || phraseMisc.tokens[i].misc != null) {
+                    this.misc += this.objToString(phraseMisc.tokens[i].misc)
+                }
+            }
         }
         this.newMisc = this.misc
-        //aggiungere misc
         for (let i = this.arrPos + 1; i < phrase.tokens.length; i++) {
             this.tokens[phrase.tokens[i].index] = phrase.tokens[i].word
         }
@@ -197,43 +204,94 @@ export default {
         }, 1)
     },
     methods: {
+        objToString(object) {
+            var str = ''
+            for (var k in object) {
+                if (Object.prototype.hasOwnProperty.call(object, k)) {
+                    str += k + ':' + object[k] + '|'
+                }
+            }
+            return str
+        },
         toggleModal() {
             this.showDialog = false
             this.$emit('close')
         },
         save() {
             let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
-            if (this.newForm != this.form) {
-                for (let i = this.arrPos; i < this.arrPos + this.arrLen; i++) {
-                    phrase.tokens[i].originalText = this.newForm
+            let phraseMisc = this.$store.state.tableData.sentences[this.sentenceIndex]
+            let len = parseInt(this.newEnd.split('-')[0]) - parseInt(this.start.split('-')[0])
+            let startMisc = 0
+            for (let i = 0; i < phraseMisc.tokens.length; i++) {
+                if (phraseMisc.tokens[i].index == parseInt(this.start.split('-')[0])) {
+                    startMisc = i
                 }
             }
+            //check if the form has changed apply changes in both the objects
+            if (this.newForm != this.form) {
+                for (let i = this.arrPos; i < this.arrPos + len; i++) {
+                    phrase.tokens[i].originalText = this.newForm
+                }
+                for (let i = 0; i < phraseMisc.tokens.length; i++) {
+                    if (
+                        phraseMisc.tokens[i].index >= parseInt(this.start.split('-')[0]) &&
+                        phraseMisc.tokens[i].index <= parseInt(this.newEnd.split('-')[0])
+                    ) {
+                        phraseMisc.tokens[i].originalText = this.newForm
+                    } else if (
+                        phraseMisc.tokens[i].index ==
+                        parseInt(this.start.split('-')[0]) + '-' + parseInt(this.newEnd.split('-')[0])
+                    ) {
+                        phraseMisc.tokens[i].word = this.newForm
+                    }
+                }
+            }
+            //check if the end has changed apply changes in both the objects
             if (this.newEnd != this.end) {
                 let startIndex = 0
                 for (let i = 0; i < phrase.tokens.length; i++) {
                     if (phrase.tokens[i].index == parseInt(this.start.split('-')[0])) {
                         startIndex = i
+                        phrase.tokens[i].multiwordSpan =
+                            parseInt(this.start.split('-')[0]) + '-' + parseInt(this.newEnd.split('-')[0])
                     }
                 }
-                for (let i = startIndex; i < parseInt(this.newEnd.split('-')[0]); i++) {
+                for (
+                    let i = startIndex;
+                    i < parseInt(this.newEnd.split('-')[0]) - parseInt(this.start.split('-')[0]);
+                    i++
+                ) {
                     phrase.tokens[i].isMultiwordToken = true
                 }
-                phrase.tokens[this.arrPos].multiwordSpan =
+                phraseMisc.tokens[startMisc].multiwordSpan =
                     parseInt(this.start.split('-')[0]) + '-' + parseInt(this.newEnd.split('-')[0])
-            }
-            if (this.newMisc != this.misc) {
-                let miscArr = this.newMisc.split('|')
-                let miscObj = { newProps: {} }
-                for (let i = 0; i < miscArr.length; i++) {
-                    if (miscArr[i].split(':')[0] == 'spaceAfter') {
-                        phrase.tokens[this.arrPos].spaceAfter = miscArr[i].split(':')[1]
-                    } else {
-                        miscObj.newProps[miscArr[i].split(':')[0]] = miscArr[i].split(':')[1]
+                for (let i = 0; i < phraseMisc.tokens.length; i++) {
+                    if (
+                        phraseMisc.tokens[i].index ==
+                        parseInt(this.start.split('-')[0]) + '-' + parseInt(this.end.split('-')[0])
+                    ) {
+                        phraseMisc.tokens[i].index =
+                            parseInt(this.start.split('-')[0]) + '-' + parseInt(this.newEnd.split('-')[0])
                     }
                 }
-                phrase.tokens[this.arrPos] = Object.assign(phrase.tokens[this.arrPos], miscObj)
+                for (
+                    let i = startIndex;
+                    i < parseInt(this.newEnd.split('-')[0]) - parseInt(this.start.split('-')[0]);
+                    i++
+                ) {
+                    phraseMisc.tokens[i].isMultiwordToken = true
+                }
+                //need to change the values in case of decreasing??
             }
-            //aggiungere misc
+            //check if the misc has changed apply changes in the object with the multiword
+            if (this.newMisc != this.misc) {
+                let miscArr = this.newMisc.split('|')
+                let miscObj = { misc: {} }
+                for (let i = 0; i < miscArr.length; i++) {
+                    miscObj.misc[miscArr[i].split(':')[0]] = miscArr[i].split(':')[1]
+                }
+                phraseMisc.tokens[startMisc - 1] = Object.assign(phraseMisc.tokens[startMisc - 1], miscObj)
+            }
             this.$emit('edited')
             this.toggleModal()
         },

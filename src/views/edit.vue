@@ -26,7 +26,6 @@
         <mwModal
             v-if="showMwModal"
             :arrPos="arrPos"
-            :arrLen="arrLen"
             @close="showMwModal = false"
             :sentenceIndex="sentenceIndex"
             @edited="editedMW"
@@ -234,7 +233,6 @@ export default {
             tableMisc: false,
             noRoot: false,
             arrPos: 0,
-            arrLen: 0,
             ready: false,
         }
     },
@@ -244,7 +242,6 @@ export default {
             localStorage.getItem('processedText') != undefined ||
             localStorage.getItem('processedText') != ''
         ) {
-            this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             if (this.$store.state.editableData.sentences.length <= 10) {
                 for (let i = 0; i < this.$store.state.editableData.sentences.length; i++) {
                     this.nerPhrases[i + 1] = this.$store.state.editableData.sentences[i].text
@@ -278,7 +275,8 @@ export default {
         if (this.isEdited) {
             const answer = window.confirm('Do you really want to leave? Your changes will be discarded!')
             if (answer) {
-                this.$store.state.editableData = {}
+                this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+                this.$store.state.tableData = JSON.parse(localStorage.getItem('tableData'))
                 next()
             } else {
                 next(false)
@@ -288,9 +286,8 @@ export default {
         }
     },
     methods: {
-        multiwordModal(arr) {
-            this.arrPos = arr[0]
-            this.arrLen = arr[1]
+        multiwordModal(arrPos) {
+            this.arrPos = arrPos
             this.showMwModal = true
         },
         setMisc(obj) {
@@ -326,6 +323,8 @@ export default {
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
             if (mode == 'save') {
                 let sen = this.$store.state.editableData
+                let senMt = this.$store.state.tableData
+                /*
                 if (this.tableMisc) {
                     for (let i = 0; i < sen.sentences[this.sentenceIndex].tokens.length; i++) {
                         this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i] = Object.assign(
@@ -334,6 +333,7 @@ export default {
                         )
                     }
                 }
+                */
                 let sentences = []
                 let mT = {}
                 for (let i = 0; i < sen.sentences.length; i++) {
@@ -342,21 +342,17 @@ export default {
                         multiTokens: [],
                         deps: sen.sentences[i]['basic-dependencies'],
                     })
-                    for (let x = 0; x < sen.sentences[i].tokens.length; x++) {
-                        if (sen.sentences[i].tokens[x].isMultiwordFirstToken) {
-                            mT = {
-                                start: parseInt(sen.sentences[i].tokens[x].multiwordSpan.split('-')[0]),
-                                end: parseInt(sen.sentences[i].tokens[x].multiwordSpan.split('-')[1]),
-                                form: sen.sentences[i].tokens[x].originalText,
+                    for (let x = 0; x < senMt.sentences[i].tokens.length; x++) {
+                        if (typeof senMt.sentences[i].tokens[x].index == 'string') {
+                            if (this.tableMisc) {
+                                senMt.sentences[i].tokens[x].misc = this.misc[senMt.sentences[i].tokens[x].index]
                             }
-                            if (
-                                sen.sentences[i].tokens[x].spaceAfter != undefined ||
-                                sen.sentences[i].tokens[x].spaceAfter != null
-                            ) {
-                                mT.misc = {
-                                    spaceAfter: sen.sentences[i].tokens[x].spaceAfter,
-                                    newProps: sen.sentences[i].tokens[x].newProps,
-                                }
+                            mT = {
+                                index: senMt.sentences[i].tokens[x].index,
+                                start: parseInt(senMt.sentences[i].tokens[x].index.split('-')[0]),
+                                end: parseInt(senMt.sentences[i].tokens[x].index.split('-')[1]),
+                                form: senMt.sentences[i].tokens[x].word,
+                                misc: senMt.sentences[i].tokens[x].misc,
                             }
                             sentences[i].multiTokens.push(mT)
                         }
@@ -366,10 +362,14 @@ export default {
                 console.log(toSend)
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(sen))
+                localStorage.setItem('tableData', '')
+                localStorage.setItem('tableData', JSON.stringify(senMt))
             } else if (!this.noRoot) {
                 this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+                this.$store.state.tableData = JSON.parse(localStorage.getItem('tableData'))
             }
             this.tableMisc = false
+            this.misc = {}
             this.noRoot = false
             switch (this.action) {
                 case 'graph':

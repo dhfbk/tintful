@@ -127,6 +127,7 @@ export default {
     created() {
         localStorage.setItem('text', '')
         localStorage.setItem('processedText', '')
+        localStorage.setItem('tableData', '')
     },
     methods: {
         process() {
@@ -141,6 +142,48 @@ export default {
                         localStorage.setItem('text', this.text)
                         localStorage.setItem('processedText', JSON.stringify(res.data))
                         this.$store.state.editableData = res.data
+                        this.$store.state.tableData = JSON.parse(JSON.stringify(res.data))
+                        let mt = {}
+                        let cont = 0
+                        for (let i = 0; i < this.$store.state.tableData.sentences.length; i++) {
+                            for (let x = 0; x < this.$store.state.tableData.sentences[i].tokens.length; x++) {
+                                if (this.$store.state.tableData.sentences[i].tokens[x].isMultiwordFirstToken) {
+                                    if (mt[i] == undefined) {
+                                        mt[i] = []
+                                    }
+                                    mt[i].push({
+                                        index: this.$store.state.tableData.sentences[i].tokens[x].multiwordSpan,
+                                        word: this.$store.state.tableData.sentences[i].tokens[x].originalText,
+                                        lemma: '_',
+                                        upos: '_',
+                                        pos: '_',
+                                        featuresText: '_',
+                                        head: '_',
+                                        deprel: '_',
+                                        deps: '_',
+                                    })
+                                }
+                            }
+                            if (mt[i] != undefined) {
+                                for (let x = 0; x < this.$store.state.tableData.sentences[i].tokens.length; x++) {
+                                    if (
+                                        this.$store.state.tableData.sentences[i].tokens[x].index ==
+                                        mt[i][cont].index.split('-')[0]
+                                    ) {
+                                        this.$store.state.tableData.sentences[i].tokens.splice(x, 0, mt[i][cont])
+                                        if (cont < mt[i].length - 1) {
+                                            cont++
+                                        } else {
+                                            break
+                                        }
+                                    }
+                                }
+                                cont = 0
+                            } else {
+                                break
+                            }
+                        }
+                        localStorage.setItem('tableData', JSON.stringify(this.$store.state.tableData))
                         this.loadBtn = false
                         this.$router.push({ name: 'result' })
                     })

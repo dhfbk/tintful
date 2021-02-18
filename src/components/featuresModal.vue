@@ -312,10 +312,11 @@ export default {
             this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
                 this.featsToEdit.tokIndex
             ].lemma = this.featsToEdit.lemma
-            console.log(
+            /*console.log(
                 this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
                     .lemma
             )
+            */
             this.$emit('edited', 'noBrat')
         },
         save() {
@@ -487,9 +488,10 @@ export default {
         },
     },
     created() {
-        console.log(
+        /*console.log(
             this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
         )
+        */
         setTimeout(() => {
             this.showDialog = true
         }, 1)

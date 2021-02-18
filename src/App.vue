@@ -53,6 +53,7 @@ export default {
         }
         if (localStorage.getItem('processedText') != undefined && localStorage.getItem('processedText') != '') {
             this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
+            this.$store.state.tableData = JSON.parse(localStorage.getItem('tableData'))
         }
     },
     methods: {
