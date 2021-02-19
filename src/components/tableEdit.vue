@@ -13,9 +13,35 @@
                     class="border-b border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-500"
                 >
                     <td
+                        v-if="typeof d.index !== 'string'"
                         class="p-1 px-2 border-r border-gray-300 dark:border-gray-500 overflow-x-auto"
                         v-html="d.index"
                     ></td>
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500 overflow-x-auto w-full" v-else>
+                        {{ d.index.split('-')[0] }} -
+                        <span class="relative">
+                            <select
+                                :name="'end' + d.index"
+                                :id="'end' + d.index"
+                                v-model="end[d.index]"
+                                @change="editData('end', d.index)"
+                                class="w-14 inline-block border border-primary appearance-none px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            >
+                                <option v-for="i in endRef[d.index]" :key="i" :value="i">{{ i }}</option>
+                            </select>
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900">
+                                <svg
+                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                    />
+                                </svg>
+                            </div>
+                        </span>
+                    </td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500" v-html="d.word"></td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <input
@@ -204,6 +230,8 @@ export default {
             deprelsRef: {}, //object with the index of the token as the key and the deprel as the value
             deprelsEditable: {},
             misc: {},
+            endRef: {},
+            end: {},
             miscInitial: {},
             spaceAfter: {}, //object with the index of the token as the key and the spaceAfter as the value
             deps: [
@@ -272,6 +300,13 @@ export default {
             this.deprelsEditable = JSON.parse(JSON.stringify(this.deprelsRef))
             this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
             for (let i = 0; i < phrase.tokens.length; i++) {
+                if (typeof phrase.tokens[i].index == 'string') {
+                    this.end[phrase.tokens[i].index] = parseInt(phrase.tokens[i].index.split('-')[1])
+                    this.endRef[phrase.tokens[i].index] = []
+                    for (let x = parseInt(phrase.tokens[i].index.split('-')[0]) + 1; x < phrase.tokens.length; x++) {
+                        this.endRef[phrase.tokens[i].index].push(x)
+                    }
+                }
                 this.misc[phrase.tokens[i].index] = {}
                 if (phrase.tokens[i].spaceAfter != undefined || phrase.tokens[i].spaceAfter != null) {
                     this.misc[phrase.tokens[i].index].spaceAfter = phrase.tokens[i].spaceAfter
@@ -290,6 +325,19 @@ export default {
                         this.miscInitial[phrase.tokens[i].index],
                         phrase.tokens[i].misc
                     )
+                }
+            }
+        },
+        setEnd(phrase) {
+            this.endRef = {}
+            this.end = {}
+            for (let i = 0; i < phrase.tokens.length; i++) {
+                if (typeof phrase.tokens[i].index == 'string') {
+                    this.end[phrase.tokens[i].index] = parseInt(phrase.tokens[i].index.split('-')[1])
+                    this.endRef[phrase.tokens[i].index] = []
+                    for (let x = parseInt(phrase.tokens[i].index.split('-')[0]) + 1; x < phrase.tokens.length; x++) {
+                        this.endRef[phrase.tokens[i].index].push(x)
+                    }
                 }
             }
         },
@@ -415,6 +463,37 @@ export default {
                     msg == '' ? (msg = 'Loop detected. Choose another head') : null
                     this.$emit('snack', msg)
                 }
+            } else if (mode == 'end') {
+                let temp = index
+                console.log(temp)
+                let value = document.getElementById('end' + index).value
+                let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+                let phraseMisc = this.$store.state.tableData.sentences[this.sentenceIndex]
+                let startIndex = 0
+                for (let i = 0; i < phrase.tokens.length; i++) {
+                    if (phrase.tokens[i].index == parseInt(index.split('-')[0])) {
+                        startIndex = i
+                        phrase.tokens[i].multiwordSpan = parseInt(index.split('-')[0]) + '-' + value
+                    }
+                }
+                for (let i = startIndex; i < value - parseInt(index.split('-')[0]); i++) {
+                    phrase.tokens[i].isMultiwordToken = true
+                }
+                for (let i = 0; i < phraseMisc.tokens.length; i++) {
+                    if (phraseMisc.tokens[i].index == parseInt(index.split('-')[0])) {
+                        startIndex = i
+                        phraseMisc.tokens[i].multiwordSpan = parseInt(index.split('-')[0]) + '-' + value
+                        break
+                    }
+                }
+                //phraseMisc.tokens[arrIndex + 1].multiwordSpan = parseInt(index.split('-')[0]) + '-' + value
+                phraseMisc.tokens[startIndex - 1].index = parseInt(index.split('-')[0]) + '-' + value
+                for (let i = startIndex; i < value - parseInt(index.split('-')[0]); i++) {
+                    phraseMisc.tokens[i].isMultiwordToken = true
+                }
+                this.setEnd(phraseMisc)
+                console.log(phrase.tokens, phraseMisc.tokens)
+                this.$emit('edited')
             } else {
                 let value = document.getElementById('space' + index).value.split('|')
                 for (let i = 0; i < value.length; i++) {
