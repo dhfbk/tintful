@@ -142,7 +142,7 @@
                             :id="'space' + d.index"
                             class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-max"
                             @blur="editData('spaceAfter', d.index)"
-                            :value="misc[d.index].complete"
+                            :value="miscInitial[d.index]"
                         />
                     </td>
                 </tr>
@@ -204,6 +204,7 @@ export default {
             deprelsRef: {}, //object with the index of the token as the key and the deprel as the value
             deprelsEditable: {},
             misc: {},
+            miscInitial: {},
             spaceAfter: {}, //object with the index of the token as the key and the spaceAfter as the value
             deps: [
                 'ROOT', //aggiunta a mano
@@ -271,15 +272,22 @@ export default {
             this.deprelsEditable = JSON.parse(JSON.stringify(this.deprelsRef))
             this.headsEditable = JSON.parse(JSON.stringify(this.headsRef))
             for (let i = 0; i < phrase.tokens.length; i++) {
-                this.misc[phrase.tokens[i].index] = { complete: '' }
+                this.misc[phrase.tokens[i].index] = {}
                 if (phrase.tokens[i].spaceAfter != undefined || phrase.tokens[i].spaceAfter != null) {
                     this.misc[phrase.tokens[i].index].spaceAfter = phrase.tokens[i].spaceAfter
-                    this.misc[phrase.tokens[i].index].complete +=
+                    this.miscInitial[phrase.tokens[i].index] =
                         'spaceAfter:' + this.misc[phrase.tokens[i].index].spaceAfter + '|'
+                } else {
+                    this.miscInitial[phrase.tokens[i].index] = ''
                 }
-                if (phrase.tokens[i].misc != undefined || phrase.tokens[i].misc != null) {
-                    this.misc[phrase.tokens[i].index].complete += this.objToString(
-                        this.misc[phrase.tokens[i].index].complete,
+                this.misc[phrase.tokens[i].index].misc = {}
+                if (
+                    phrase.tokens[i].misc != undefined &&
+                    phrase.tokens[i].misc != null &&
+                    Object.keys(phrase.tokens[i].misc).length !== 0
+                ) {
+                    this.miscInitial[phrase.tokens[i].index] += this.objToString(
+                        this.miscInitial[phrase.tokens[i].index],
                         phrase.tokens[i].misc
                     )
                 }
@@ -287,7 +295,7 @@ export default {
         },
         objToString(ph, object) {
             var str = ''
-            if (ph.charAt(0) != '|' && ph != '' && ph != undefined) {
+            if (ph != undefined && ph.charAt(ph.length - 1) != '|' && ph != '') {
                 str += '|'
             }
             for (var k in object) {
@@ -409,16 +417,20 @@ export default {
                 }
             } else {
                 let value = document.getElementById('space' + index).value.split('|')
-                this.misc[index] = {}
                 for (let i = 0; i < value.length; i++) {
                     if (value[i].split(':')[0] != undefined && value[i].split(':')[0] != '') {
                         if (value[i].split(':')[1] != undefined && value[i].split(':')[1] != '') {
-                            this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
+                            if (value[i].split(':')[0] == 'spaceAfter') {
+                                this.misc[index][value[i].split(':')[0]] = value[i].split(':')[1]
+                            } else {
+                                this.misc[index].misc[value[i].split(':')[0]] = value[i].split(':')[1]
+                            }
                         }
                         this.$emit('edited')
                     }
                 }
                 this.$emit('misc', this.misc)
+                console.log(this.misc)
             }
             let hasRoot = 0
             for (let x = 0; x < dep.length; x++) {

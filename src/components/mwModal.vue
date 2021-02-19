@@ -190,8 +190,16 @@ export default {
                 phraseMisc.tokens[i].index ==
                 parseInt(this.start.split('-')[0]) + '-' + parseInt(this.end.split('-')[0])
             ) {
-                if (phraseMisc.tokens[i].misc != undefined || phraseMisc.tokens[i].misc != null) {
-                    this.misc += this.objToString(phraseMisc.tokens[i].misc)
+                if (phraseMisc.tokens[i].spaceAfter != undefined || phraseMisc.tokens[i].spaceAfter != null) {
+                    this.misc += 'spaceAfter:' + phraseMisc.tokens[i].spaceAfter + '|'
+                }
+
+                if (
+                    phraseMisc.tokens[i].misc != undefined &&
+                    phraseMisc.tokens[i].misc != null &&
+                    Object.keys(phraseMisc.tokens[i].misc).length !== 0
+                ) {
+                    this.misc += this.objToString(this.misc, phraseMisc.tokens[i].misc)
                 }
             }
         }
@@ -204,8 +212,11 @@ export default {
         }, 1)
     },
     methods: {
-        objToString(object) {
+        objToString(ph, object) {
             var str = ''
+            if (ph != undefined && ph.charAt(ph.length - 1) != '|' && ph != '') {
+                str += '|'
+            }
             for (var k in object) {
                 if (Object.prototype.hasOwnProperty.call(object, k)) {
                     str += k + ':' + object[k] + '|'
@@ -288,7 +299,11 @@ export default {
                 let miscArr = this.newMisc.split('|')
                 let miscObj = { misc: {} }
                 for (let i = 0; i < miscArr.length; i++) {
-                    miscObj.misc[miscArr[i].split(':')[0]] = miscArr[i].split(':')[1]
+                    if (miscArr[i].split(':')[0] == 'spaceAfter') {
+                        miscObj.spaceAfter = miscArr[i].split(':')[1]
+                    } else {
+                        miscObj.misc[miscArr[i].split(':')[0]] = miscArr[i].split(':')[1]
+                    }
                 }
                 phraseMisc.tokens[startMisc - 1] = Object.assign(phraseMisc.tokens[startMisc - 1], miscObj)
             }

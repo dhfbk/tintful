@@ -337,16 +337,29 @@ export default {
                 let sentences = []
                 let mT = {}
                 for (let i = 0; i < sen.sentences.length; i++) {
+                    for (let x = 0; x < sen.sentences[i].tokens.length; x++) {
+                        if (this.misc[sen.sentences[i].tokens[x].index] != undefined) {
+                            sen.sentences[i].tokens[x] = Object.assign(
+                                sen.sentences[i].tokens[x],
+                                this.misc[sen.sentences[i].tokens[x].index]
+                            )
+                        }
+                    }
                     sentences.push({
                         tokens: sen.sentences[i].tokens,
                         multiTokens: [],
                         deps: sen.sentences[i]['basic-dependencies'],
                     })
                     for (let x = 0; x < senMt.sentences[i].tokens.length; x++) {
-                        if (typeof senMt.sentences[i].tokens[x].index == 'string') {
-                            if (this.tableMisc) {
-                                senMt.sentences[i].tokens[x].misc = this.misc[senMt.sentences[i].tokens[x].index]
+                        if (this.tableMisc) {
+                            if (this.misc[senMt.sentences[i].tokens[x].index] != undefined) {
+                                senMt.sentences[i].tokens[x] = Object.assign(
+                                    senMt.sentences[i].tokens[x],
+                                    this.misc[senMt.sentences[i].tokens[x].index]
+                                )
                             }
+                        }
+                        if (typeof senMt.sentences[i].tokens[x].index == 'string') {
                             mT = {
                                 index: senMt.sentences[i].tokens[x].index,
                                 start: parseInt(senMt.sentences[i].tokens[x].index.split('-')[0]),
