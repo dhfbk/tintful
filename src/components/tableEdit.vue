@@ -304,7 +304,15 @@ export default {
                     this.end[phrase.tokens[i].index] = parseInt(phrase.tokens[i].index.split('-')[1])
                     this.endRef[phrase.tokens[i].index] = []
                     for (let x = parseInt(phrase.tokens[i].index.split('-')[0]) + 1; x < phrase.tokens.length; x++) {
-                        this.endRef[phrase.tokens[i].index].push(x)
+                        if (x > parseInt(phrase.tokens[i].index.split('-')[0]) + 1) {
+                            if (typeof phrase.tokens[x].index == 'string' || phrase.tokens[x].isMultiwordFirstToken) {
+                                break
+                            } else {
+                                this.endRef[phrase.tokens[i].index].push(phrase.tokens[x].index)
+                            }
+                        } else {
+                            this.endRef[phrase.tokens[i].index].push(phrase.tokens[x].index)
+                        }
                     }
                 }
                 this.misc[phrase.tokens[i].index] = {}
@@ -464,8 +472,8 @@ export default {
                     this.$emit('snack', msg)
                 }
             } else if (mode == 'end') {
-                let temp = index
-                console.log(temp)
+                //let temp = index
+                //console.log(temp)
                 let value = document.getElementById('end' + index).value
                 let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
                 let phraseMisc = this.$store.state.tableData.sentences[this.sentenceIndex]
@@ -492,7 +500,7 @@ export default {
                     phraseMisc.tokens[i].isMultiwordToken = true
                 }
                 this.setEnd(phraseMisc)
-                console.log(phrase.tokens, phraseMisc.tokens)
+                //console.log(phrase.tokens, phraseMisc.tokens)
                 this.$emit('edited')
             } else {
                 let value = document.getElementById('space' + index).value.split('|')
@@ -509,7 +517,7 @@ export default {
                     }
                 }
                 this.$emit('misc', this.misc)
-                console.log(this.misc)
+                //console.log(this.misc)
             }
             let hasRoot = 0
             for (let x = 0; x < dep.length; x++) {

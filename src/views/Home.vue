@@ -179,8 +179,6 @@ export default {
                                     }
                                 }
                                 cont = 0
-                            } else {
-                                break
                             }
                         }
                         localStorage.setItem('tableData', JSON.stringify(this.$store.state.tableData))

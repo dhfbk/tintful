@@ -205,7 +205,11 @@ export default {
         }
         this.newMisc = this.misc
         for (let i = this.arrPos + 1; i < phrase.tokens.length; i++) {
-            this.tokens[phrase.tokens[i].index] = phrase.tokens[i].word
+            if (typeof phrase.tokens[i].index == 'string' || phrase.tokens[i].isMultiwordFirstToken) {
+                break
+            } else {
+                this.tokens[phrase.tokens[i].index] = phrase.tokens[i].word
+            }
         }
         setTimeout(() => {
             this.showDialog = true
