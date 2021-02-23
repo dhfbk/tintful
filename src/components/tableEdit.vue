@@ -1,6 +1,6 @@
 <template>
     <div class="overflow-x-auto" v-if="!loading">
-        <table class="xs2:min-w-5/6 bg-transparent mx-auto border border-gray-300 dark:border-gray-500">
+        <table class="xs2:min-w-5/6 bg-transparent mx-auto border border-gray-300 dark:border-gray-500 min-w-full">
             <thead>
                 <tr class="text-left text-white bg-primary border-b border-gray-300 dark:border-gray-500 uppercase">
                     <th class="px-2" v-for="h in headers" :key="h">{{ h }}</th>

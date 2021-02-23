@@ -30,6 +30,7 @@
             :sentenceIndex="sentenceIndex"
             @edited="editedMW"
         />
+        <manageMultiword v-if="manageMW" :sentenceIndex="sentenceIndex" @close="manageMW = false" />
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
                 <div
@@ -132,6 +133,14 @@
             Sentence:
             <span class="font-bold">{{ $store.state.editableData.sentences[sentenceIndex].text }}</span>
         </span>
+        <div class="my-2" v-if="selectedTab != 2">
+            <button
+                @click="manageMW = !manageMW"
+                class="bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
+            >
+                Edit multiwords
+            </button>
+        </div>
         <!--inserire paginazione-->
         <!-- <span class="my-2 inline-block w-full" v-else>
             Sentences:<br />
@@ -202,6 +211,7 @@ import FeaturesModal from '../components/featuresModal.vue'
 import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
 import confirmationModal from '../components/confirmationModal.vue'
+import manageMultiword from '../components/manageMultiword.vue'
 export default {
     props: {
         sheetMode: String,
@@ -215,6 +225,7 @@ export default {
             showDepsModal: false,
             showFeatsModal: false,
             showMwModal: false,
+            manageMW: false,
             sentenceIndex: 0,
             sentencesNum: 0,
             selectedTab: 0,
@@ -256,7 +267,17 @@ export default {
             this.ready = true
         }
     },
-    components: { bratEdit, tableEdit, depsModal, FeaturesModal, nerEdit, modalInfo, confirmationModal, mwModal },
+    components: {
+        bratEdit,
+        tableEdit,
+        depsModal,
+        FeaturesModal,
+        nerEdit,
+        modalInfo,
+        confirmationModal,
+        mwModal,
+        manageMultiword,
+    },
     mounted() {
         if (
             localStorage.getItem('processedText') != null ||
