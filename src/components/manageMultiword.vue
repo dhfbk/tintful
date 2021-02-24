@@ -31,94 +31,148 @@
                                 <span class="sr-only">Close dialog</span>
                             </button>
                         </div>
-                        <div
-                            class="flex flex-col sm:flex-row items-center content-center mb-1 justify-between"
-                            v-for="(mw, i) in current"
-                            :key="i"
-                        >
-                            <div class="flex flex-row items-center content-center gap-1 flex-wrap">
-                                <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
-                                    <p>Start</p>
-                                    <div class="relative" v-if="mw.start == '' || mw.start == undefined">
-                                        <select
-                                            :name="'start' + mw.start"
-                                            :id="'start' + mw.start"
-                                            v-model="mw.start"
-                                            @change="editData('start', mw.start)"
-                                            class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                        >
-                                            <option v-for="(s, i) in availableStarts" :key="'start' + i" :value="s">{{
-                                                s
-                                            }}</option>
-                                        </select>
-                                        <div
-                                            class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                        <div v-if="current.length != 0">
+                            <div
+                                class="flex flex-col sm:flex-row items-center content-center mb-1 justify-between"
+                                v-for="(mw, i) in current"
+                                :key="i"
+                            >
+                                <div class="flex flex-row items-center content-center gap-1 flex-wrap">
+                                    <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
+                                        <p>Start</p>
+                                        <div class="relative" v-if="mw.start == '' || mw.start == undefined">
+                                            <select
+                                                :name="'start' + mw.start"
+                                                :id="'start' + mw.start"
+                                                v-model="mw.start"
+                                                @change="editData('start', mw.start)"
+                                                class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                            >
+                                                <option
+                                                    v-for="(s, i) in availableStarts"
+                                                    :key="'start' + i"
+                                                    :value="s"
+                                                    >{{ s }}</option
+                                                >
+                                            </select>
+                                            <div
+                                                class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                            >
+                                                <svg
+                                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                >
+                                                    <path
+                                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <input
+                                                type="text"
+                                                class="w-28 cursor-not-allowed px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                v-model="mw.start"
+                                                disabled
+                                            />
+                                        </div>
+                                    </span>
+                                    <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
+                                        <p>End</p>
+                                        <div class="relative">
+                                            <select
+                                                :name="'end' + mw.index"
+                                                :id="'end' + mw.index"
+                                                v-model="mw.end"
+                                                @change="editData('end', mw.index)"
+                                                class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                            >
+                                                <option
+                                                    v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
+                                                    :key="'end' + i"
+                                                    :value="e"
+                                                    >{{ e }}</option
+                                                >
+                                            </select>
+                                            <div
+                                                class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                            >
+                                                <svg
+                                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                >
+                                                    <path
+                                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </span>
+                                    <span class="flex flex-row items-center content-center gap-1 sm:mt-0">
+                                        <p>Form</p>
+                                        <div class="relative">
+                                            <input
+                                                :name="'form' + mw.index"
+                                                :id="'form' + mw.index"
+                                                class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
+                                                v-model="mw.word"
+                                            />
+                                        </div>
+                                    </span>
+                                    <span class="flex flex-row ml-2 mt-1 sm:mt-0" v-if="current[i].word != ''">
+                                        <button
+                                            class="p-2 ripple rounded-full focus:outline-none text-red-500 transition duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
+                                            @click="removeElement(i)"
                                         >
                                             <svg
-                                                class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
+                                                style="width:24px;height:24px"
+                                                viewBox="0 0 24 24"
+                                                class="fill-current"
                                             >
                                                 <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                                    fill="currentColor"
+                                                    d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
                                                 />
                                             </svg>
-                                        </div>
-                                    </div>
-                                    <div v-else>
-                                        <input
-                                            type="text"
-                                            class="w-28 cursor-not-allowed px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                            v-model="mw.start"
-                                            disabled
-                                        />
-                                    </div>
-                                </span>
-                                <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
-                                    <p>End</p>
-                                    <div class="relative">
-                                        <select
-                                            :name="'end' + mw.index"
-                                            :id="'end' + mw.index"
-                                            v-model="mw.end"
-                                            @change="editData('end', mw.index)"
-                                            class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                        >
-                                            <option
-                                                v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
-                                                :key="'end' + i"
-                                                :value="e"
-                                                >{{ e }}</option
-                                            >
-                                        </select>
-                                        <div
-                                            class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                            <span class="sr-only">Remove multiword</span>
+                                        </button>
+                                        <button
+                                            v-if="i == current.length - 1"
+                                            class="p-2 ripple rounded-full transition text-primary dark:text-primaryLight duration-100 ease-out focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600"
+                                            @click="newElement()"
                                         >
                                             <svg
-                                                class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
+                                                style="width:24px;height:24px"
+                                                viewBox="0 0 24 24"
+                                                class="fill-current"
                                             >
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                                />
+                                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                             </svg>
-                                        </div>
-                                    </div>
-                                </span>
-                                <span class="flex flex-row items-center content-center gap-1 sm:mt-0">
-                                    <p>Form</p>
-                                    <div class="relative">
-                                        <input
-                                            :name="'form' + mw.index"
-                                            :id="'form' + mw.index"
-                                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
-                                            v-model="mw.word"
-                                        />
-                                    </div>
-                                </span>
+                                            <span class="sr-only">Add multiword</span>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
-                            <span class="flex flex-row ml-2 mt-1 sm:mt-0" v-if="mw.end != ''">
+                            <div class="float-right pb-4">
+                                <button
+                                    class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent text-red-400 py-2 px-4 rounded mr-2"
+                                    @click="toggleModal()"
+                                >
+                                    CANCEL
+                                </button>
+                                <button
+                                    class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent py-2 px-4 rounded"
+                                    @click="save()"
+                                >
+                                    SAVE
+                                </button>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <p class="text-center italic">No multiword token found</p>
+                            <div class="flex items-center justify-center content-center">
                                 <button
                                     class="p-2 ripple rounded-full transition text-primary dark:text-primaryLight duration-100 ease-out focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600"
                                     @click="newElement()"
@@ -128,19 +182,15 @@
                                     </svg>
                                     <span class="sr-only">Add multiword</span>
                                 </button>
+                            </div>
+                            <div class="float-right pb-4">
                                 <button
-                                    class="p-2 ripple rounded-full focus:outline-none text-red-500 transition duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
-                                    @click="removeElement(mw.start)"
+                                    class="font-medium ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent text-red-400 py-2 px-4 rounded mr-2"
+                                    @click="toggleModal()"
                                 >
-                                    <svg style="width:24px;height:24px" viewBox="0 0 24 24" class="fill-current">
-                                        <path
-                                            fill="currentColor"
-                                            d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-                                        />
-                                    </svg>
-                                    <span class="sr-only">Remove multiword</span>
+                                    CANCEL
                                 </button>
-                            </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -199,7 +249,6 @@ export default {
                 this.availableEnds[phrase.tokens[i].index.split('-')[0]] = []
                 this.availableEnds[phrase.tokens[i].index.split('-')[0]] = endTmp
                 endTmp = []
-                //console.log(this.current, this.misc, this.availableEnds)
             } else {
                 if (phrase.tokens[i].isMultiwordFirstToken) {
                     this.notUsable.push(phrase.tokens[i].multiwordSpan)
@@ -219,7 +268,7 @@ export default {
                     }
                 }
                 if (!found) {
-                    if (phrase.tokens[i + 1] != undefined && typeof phrase.tokens[i + 1] != 'string') {
+                    if (phrase.tokens[i + 1] != undefined && typeof phrase.tokens[i + 1].index != 'string') {
                         this.availableStarts.push(phrase.tokens[i].index + '-' + phrase.tokens[i].word)
                     }
                 }
@@ -263,15 +312,29 @@ export default {
                     }
                 }
             } else if (mode == 'end') {
-                //non capisco il bug, controllare
                 for (let i = 0; i < this.availableStarts.length; i++) {
                     for (let x = 0; x < this.current.length; x++) {
                         if (
-                            this.availableStarts[i].split('-')[0] >= this.current[x].start.split('-')[0] &&
-                            this.availableStarts[i].split('-')[0] <= this.current[x].end.split('-')[0]
+                            parseInt(this.availableStarts[i].split('-')[0]) >=
+                                parseInt(this.current[x].start.split('-')[0]) &&
+                            parseInt(this.availableStarts[i].split('-')[0]) <=
+                                parseInt(this.current[x].end.split('-')[0])
                         ) {
                             this.availableStarts.splice(i, 1)
                             i--
+                        }
+                    }
+                }
+                for (let i = 0; i < this.availableStarts.length; i++) {
+                    for (let x = 0; x < this.current.length; x++) {
+                        if (this.availableStarts[i + 1] != undefined) {
+                            if (
+                                parseInt(this.current[x].start.split('-')[0]) ==
+                                parseInt(this.availableStarts[i].split('-')[0]) + 1
+                            ) {
+                                this.availableStarts.splice(i, 1)
+                                i--
+                            }
                         }
                     }
                 }
@@ -292,21 +355,73 @@ export default {
                         }
                     }
                 }
-                /*
-                for (let i = 0; i < phrase.tokens.length; i++) {
-                    for (let x = i + 1; x < phrase.tokens.length; x++) {
-                        if (typeof phrase.tokens[x].index == 'string') {
+            }
+        },
+        removeElement(arrInd) {
+            this.current.splice(arrInd, 1)
+            var phrase = this.$store.state.tableData.sentences[this.sentenceIndex]
+            let found = false
+            this.availableStarts = []
+            var startIndexes = {}
+            for (let i = 0; i < phrase.tokens.length; i++) {
+                if (typeof phrase.tokens[i].index != 'string') {
+                    for (let x = 0; x < this.current.length; x++) {
+                        if (
+                            phrase.tokens[i].index >= parseInt(this.current[x].start.split('-')[0]) &&
+                            phrase.tokens[i].index <= parseInt(this.current[x].end.split('-')[0])
+                        ) {
+                            found = true
                             break
                         }
-                        if()
+                    }
+                    if (!found) {
+                        if (phrase.tokens[i + 1] != undefined && typeof phrase.tokens[i + 1] != 'string') {
+                            this.availableStarts.push(phrase.tokens[i].index + '-' + phrase.tokens[i].word)
+                        }
+                    }
+                    found = false
+                }
+            }
+            for (let i = 0; i < this.availableStarts.length; i++) {
+                for (let x = 0; x < this.current.length; x++) {
+                    if (this.availableStarts[i + 1] != undefined) {
+                        if (
+                            parseInt(this.current[x].start.split('-')[0]) ==
+                            parseInt(this.availableStarts[i].split('-')[0]) + 1
+                        ) {
+                            this.availableStarts.splice(i, 1)
+                            i--
+                        }
+                    }
+                }
+            }
+            for (let i = 0; i < phrase.tokens.length; i++) {
+                for (let x = 0; x < this.current.length; x++) {
+                    if (phrase.tokens[i].index == parseInt(this.current[x].start.split('-')[0])) {
+                        startIndexes[i] = {}
+                        startIndexes[i].start = parseInt(this.current[x].start.split('-')[0])
+                        break
+                    }
+                }
+            }
+            this.availableEnds = {}
+            let endTmp = []
+            Object.keys(startIndexes).forEach(i => {
+                for (let x = parseInt(i) + 1; x < phrase.tokens.length; x++) {
+                    if (typeof phrase.tokens[x].index == 'string') {
+                        break
+                    } else if (phrase.tokens[x] != undefined) {
                         endTmp.push(phrase.tokens[x].index + '-' + phrase.tokens[x].word)
                     }
-                    this.availableEnds[itemInd.split('-')[0]] = []
-                    this.availableEnds[itemInd.split('-')[0]] = endTmp
-                    endTmp = []
                 }
-                */
-            }
+                this.availableEnds[startIndexes[i].start] = []
+                this.availableEnds[startIndexes[i].start] = endTmp
+                endTmp = []
+            })
+        },
+        save() {
+            //implementa salvataggio, parse con i 2 oggetti nello store, emit che hai fatto edit ed emit che chiudi
+            //mettere anche la validazione dei campi che non siano vuoti per evitare problemi nel salvataggio
         },
         toggleModal() {
             this.$emit('close')
