@@ -30,7 +30,13 @@
             :sentenceIndex="sentenceIndex"
             @edited="editedMW"
         />
-        <manageMultiword v-if="manageMW" :sentenceIndex="sentenceIndex" @close="manageMW = false" />
+        <manageMultiword
+            v-if="manageMW"
+            :sentenceIndex="sentenceIndex"
+            @close="manageMW = false"
+            @snack="snack"
+            @edited="editedMW"
+        />
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
                 <div
@@ -183,7 +189,7 @@
             :doc="$store.state.editableData"
             @showDepsModal="depsModal"
             @showFeatsModal="featsModal"
-            :refresh="refreshBrat"
+            :refresh="refresh"
             @edited="isEdited = true"
             @snack="snack"
             @noRoot="checkRoot"
@@ -192,6 +198,7 @@
         <table-edit
             v-else-if="selectedTab == 1"
             :sentenceIndex="sentenceIndex"
+            :refresh="refresh"
             @edited="isEdited = true"
             @editFeats="featsModal"
             @snack="snack"
@@ -233,7 +240,7 @@ export default {
             isEdited: false,
             depToEdit: {},
             featsToEdit: {},
-            refreshBrat: false,
+            refresh: false,
             type: 'graph',
             modalInfo: false,
             confirmText: '',
@@ -394,6 +401,7 @@ export default {
                 }
                 let toSend = { user: '', sentences: sentences }
                 console.log(toSend)
+                this.snack('Edited succesfully')
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(sen))
                 localStorage.setItem('tableData', '')
@@ -434,9 +442,9 @@ export default {
         },
         editedMW() {
             this.isEdited = true
-            this.refreshBrat = true
+            this.refresh = true
             setTimeout(() => {
-                this.refreshBrat = false
+                this.refresh = false
             }, 200)
         },
         editedDep(dep) {
@@ -449,9 +457,9 @@ export default {
                     break
                 }
             }
-            this.refreshBrat = true
+            this.refresh = true
             setTimeout(() => {
-                this.refreshBrat = false
+                this.refresh = false
             }, 200)
         },
         editedFeat(feats) {
@@ -462,9 +470,9 @@ export default {
                 //console.log(feats)
                 x.features = feats.newFeats
                 x.pos = feats.newPos
-                this.refreshBrat = true
+                this.refresh = true
                 setTimeout(() => {
-                    this.refreshBrat = false
+                    this.refresh = false
                 }, 200)
             }
         },
@@ -500,9 +508,9 @@ export default {
             }
         },
         sheetMode() {
-            this.refreshBrat = true
+            this.refresh = true
             setTimeout(() => {
-                this.refreshBrat = false
+                this.refresh = false
             }, 200)
         },
         // startNerPages() {

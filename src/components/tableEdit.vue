@@ -182,6 +182,7 @@ export default {
     name: 'tableEdit',
     props: {
         sentenceIndex: Number,
+        refresh: Boolean,
     },
     data() {
         return {
@@ -303,15 +304,15 @@ export default {
                 if (typeof phrase.tokens[i].index == 'string') {
                     this.end[phrase.tokens[i].index] = parseInt(phrase.tokens[i].index.split('-')[1])
                     this.endRef[phrase.tokens[i].index] = []
-                    for (let x = parseInt(phrase.tokens[i].index.split('-')[0]) + 1; x < phrase.tokens.length; x++) {
-                        if (x > parseInt(phrase.tokens[i].index.split('-')[0]) + 1) {
-                            if (typeof phrase.tokens[x].index == 'string' || phrase.tokens[x].isMultiwordFirstToken) {
-                                break
-                            } else {
-                                this.endRef[phrase.tokens[i].index].push(phrase.tokens[x].index)
-                            }
-                        } else {
+                    for (let x = i + 2; x < phrase.tokens.length; x++) {
+                        if (
+                            phrase.tokens[x] != undefined &&
+                            typeof phrase.tokens[x].index != 'string' &&
+                            phrase.tokens[x].isMultiwordFirstToken == false
+                        ) {
                             this.endRef[phrase.tokens[i].index].push(phrase.tokens[x].index)
+                        } else {
+                            break
                         }
                     }
                 }
@@ -343,8 +344,16 @@ export default {
                 if (typeof phrase.tokens[i].index == 'string') {
                     this.end[phrase.tokens[i].index] = parseInt(phrase.tokens[i].index.split('-')[1])
                     this.endRef[phrase.tokens[i].index] = []
-                    for (let x = parseInt(phrase.tokens[i].index.split('-')[0]) + 1; x < phrase.tokens.length; x++) {
-                        this.endRef[phrase.tokens[i].index].push(x)
+                    for (let x = i + 2; x < phrase.tokens.length; x++) {
+                        if (
+                            phrase.tokens[x] != undefined &&
+                            typeof phrase.tokens[x].index != 'string' &&
+                            phrase.tokens[x].isMultiwordFirstToken == false
+                        ) {
+                            this.endRef[phrase.tokens[i].index].push(phrase.tokens[x].index)
+                        } else {
+                            break
+                        }
                     }
                 }
             }
@@ -531,6 +540,14 @@ export default {
     watch: {
         sentenceIndex() {
             this.setInitialData()
+        },
+        refresh() {
+            if (this.refresh == true) {
+                this.loading = true
+                this.setEnd(this.$store.state.tableData.sentences[this.sentenceIndex])
+            } else {
+                this.loading = false
+            }
         },
     },
 }
