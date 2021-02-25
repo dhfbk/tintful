@@ -1,7 +1,7 @@
 <template>
     <transition name="fade-bg" appear>
         <div
-            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full dark:bg-black bg-gray-900 bg-opacity-25 customZ"
+            class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full min-h-screen dark:bg-black bg-gray-900 bg-opacity-25 customZ"
             @click="toggleModal"
         >
             <transition name="fade" appear>
@@ -37,90 +37,96 @@
                                 v-for="(mw, i) in current"
                                 :key="i"
                             >
-                                <div class="flex flex-row items-center content-center gap-1 flex-wrap">
-                                    <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
-                                        <p>Start</p>
-                                        <div class="relative" v-if="mw.start == '' || mw.start == undefined">
-                                            <select
-                                                :name="'start' + mw.start"
-                                                :id="'start' + mw.start"
-                                                v-model="mw.start"
-                                                @change="editData('start', mw.start)"
-                                                class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                            >
-                                                <option
-                                                    v-for="(s, i) in availableStarts"
-                                                    :key="'start' + i"
-                                                    :value="s"
-                                                    >{{ s }}</option
+                                <div
+                                    class="flex flex-col justify-center md:flex-row md:justify-between items-center content-center gap-1 flex-wrap w-full"
+                                >
+                                    <span
+                                        class="flex flex-row items-center content-center gap-1 flex-wrap justify-center md:justify-start mx-auto md:mx-0"
+                                    >
+                                        <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
+                                            <p>Start</p>
+                                            <div class="relative" v-if="mw.start == '' || mw.start == undefined">
+                                                <select
+                                                    :name="'start' + mw.start"
+                                                    :id="'start' + mw.start"
+                                                    v-model="mw.start"
+                                                    @change="editData('start', mw.start)"
+                                                    class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                                 >
-                                            </select>
-                                            <div
-                                                class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
-                                            >
-                                                <svg
-                                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
+                                                    <option
+                                                        v-for="(s, i) in availableStarts"
+                                                        :key="'start' + i"
+                                                        :value="s"
+                                                        >{{ s }}</option
+                                                    >
+                                                </select>
+                                                <div
+                                                    class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
                                                 >
-                                                    <path
-                                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                                    />
-                                                </svg>
+                                                    <svg
+                                                        class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                    >
+                                                        <path
+                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                                        />
+                                                    </svg>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div v-else>
-                                            <input
-                                                type="text"
-                                                class="w-28 cursor-not-allowed px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                                v-model="mw.start"
-                                                disabled
-                                            />
-                                        </div>
-                                    </span>
-                                    <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
-                                        <p>End</p>
-                                        <div class="relative">
-                                            <select
-                                                :name="'end' + mw.index"
-                                                :id="'end' + mw.index"
-                                                v-model="mw.end"
-                                                @change="editData('end', mw.index)"
-                                                class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                            >
-                                                <option
-                                                    v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
-                                                    :key="'end' + i"
-                                                    :value="e"
-                                                    >{{ e }}</option
-                                                >
-                                            </select>
-                                            <div
-                                                class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
-                                            >
-                                                <svg
-                                                    class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                >
-                                                    <path
-                                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                                    />
-                                                </svg>
+                                            <div v-else>
+                                                <input
+                                                    type="text"
+                                                    class="w-28 cursor-not-allowed px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                    v-model="mw.start"
+                                                    disabled
+                                                />
                                             </div>
-                                        </div>
-                                    </span>
-                                    <span class="flex flex-row items-center content-center gap-1 sm:mt-0">
-                                        <p>Form</p>
-                                        <div class="relative">
-                                            <input
-                                                :name="'form' + mw.index"
-                                                :id="'form' + mw.index"
-                                                class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
-                                                v-model="mw.word"
-                                                @keydown="checkWords"
-                                            />
-                                        </div>
+                                        </span>
+                                        <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
+                                            <p>End</p>
+                                            <div class="relative">
+                                                <select
+                                                    :name="'end' + mw.end"
+                                                    :id="'end' + mw.end"
+                                                    v-model="mw.end"
+                                                    @change="editData('end')"
+                                                    class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                >
+                                                    <option
+                                                        v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
+                                                        :key="'end' + i"
+                                                        :value="e"
+                                                        >{{ e }}</option
+                                                    >
+                                                </select>
+                                                <div
+                                                    class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                                >
+                                                    <svg
+                                                        class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                    >
+                                                        <path
+                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </span>
+                                        <span class="flex flex-row items-center content-center gap-1 sm:mt-0">
+                                            <p>Form</p>
+                                            <div class="relative">
+                                                <input
+                                                    :name="'form' + mw.start"
+                                                    :id="'form' + mw.start"
+                                                    class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
+                                                    v-model="mw.word"
+                                                    @keydown="checkWords"
+                                                />
+                                            </div>
+                                        </span>
                                     </span>
                                     <span class="flex flex-row ml-2 mt-1 sm:mt-0" v-if="!invalid">
                                         <button
@@ -217,7 +223,6 @@ export default {
     },
     created() {
         var phrase = this.$store.state.tableData.sentences[this.sentenceIndex]
-        console.log(phrase)
         let tmp = {}
         let endTmp = []
         let miscStr = ''
