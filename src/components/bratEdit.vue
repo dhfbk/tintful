@@ -341,8 +341,12 @@ export default {
             infoToEdit.lemma = feat.lemma
             infoToEdit.pos = feat.pos
             infoToEdit.word = feat.word
+            //infoToEdit.misc = feat.
+            infoToEdit.misc = {}
+            if (feat.spaceAfter) infoToEdit.misc.spaceAfter = feat.spaceAfter
+            if (feat.misc) infoToEdit.misc.misc = feat.misc
             this.$emit('showFeatsModal', infoToEdit, 'brat')
-            //console.log(infoToEdit)
+            console.log(feat)
         },
         dblRoot(e) {
             var i = e.target

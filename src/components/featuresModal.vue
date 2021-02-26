@@ -177,6 +177,18 @@
                                 />
                             </transition-group>
                         </div>
+                        <div class="flex flex-row">
+                            <span>Miscellaneous: </span>
+
+                            <textarea
+                                placeholder="Misc"
+                                class="w-full ml-4 appearance-none bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary dark:hover:border-primaryLight rounded-md py-2 px-3 focus:outline-none"
+                                id="textInput"
+                                rows="8"
+                                v-model="misc"
+                                @change="changeMisc"
+                            ></textarea>
+                        </div>
                         <div class="flow-root mt-4">
                             <div class="float-right">
                                 <button
@@ -237,6 +249,7 @@ export default {
             showCli: false,
             showNumType: false,
             showDef: false,
+            misc: '',
 
             params: {
                 Gender: ['Fem', 'Masc'],
@@ -319,6 +332,24 @@ export default {
             */
             this.$emit('edited', 'noBrat')
         },
+        changeMisc() {
+            let newMisc = {}
+            let arr = this.misc.split('|')
+            for (let i = 0; i < this.arr.length; i++) {
+                if (arr[i].split(':')[0] && arr[i].split(':')[0]) {
+                    if (arr[i].split(':')[0] == 'spaceAfter') {
+                        newMisc.spaceAfter = arr[i].split(':')[1]
+                    } else {
+                        newMisc.misc[arr[i].split(':')[0]] = arr[i].split(':')[1]
+                    }
+                }
+            }
+            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex].misc =
+                newMisc.misc
+            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                this.featsToEdit.tokIndex
+            ].spaceAfter = newMisc.spaceAfter
+        },
         save() {
             let toCheck = {
                 Gender: [this.gen],
@@ -346,7 +377,7 @@ export default {
             let dataToSend = {
                 senIndex: this.featsToEdit.senIndex,
                 tokIndex: parseInt(this.featsToEdit.tokIndex),
-                newPos: this.pos,
+                //newPos: this.pos,
                 newFeats: newFeatures,
             }
             this.$emit('edited', dataToSend)
@@ -486,16 +517,25 @@ export default {
                     break
             }
         },
+        objToStr(object) {
+            let str = ''
+            for (var k in object) {
+                if (Object.prototype.hasOwnProperty.call(object, k)) {
+                    str += k + ':' + object[k] + '|'
+                }
+            }
+            return str
+        },
     },
     created() {
-        /*console.log(
-            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
-        )
-        */
+        console.log(this.featsToEdit)
+
         setTimeout(() => {
             this.showDialog = true
         }, 1)
         //console.log(this.featsToEdit.feats)
+        this.misc = this.objToStr(this.featsToEdit.misc.spaceAfter)
+        this.misc += this.objToStr(this.featsToEdit.misc.misc)
         this.pos = this.featsToEdit.pos
         let features = this.featsToEdit.feats
         this.gen = features.Gender == undefined ? '' : features.Gender[0]
