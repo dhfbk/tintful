@@ -33,10 +33,10 @@
                         </div>
                         <div class="flex content-center items-center justify-between my-2">
                             Form:
-                            <form class="font-medium ">
+                            <form class="w-full max-w-xs">
                                 <input
                                     type="text"
-                                    class="appearance-none dark:bg-gray-700 bg-gray-200 focus:outline-none p-1 rounded"
+                                    class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                                     v-model="featsToEdit.word"
                                     @change="changeForm"
                                 />
@@ -44,11 +44,10 @@
                         </div>
                         <div class="flex content-center items-center justify-between my-2">
                             Lemma:
-                            <form class="font-medium ">
+                            <form class="w-full max-w-xs">
                                 <input
                                     type="text"
-                                    class="appearance-none dark:bg-gray-700 bg-gray-200
-                                focus:outline-none p-1 rounded"
+                                    class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                                     v-model="featsToEdit.lemma"
                                     @change="changeLemma"
                                 />
@@ -177,17 +176,14 @@
                                 />
                             </transition-group>
                         </div>
-                        <div class="flex flex-row">
+                        <div class="flex flex-row justify-between content-center items-center">
                             <span>Miscellaneous: </span>
-
-                            <textarea
-                                placeholder="Misc"
-                                class="w-full ml-4 appearance-none bg-gray-200 dark:bg-gray-800 transition-colors duration-150 ease-out hover:border-primary dark:hover:border-primaryLight rounded-md py-2 px-3 focus:outline-none"
-                                id="textInput"
-                                rows="8"
+                            <input
+                                name="misc"
+                                id="misc"
+                                class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full max-w-xs"
                                 v-model="misc"
-                                @change="changeMisc"
-                            ></textarea>
+                            />
                         </div>
                         <div class="flow-root mt-4">
                             <div class="float-right">
@@ -303,6 +299,7 @@ export default {
                 { abbr: 'V', full: 'main verb' },
                 { abbr: 'X', full: 'residual class' },
             ],
+            miscObj: {},
         }
     },
     methods: {
@@ -331,24 +328,6 @@ export default {
             )
             */
             this.$emit('edited', 'noBrat')
-        },
-        changeMisc() {
-            let newMisc = {}
-            let arr = this.misc.split('|')
-            for (let i = 0; i < this.arr.length; i++) {
-                if (arr[i].split(':')[0] && arr[i].split(':')[0]) {
-                    if (arr[i].split(':')[0] == 'spaceAfter') {
-                        newMisc.spaceAfter = arr[i].split(':')[1]
-                    } else {
-                        newMisc.misc[arr[i].split(':')[0]] = arr[i].split(':')[1]
-                    }
-                }
-            }
-            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex].misc =
-                newMisc.misc
-            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
-                this.featsToEdit.tokIndex
-            ].spaceAfter = newMisc.spaceAfter
         },
         save() {
             let toCheck = {
@@ -379,6 +358,47 @@ export default {
                 tokIndex: parseInt(this.featsToEdit.tokIndex),
                 //newPos: this.pos,
                 newFeats: newFeatures,
+            }
+
+            if (this.misc != '') {
+                let value = this.misc.split('|')
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i].split(':')[0] != undefined && value[i].split(':')[0] != '') {
+                        if (value[i].split(':')[1] != undefined && value[i].split(':')[1] != '') {
+                            if (value[i].split(':')[0] == 'spaceAfter') {
+                                this.miscObj[value[i].split(':')[0]] = value[i].split(':')[1]
+                            } else {
+                                if (this.miscObj.misc == undefined) {
+                                    this.miscObj.misc = {}
+                                }
+                                this.miscObj.misc[value[i].split(':')[0]] = value[i].split(':')[1]
+                            }
+                        }
+                    }
+                }
+                console.log(this.misc, this.miscObj)
+                this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                    this.featsToEdit.tokIndex
+                ] = Object.assign(
+                    this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                        this.featsToEdit.tokIndex
+                    ],
+                    this.miscObj
+                )
+                let senMW = this.$store.state.tableData.sentences[this.featsToEdit.senIndex].tokens
+                for (let i = 0; i < senMW.length; i++) {
+                    if (
+                        senMW[i].index ==
+                        this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+                            this.featsToEdit.tokIndex
+                        ].index
+                    ) {
+                        this.$store.state.tableData.sentences[this.featsToEdit.senIndex].tokens[i] = Object.assign(
+                            this.$store.state.tableData.sentences[this.featsToEdit.senIndex].tokens[i],
+                            this.miscObj
+                        )
+                    }
+                }
             }
             this.$emit('edited', dataToSend)
             this.$emit('closeFeatsModal')
@@ -516,6 +536,7 @@ export default {
                     this.showTen = true
                     break
             }
+            this.showDialog = true
         },
         objToStr(object) {
             let str = ''
@@ -528,14 +549,12 @@ export default {
         },
     },
     created() {
-        console.log(this.featsToEdit)
-
-        setTimeout(() => {
-            this.showDialog = true
-        }, 1)
-        //console.log(this.featsToEdit.feats)
-        this.misc = this.objToStr(this.featsToEdit.misc.spaceAfter)
-        this.misc += this.objToStr(this.featsToEdit.misc.misc)
+        if (this.featsToEdit.misc.spaceAfter != undefined) {
+            this.misc = this.objToStr(this.featsToEdit.misc.spaceAfter)
+        }
+        if (this.featsToEdit.misc.misc != undefined) {
+            this.misc += this.objToStr(this.featsToEdit.misc.misc)
+        }
         this.pos = this.featsToEdit.pos
         let features = this.featsToEdit.feats
         this.gen = features.Gender == undefined ? '' : features.Gender[0]
