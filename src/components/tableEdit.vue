@@ -42,7 +42,16 @@
                             </div>
                         </span>
                     </td>
-                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500" v-html="d.word"></td>
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
+                        <span v-if="typeof d.index !== 'string'">{{ d.word }}</span>
+                        <input
+                            v-else
+                            type="text"
+                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                            v-model="d.word"
+                            @keyup="changeForm(d.word, d.index, index)"
+                        />
+                    </td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <input
                             type="text"
@@ -292,6 +301,23 @@ export default {
         this.loading = false
     },
     methods: {
+        changeForm(txt, span, tbInd) {
+            let sen = this.$store.state.editableData.sentences[this.sentenceIndex].tokens
+            let sen2 = this.$store.state.tableData.sentences[this.sentenceIndex].tokens
+            let diff = parseInt(span.split('-')[1]) - parseInt(span.split('-')[0])
+            for (let i = 0; i < sen.length; i++) {
+                if (sen[i].multiwordSpan == span) {
+                    for (let x = i; x <= i + diff; x++) {
+                        sen[x].originalText = txt
+                    }
+                    break
+                }
+            }
+            for (let i = tbInd + 1; i <= tbInd + 1 + diff; i++) {
+                sen2[i].originalText = txt
+            }
+            this.$emit('edited')
+        },
         setInitialData() {
             var phrase = this.$store.state.tableData.sentences[this.sentenceIndex]
             for (let i = 0; i < phrase['basic-dependencies'].length; i++) {
