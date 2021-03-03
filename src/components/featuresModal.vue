@@ -37,8 +37,7 @@
                                 <input
                                     type="text"
                                     class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
-                                    v-model="featsToEdit.word"
-                                    @change="changeForm"
+                                    v-model="word"
                                 />
                             </form>
                         </div>
@@ -48,8 +47,7 @@
                                 <input
                                     type="text"
                                     class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
-                                    v-model="featsToEdit.lemma"
-                                    @change="changeLemma"
+                                    v-model="lemma"
                                 />
                             </form>
                         </div>
@@ -63,7 +61,6 @@
                                 name="posSelect"
                                 id="posSelect"
                                 v-model="pos"
-                                @change="changePos"
                             >
                                 <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
                                     {{ i.abbr }} ({{ i.full }})
@@ -220,6 +217,8 @@ export default {
         return {
             notFirstIter: false,
             showDialog: false,
+            word: '',
+            lemma: '',
             pos: '',
             gen: '',
             num: '',
@@ -306,29 +305,29 @@ export default {
         toggleModal() {
             this.$emit('closeFeatsModal')
         },
-        changePos() {
-            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
-                this.featsToEdit.tokIndex
-            ].pos = this.featsToEdit.pos
-            this.$emit('edited', 'noBrat')
-        },
-        changeForm() {
-            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
-                this.featsToEdit.tokIndex
-            ].word = this.featsToEdit.word
-            this.$emit('edited', 'noBrat')
-        },
-        changeLemma() {
-            this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
-                this.featsToEdit.tokIndex
-            ].lemma = this.featsToEdit.lemma
-            /*console.log(
-                this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
-                    .lemma
-            )
-            */
-            this.$emit('edited', 'noBrat')
-        },
+        // changePos() {
+        //     this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+        //         this.featsToEdit.tokIndex
+        //     ].pos = this.pos
+        //     this.$emit('edited', 'noBrat')
+        // },
+        // changeForm() {
+        //     this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+        //         this.featsToEdit.tokIndex
+        //     ].word = this.featsToEdit.word
+        //     this.$emit('edited', 'noBrat')
+        // },
+        // changeLemma() {
+        //     this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[
+        //         this.featsToEdit.tokIndex
+        //     ].lemma = this.featsToEdit.lemma
+        //     /*console.log(
+        //         this.$store.state.editableData.sentences[this.featsToEdit.senIndex].tokens[this.featsToEdit.tokIndex]
+        //             .lemma
+        //     )
+        //     */
+        //     this.$emit('edited', 'noBrat')
+        // },
         save() {
             let toCheck = {
                 Gender: [this.gen],
@@ -356,7 +355,9 @@ export default {
             let dataToSend = {
                 senIndex: this.featsToEdit.senIndex,
                 tokIndex: parseInt(this.featsToEdit.tokIndex),
-                //newPos: this.pos,
+                newPos: this.pos,
+                newWord: this.word,
+                newLemma: this.lemma,
                 newFeats: newFeatures,
             }
 
@@ -556,6 +557,8 @@ export default {
             this.misc += this.objToStr(this.featsToEdit.misc.misc)
         }
         this.pos = this.featsToEdit.pos
+        this.word = this.featsToEdit.word
+        this.lemma = this.featsToEdit.lemma
         let features = this.featsToEdit.feats
         this.gen = features.Gender == undefined ? '' : features.Gender[0]
         this.num = features.Number == undefined ? '' : features.Number[0]

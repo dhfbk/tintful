@@ -470,6 +470,8 @@ export default {
                 //console.log(feats)
                 x.features = feats.newFeats
                 x.pos = feats.newPos
+                x.word = feats.newWord
+                x.lemma = feats.newLemma
                 this.refresh = true
                 setTimeout(() => {
                     this.refresh = false
