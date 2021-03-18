@@ -18,7 +18,7 @@
         -->
         <div class="grid grid-cols-9 col-span-8 gap-x-6 gap-y-6 mb-6">
             <div class="col-span-9 lg:col-span-2 sm:col-span-4 dark:bg-dark01dp shadow-md rounded-lg p-3 md:p-4">
-                <div class="col-span-8 mb-4 text-primary dark:text-primaryLight text-xl tracking-wide ">
+                <div class="col-span-8 mb-4 text-primary dark:text-primaryLight text-xl tracking-wide">
                     General Information
                 </div>
 
@@ -86,9 +86,7 @@
             :sheetMode="sheetMode"
         />
         <swipeable-bottom-sheet ref="swipeableBottomSheet" class="md:hidden">
-            <h1 v-if="info == ''" class="px-4 text-center">
-                Click on a token for further information
-            </h1>
+            <h1 v-if="info == ''" class="px-4 text-center">Click on a token for further information</h1>
             <div v-else class="px-4">
                 <div class="font-light text-lg text-center">
                     Info on the token "
@@ -245,6 +243,9 @@ export default {
                 }
                 this.chartOptionsDifficulty.colors.push(tmpCol)
             }
+            setTimeout(() => {
+                this.sheetColor()
+            }, 100)
         }
     },
     methods: {
@@ -262,9 +263,7 @@ export default {
             this.modalMode = type.toLowerCase()
             this.modal = !this.modal
         },
-    },
-    watch: {
-        sheetMode() {
+        sheetColor() {
             if (this.show) {
                 if (this.sheetMode == 'dark') {
                     document.querySelector('.card').classList.add('cardDark')
@@ -274,6 +273,11 @@ export default {
                     document.querySelector('.card').classList.remove('barDark')
                 }
             }
+        },
+    },
+    watch: {
+        sheetMode() {
+            this.sheetColor()
         },
     },
 }

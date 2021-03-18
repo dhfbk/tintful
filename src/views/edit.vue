@@ -1,5 +1,5 @@
 <template>
-    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 md:p-4" v-if="ready">
+    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 pb-4 md:p-4 md:pb-5" v-if="ready">
         <deps-modal
             @closeDepsModal="showDepsModal = false"
             @edited="editedDep"
@@ -37,8 +37,20 @@
             @snack="snack"
             @edited="editedMW"
         />
+        <authModal v-if="showAuth" @snack="snack" @close="showAuth = false" />
+        <button
+            @click="showAuth = !showAuth"
+            class="float-right bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded-full p-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
+        >
+            <svg style="width: 24px; height: 24px" class="fill-current" viewBox="0 0 24 24">
+                <path
+                    d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                />
+            </svg>
+        </button>
+        <div class="clearfix"></div>
         <div class="overflow-x-auto w-full">
-            <div class="w-full grid grid-cols-3 text-center min-w-max p-2">
+            <div class="w-full grid grid-cols-3 text-center min-w-max py-2">
                 <div
                     @click="confirmModal('graph')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -66,7 +78,7 @@
                 >
                     Named Entity Recognition
                 </div>
-                <div class="col-span-4">
+                <div class="col-span-3">
                     <div class="h-1 w-1/3 bg-primary dark:bg-primaryLight" :class="tabScroll"></div>
                 </div>
             </div>
@@ -91,7 +103,7 @@
                 </button>
             </div>
             <div
-                v-if="selectedTab == 0 || selectedTab == 1"
+                v-if="selectedTab != 2"
                 class="flex content-center items-center col-span-2 sm:col-span-1 justify-end sm:justify-center"
             >
                 <button
@@ -108,7 +120,7 @@
                 <span class="mx-2">{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
                 <button
                     @click="confirmModal('next')"
-                    class="rounded h-5/6 flex items-center content-center mr-1 px-2  ripple transition-colors duration-100 ease-out select-none focus:outline-none"
+                    class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                     :class="
                         sentenceIndex == sentencesNum - 1
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
@@ -125,13 +137,20 @@
                 <button
                     :class="
                         isEdited && !noRoot
-                            ? 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            ? 'bg-green-400 dark:bg-green-400 dark:hover:bg-green-600 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                             : 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
                     "
                     @click="confirmModal('save')"
-                    class="rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
+                    class="flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                 >
                     Save changes
+                    <svg
+                        :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
+                        style="width: 24px; height: 24px"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -219,6 +238,8 @@ import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
 import confirmationModal from '../components/confirmationModal.vue'
 import manageMultiword from '../components/manageMultiword.vue'
+import authModal from '../components/authModal.vue'
+import axios from 'axios'
 export default {
     props: {
         sheetMode: String,
@@ -233,6 +254,7 @@ export default {
             showFeatsModal: false,
             showMwModal: false,
             manageMW: false,
+            showAuth: false,
             sentenceIndex: 0,
             sentencesNum: 0,
             selectedTab: 0,
@@ -252,6 +274,7 @@ export default {
             noRoot: false,
             arrPos: 0,
             ready: false,
+            loadBtn: false,
         }
     },
     created() {
@@ -284,6 +307,7 @@ export default {
         confirmationModal,
         mwModal,
         manageMultiword,
+        authModal,
     },
     mounted() {
         if (
@@ -350,57 +374,45 @@ export default {
             this.isEdited = false
             this.confirmation ? (this.confirmation = !this.confirmation) : ''
             if (mode == 'save') {
+                this.loadBtn = true
                 let sen = this.$store.state.editableData
                 let senMt = this.$store.state.tableData
-                /*
-                if (this.tableMisc) {
-                    for (let i = 0; i < sen.sentences[this.sentenceIndex].tokens.length; i++) {
-                        this.$store.state.editableData.sentences[this.sentenceIndex].tokens[i] = Object.assign(
-                            sen.sentences[this.sentenceIndex].tokens[i],
-                            this.misc[i + 1]
-                        )
-                    }
-                }
-                */
                 let sentences = []
-                let mT = {}
-                for (let i = 0; i < sen.sentences.length; i++) {
-                    for (let x = 0; x < sen.sentences[i].tokens.length; x++) {
-                        if (this.misc[sen.sentences[i].tokens[x].index] != undefined) {
-                            sen.sentences[i].tokens[x] = Object.assign(
-                                sen.sentences[i].tokens[x],
-                                this.misc[sen.sentences[i].tokens[x].index]
-                            )
-                        }
-                    }
-                    sentences.push({
-                        tokens: sen.sentences[i].tokens,
-                        multiTokens: [],
-                        deps: sen.sentences[i]['basic-dependencies'],
-                    })
-                    for (let x = 0; x < senMt.sentences[i].tokens.length; x++) {
-                        if (this.tableMisc) {
-                            if (this.misc[senMt.sentences[i].tokens[x].index] != undefined) {
-                                senMt.sentences[i].tokens[x] = Object.assign(
-                                    senMt.sentences[i].tokens[x],
-                                    this.misc[senMt.sentences[i].tokens[x].index]
-                                )
-                            }
-                        }
-                        if (typeof senMt.sentences[i].tokens[x].index == 'string') {
-                            mT = {
-                                index: senMt.sentences[i].tokens[x].index,
-                                start: parseInt(senMt.sentences[i].tokens[x].index.split('-')[0]),
-                                end: parseInt(senMt.sentences[i].tokens[x].index.split('-')[1]),
-                                form: senMt.sentences[i].tokens[x].word,
-                                misc: senMt.sentences[i].tokens[x].misc,
-                            }
-                            sentences[i].multiTokens.push(mT)
-                        }
+                if (this.type == 'graph' || this.type == 'table') {
+                    this.createData(sen, senMt, sentences, this.sentenceIndex)
+                } else {
+                    for (let i = 0; i < sen.sentences.length; i++) {
+                        this.createData(sen, senMt, sentences, i)
                     }
                 }
                 let toSend = { user: '', sentences: sentences }
                 console.log(toSend)
+                let sessID = ''
+                if (sessionStorage.getItem('session_id') != undefined) {
+                    sessID = sessionStorage.getItem('session_id')
+                }
+                axios({
+                    method: 'post',
+                    url: 'https://dh-server.fbk.eu/tint-w/?action=submit',
+                    data: {
+                        session_id: sessID,
+                        type: this.type,
+                        data: JSON.stringify(toSend),
+                    },
+                })
+                    .then(res => {
+                        if (res.data.result == 'ERR') {
+                            this.$emit('snack', res.data.error)
+                        } else {
+                            this.$emit('snack', 'Login successful')
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+                    .then(() => {
+                        this.loadBtn = false
+                    })
                 this.snack('Edited succesfully')
                 localStorage.setItem('processedText', '')
                 localStorage.setItem('processedText', JSON.stringify(sen))
@@ -438,6 +450,42 @@ export default {
                 case 'prev':
                     this.sentenceIndex > 0 ? this.sentenceIndex-- : false
                     break
+            }
+        },
+        createData(sen, senMt, sentences, index) {
+            let mT = {}
+            for (let x = 0; x < sen.sentences[index].tokens.length; x++) {
+                if (this.misc[sen.sentences[index].tokens[x].index] != undefined) {
+                    sen.sentences[index].tokens[x] = Object.assign(
+                        sen.sentences[index].tokens[x],
+                        this.misc[sen.sentences[index].tokens[x].index]
+                    )
+                }
+            }
+            sentences.push({
+                tokens: sen.sentences[index].tokens,
+                multiTokens: [],
+                deps: sen.sentences[index]['basic-dependencies'],
+            })
+            for (let x = 0; x < senMt.sentences[index].tokens.length; x++) {
+                if (this.tableMisc) {
+                    if (this.misc[senMt.sentences[index].tokens[x].index] != undefined) {
+                        senMt.sentences[index].tokens[x] = Object.assign(
+                            senMt.sentences[index].tokens[x],
+                            this.misc[senMt.sentences[index].tokens[x].index]
+                        )
+                    }
+                }
+                if (typeof senMt.sentences[index].tokens[x].index == 'string') {
+                    mT = {
+                        index: senMt.sentences[index].tokens[x].index,
+                        start: parseInt(senMt.sentences[index].tokens[x].index.split('-')[0]),
+                        end: parseInt(senMt.sentences[index].tokens[x].index.split('-')[1]),
+                        form: senMt.sentences[index].tokens[x].word,
+                        misc: senMt.sentences[index].tokens[x].misc,
+                    }
+                    sentences[index].multiTokens.push(mT)
+                }
             }
         },
         editedMW() {
