@@ -27,6 +27,11 @@ const routes = [
     name: 'edit',
     component: lazyLoad('edit'),
   },
+  {
+    path: '/account',
+    name: 'account',
+    component: lazyLoad('account'),
+  },
 ]
 
 const router = new VueRouter({

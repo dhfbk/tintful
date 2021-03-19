@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "debounce": "^1.2.0",
     "json-formatter-js": "^2.3.4",
+    "md5": "^2.3.0",
     "poplar-annotation": "^2.0.3",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",

@@ -43,18 +43,6 @@
             @snack="snack"
             @edited="editedMW"
         />
-        <authModal v-if="showAuth" @snack="snack" @close="showAuth = false" />
-        <button
-            @click="showAuth = !showAuth"
-            class="float-right bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded-full p-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
-        >
-            <svg style="width: 24px; height: 24px" class="fill-current" viewBox="0 0 24 24">
-                <path
-                    d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
-                />
-            </svg>
-        </button>
-        <div class="clearfix"></div>
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-4 text-center min-w-max py-2">
                 <div
@@ -127,7 +115,7 @@
                     :class="
                         sentenceIndex == 0
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
                     Prev.
@@ -139,7 +127,7 @@
                     :class="
                         sentenceIndex == sentencesNum - 1
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
                     Next
@@ -176,7 +164,7 @@
         <div class="my-2" v-if="selectedTab != 2 && selectedTab != 3">
             <button
                 @click="manageMW = !manageMW"
-                class="bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
+                class="bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
             >
                 Edit multiwords
             </button>
@@ -257,8 +245,9 @@ import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
 import confirmationModal from '../components/confirmationModal.vue'
 import manageMultiword from '../components/manageMultiword.vue'
-import authModal from '../components/authModal.vue'
 import axios from 'axios'
+
+const md5 = require('md5')
 export default {
     props: {
         sheetMode: String,
@@ -274,7 +263,6 @@ export default {
             showPosModal: false,
             showMwModal: false,
             manageMW: false,
-            showAuth: false,
             sentenceIndex: 0,
             sentencesNum: 0,
             selectedTab: 0,
@@ -330,7 +318,6 @@ export default {
         posModal,
         mwModal,
         manageMultiword,
-        authModal,
     },
     mounted() {
         if (
@@ -401,25 +388,38 @@ export default {
                 let sen = this.$store.state.editableData
                 let senMt = this.$store.state.tableData
                 let sentences = []
+                let ind = ''
+                let type = ''
+                for (let i = 0; i < sen.sentences.length; i++) {
+                    this.createData(sen, senMt, sentences, i)
+                }
                 if (this.type == 'graph' || this.type == 'table') {
-                    this.createData(sen, senMt, sentences, this.sentenceIndex)
+                    type = 'dep'
+                    ind += this.sentenceIndex
                 } else {
+                    type = this.type
                     for (let i = 0; i < sen.sentences.length; i++) {
-                        this.createData(sen, senMt, sentences, i)
+                        ind += sen.sentences[i].index
+                        if (i < sen.sentences.length - 1) {
+                            ind += ','
+                        }
                     }
                 }
                 let toSend = { user: '', sentences: sentences }
-                console.log(toSend)
+                console.log(toSend, ind)
                 let sessID = ''
                 if (sessionStorage.getItem('session_id') != undefined) {
                     sessID = sessionStorage.getItem('session_id')
                 }
+                let hashTxt = md5(localStorage.getItem('text'))
                 axios({
                     method: 'post',
-                    url: 'https://dh-server.fbk.eu/tint-w/?action=submit',
+                    url: 'https://dh-server.fbk.eu/tint-w/api/?action=submit',
                     data: {
                         session_id: sessID,
-                        type: this.type,
+                        type: type,
+                        hash: hashTxt,
+                        sentences: ind,
                         data: JSON.stringify(toSend),
                     },
                 })

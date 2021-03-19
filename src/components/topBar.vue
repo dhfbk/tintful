@@ -14,7 +14,7 @@
         >
             <button
                 title="Overview"
-                class="group md:mt-4 p-2 rounded-full focus:outline-none"
+                class="group md:mx-auto mx-2 md:mt-2 p-2 rounded-full focus:outline-none"
                 :class="
                     $route.name == 'result' ? 'dark:text-gray-300 text-gray-600' : 'dark:text-gray-500 text-gray-400'
                 "
@@ -76,6 +76,36 @@
                         >
                             Overview
                         </div> -->
+                    </transition>
+                </div>
+            </button>
+            <button
+                title="Account"
+                class="group md:mx-auto mx-2 md:mt-2 p-2 rounded-full focus:outline-none"
+                :class="
+                    $route.name == 'account' ? 'dark:text-gray-300 text-gray-600' : 'dark:text-gray-500 text-gray-400'
+                "
+                @click="goTo('/account')"
+            >
+                <svg class="w-6 h-6 fill-current mx-auto mb-1 dark:group-hover:text-gray-100" viewBox="0 0 24 24">
+                    <path
+                        d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                    />
+                </svg>
+                <span class="sr-only">Account</span>
+                <div>
+                    <transition name="fade">
+                        <div
+                            class="text-center text-sm uppercase tracking-widest font-bold"
+                            :class="
+                                $route.name == 'account'
+                                    ? 'dark:text-gray-300 text-gray-600 dark:group-hover:text-gray-100'
+                                    : 'dark:text-gray-500 text-gray-400'
+                            "
+                            v-show="$route.name == 'account'"
+                        >
+                            Account
+                        </div>
                     </transition>
                 </div>
             </button>

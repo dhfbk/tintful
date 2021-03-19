@@ -118,7 +118,7 @@ export default {
             this.loadBtn = true
             axios({
                 method: 'post',
-                url: 'https://dh-server.fbk.eu/tint-w/?action=login',
+                url: 'https://dh-server.fbk.eu/tint-w/api/?action=login',
                 data: {
                     username: this.username,
                     password: this.password,

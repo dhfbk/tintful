@@ -1,5 +1,6 @@
 <template>
     <div class="mt-4">
+        <!--
         <span class="mt-2 mb-4 inline-block w-full">
             <div
                 class="flex flex-row content-center items-center justify-center"
@@ -10,7 +11,7 @@
                     :class="
                         page == 1
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                     @click="page > 1 ? page-- : (page = page)"
                 >
@@ -22,7 +23,7 @@
                     :class="
                         page == totalPages
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                     @click="page < totalPages ? page++ : (page = page)"
                 >
@@ -34,6 +35,7 @@
                 {{ n + 1 + (page - 1) * senPerPage }}. {{ sen }}<br />
             </span>
         </span>
+        -->
         <div class="font-bold text-lg">Legend</div>
         <div :class="'grid grid-rows-' + nerDesc.length + 'grid-flow-col mb-6'">
             <div v-for="type in nerDesc" :key="type">
@@ -45,6 +47,7 @@
         </div>
         <div class="divide-y divide-primary divide-opacity-75">
             <div v-for="sen in localData.sentences" :key="sen.index" class="">
+                <p class="mt-3 mb-1">{{sen.text}}</p>
                 <div class="flex flex-row flex-wrap">
                     <span
                         v-for="(token, cont) in sen.tokens"

@@ -1,5 +1,6 @@
 <template>
     <div class="mt-4">
+        <!--
         <span class="mt-2 mb-4 inline-block w-full">
             <div
                 class="flex flex-row content-center items-center justify-center"
@@ -10,7 +11,7 @@
                     :class="
                         page == 1
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                     @click="page > 1 ? page-- : (page = page)"
                 >
@@ -22,7 +23,7 @@
                     :class="
                         page == totalPages
                             ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
+                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                     @click="page < totalPages ? page++ : (page = page)"
                 >
@@ -34,6 +35,7 @@
                 {{ n + 1 + (page - 1) * senPerPage }}. {{ sen }}<br />
             </span>
         </span>
+        -->
         <!-- <div class="font-bold text-lg">Legend</div> -->
         <!-- <div :class="'grid grid-rows-' + nerDesc.length + 'grid-flow-col mb-6'">
             <div v-for="type in nerDesc" :key="type">
@@ -43,16 +45,24 @@
                 </div>
             </div>
         </div> -->
+        <div class="font-bold text-lg">Legend</div>
+        <div class="grid grid-rows-4 grid-flow-col gap-x-1 auto-cols-auto mb-6 max-w-max">
+            <div v-for="(i, x) in Object.keys(legend)" :key="x">
+                <div class="h-3 w-3 rounded-full inline-block" :style="{ background: legend[i] }"></div>
+                {{ i }}{{ posDesc[i] ? ': ' + posDesc[i] : ': Other' }}
+            </div>
+        </div>
         <div class="divide-y divide-primary divide-opacity-75">
             <div v-for="sen in localData.sentences" :key="sen.index" class="">
+                <p class="mt-3 mb-1">{{sen.text}}</p>
                 <div class="flex flex-row flex-wrap">
                     <span
+                        @dblclick="openModal(sen.index, i)"
                         v-for="(token, i) in sen.tokens"
                         :key="i"
                         class="flex flex-col place-items-center my-2 cursor-pointer"
                     >
                         <span
-                            @dblclick="openModal(sen.index, i)"
                             class="rounded px-1 text-sm text-black max-w-min mx-1 mb-1"
                             :style="{ background: legend[token.pos[0]] }"
                             >{{ token.pos }}
@@ -138,9 +148,14 @@ export default {
             page: 1,
             senPerPage: 10,
             sentencesToShow: [],
+            posDesc: [],
         }
     },
     created() {
+        this.posDesc = this.localData.readability.genericPosDescription
+        for (let i = 0; i < this.poses.length; i++) {
+            this.legend[this.poses[i]] = this.colors[i]
+        }
         this.totalPages = Math.ceil(this.localData.sentences.length / this.senPerPage)
         for (let i = 0; i < this.senPerPage; i++) {
             if (this.localData.sentences[i] != undefined) {
