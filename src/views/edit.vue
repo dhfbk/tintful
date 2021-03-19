@@ -1,5 +1,11 @@
 <template>
     <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 pb-4 md:p-4 md:pb-5" v-if="ready">
+        <pos-modal
+            v-if="showPosModal"
+            @closePosModal="showPosModal = false"
+            :posToEdit="posToEdit"
+            @edited="editedPos"
+        />
         <deps-modal
             @closeDepsModal="showDepsModal = false"
             @edited="editedDep"
@@ -50,7 +56,7 @@
         </button>
         <div class="clearfix"></div>
         <div class="overflow-x-auto w-full">
-            <div class="w-full grid grid-cols-3 text-center min-w-max py-2">
+            <div class="w-full grid grid-cols-4 text-center min-w-max py-2">
                 <div
                     @click="confirmModal('graph')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -70,10 +76,19 @@
                     Table
                 </div>
                 <div
-                    @click="confirmModal('ner')"
+                    @click="confirmModal('pos')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
                     :class="
                         selectedTab == 2 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
+                    "
+                >
+                    Part of Speech
+                </div>
+                <div
+                    @click="confirmModal('ner')"
+                    class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    :class="
+                        selectedTab == 3 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
                     "
                 >
                     Named Entity Recognition
@@ -103,7 +118,7 @@
                 </button>
             </div>
             <div
-                v-if="selectedTab != 2"
+                v-if="selectedTab != 2 && selectedTab != 3"
                 class="flex content-center items-center col-span-2 sm:col-span-1 justify-end sm:justify-center"
             >
                 <button
@@ -132,7 +147,7 @@
             </div>
             <div
                 class="w-full mt-1 sm:mt-0 col-span-3 sm:col-span-1 justify-self-end flex content-center items-center justify-start sm:justify-end"
-                :class="selectedTab == 2 ? 'sm:col-span-2' : ''"
+                :class="selectedTab == 2 || selectedTab == 3 ? 'sm:col-span-2' : ''"
             >
                 <button
                     :class="
@@ -154,11 +169,11 @@
                 </button>
             </div>
         </div>
-        <span class="my-2 inline-block" v-if="selectedTab != 2">
+        <span class="my-2 inline-block" v-if="selectedTab != 2 && selectedTab != 3">
             Sentence:
             <span class="font-bold">{{ $store.state.editableData.sentences[sentenceIndex].text }}</span>
         </span>
-        <div class="my-2" v-if="selectedTab != 2">
+        <div class="my-2" v-if="selectedTab != 2 && selectedTab != 3">
             <button
                 @click="manageMW = !manageMW"
                 class="bg-primary dark:bg-primaryLight dark:hover:bg-primary hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
@@ -202,6 +217,7 @@
         <p class="my-1 text-red-500 dark:text-red-400" v-if="noRoot && action == 'table'">
             No ROOT element, please choose one
         </p>
+
         <brat-edit
             v-if="selectedTab == 0"
             :sentenceIndex="sentenceIndex"
@@ -224,14 +240,17 @@
             @misc="setMisc"
             @noRoot="checkRoot"
         />
-        <nerEdit v-else-if="selectedTab == 2" @edited="isEdited = true" />
+        <pos-edit v-else-if="selectedTab == 2" @showPosModal="posModal" />
+        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" />
     </div>
 </template>
 
 <script>
 import bratEdit from '../components/bratEdit.vue'
 import tableEdit from '../components/tableEdit.vue'
+import posEdit from '../components/posEdit.vue'
 import depsModal from '../components/depsModal.vue'
+import posModal from '../components/posModal.vue'
 import mwModal from '../components/mwModal.vue'
 import FeaturesModal from '../components/featuresModal.vue'
 import nerEdit from '../components/nerEdit.vue'
@@ -252,6 +271,7 @@ export default {
             nerPhrases: {},
             showDepsModal: false,
             showFeatsModal: false,
+            showPosModal: false,
             showMwModal: false,
             manageMW: false,
             showAuth: false,
@@ -262,6 +282,7 @@ export default {
             isEdited: false,
             depToEdit: {},
             featsToEdit: {},
+            posToEdit: {},
             refresh: false,
             type: 'graph',
             modalInfo: false,
@@ -301,10 +322,12 @@ export default {
         bratEdit,
         tableEdit,
         depsModal,
+        posEdit,
         FeaturesModal,
         nerEdit,
         modalInfo,
         confirmationModal,
+        posModal,
         mwModal,
         manageMultiword,
         authModal,
@@ -438,9 +461,15 @@ export default {
                         this.type = 'table'
                     }
                     break
-                case 'ner':
+                case 'pos':
                     if (this.selectedTab != 2) {
                         this.selectedTab = 2
+                        this.type = 'ner'
+                    }
+                    break
+                case 'ner':
+                    if (this.selectedTab != 3) {
+                        this.selectedTab = 3
                         this.type = 'ner'
                     }
                     break
@@ -526,6 +555,9 @@ export default {
                 }, 200)
             }
         },
+        editedPos() {
+            this.isEdited = true
+        },
         depsModal(i) {
             if (i.dep == undefined || i.dep == null) {
                 this.depToEdit.dep = i.getAttribute('data-arc-role')
@@ -544,6 +576,15 @@ export default {
             this.featsToEdit = info
             this.featsMode = mode
             this.showFeatsModal = true
+        },
+        posModal(info) {
+            this.posToEdit = {
+                senIndex: info.senIndex,
+                tokenIndex: info.tokenIndex,
+                token: this.$store.state.editableData.sentences[info.senIndex].tokens[info.tokenIndex],
+            }
+            console.log(this.$store.state.editableData.sentences[info.senIndex].tokens[info.tokenIndex])
+            this.showPosModal = true
         },
     },
     watch: {
