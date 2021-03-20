@@ -4,7 +4,7 @@
     >
         <router-link to="/">
             <img
-                src="../assets/logoTint.png"
+                src="../assets/logoTint.webp"
                 alt="Logo Tint"
                 class="inline md:block w-24 sm:w-36 md:w-2/3 mx-2 md:mx-auto"
             />
