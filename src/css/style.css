@@ -59,18 +59,19 @@ body {
     color: rgb(255, 255, 255) !important;
 }
 
-.dark .multiWord text, .dark .rootText{
+.dark .multiWord text,
+.dark .rootText {
     fill: white;
 }
 
-.root{
+.root {
     stroke: green;
-    fill: green;
+    fill  : green;
 }
 
-.dark .root{
+.dark .root {
     stroke: limegreen;
-    fill: limegreen;
+    fill  : limegreen;
 }
 
 @keyframes fade-in {
@@ -166,9 +167,18 @@ body {
 
 .cardDark {
     background: #374151 !important;
-    color           : #f3f4f6 !important;
+    color     : #f3f4f6 !important;
 }
 
 .cardDark .pan-area .bar {
     background: #9ca3af !important;
+}
+
+.pin-r {
+    right: 0;
+}
+
+.pin-y {
+    top   : 0;
+    bottom: 0;
 }

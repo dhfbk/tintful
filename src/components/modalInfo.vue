@@ -116,9 +116,12 @@ export default {
         } else if (this.type == 'table') {
             this.text =
                 "To edit values in the table, simply change the text where the field is an open one, select another option in the dropdown fields, or use the modal where it's needed"
-        } else {
+        } else if (this.type == 'ner') {
             this.text =
-                'To change the NER value of a certain token, simply click/tap on it and the color will change according to the new value. You can check the legend to see what value each color refers to.'
+                'To change the NER value of a certain token, simply click/tap on it and the color will change according to the new value. You can check the legend to see what value each color refers to.<br>Clicking on the checkbox on the left side of each sentence marks each sentence as "correct" and removes any NER changes made to its tokens (if there are any).'
+        } else if (this.type == 'pos') {
+            this.text =
+                'To change the POS value of a certain token, simply click/tap on it and choose the new value through the dialog.<br>Clicking on the checkbox on the left side of each sentence marks each sentence as "correct" and removes any POS changes made to its tokens (if there are any).'
         }
     },
 }

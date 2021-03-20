@@ -2,6 +2,7 @@
     <transition name="fade-bg" appear>
         <div
             class="flex items-center justify-center fixed left-0 bottom-0 w-full h-full min-h-screen dark:bg-black bg-gray-900 bg-opacity-25 customZ"
+            @click="modal"
         >
             <transition name="fade" appear>
                 <div
@@ -28,16 +29,27 @@
                     </div>
                     <div>Word: "{{ posToEdit.token.word }}"</div>
                     <span>POS: </span>
-                    <select
-                        class="appearance-none font-medium h-full border-b-2 inline-block bg-transparent border-gray-400 text-gray-700 dark:text-gray-200 py-1 pl-2 leading-tight focus:outline-none focus:bg-white dark:focus:bg-gray-800 focus:border-gray-500"
-                        name="posSelect"
-                        id="posSelect"
-                        v-model="pos"
-                    >
-                        <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
-                            {{ i.abbr }} ({{ i.full }})
-                        </option>
-                    </select>
+                    <div class="relative">
+                        <select
+                            name="depsSelect"
+                            id="depsSelect"
+                            v-model="pos"
+                            class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                        >
+                            <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
+                                {{ i.abbr }} ({{ i.full }})
+                            </option>
+                        </select>
+                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
+                            <svg
+                                class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                            >
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                            </svg>
+                        </div>
+                    </div>
                     <div class="flow-root mt-4">
                         <div class="float-right">
                             <button
@@ -121,6 +133,7 @@ export default {
                 this.posToEdit.tokenIndex
             ].pos = this.pos
             this.$emit('edited')
+            this.$emit('sendID', [this.posToEdit.senIndex, 'token'])
             this.modal()
         },
     },

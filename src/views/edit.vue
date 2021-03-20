@@ -5,6 +5,7 @@
             @closePosModal="showPosModal = false"
             :posToEdit="posToEdit"
             @edited="editedPos"
+            @sendID="addToID"
         />
         <deps-modal
             @closeDepsModal="showDepsModal = false"
@@ -228,8 +229,8 @@
             @misc="setMisc"
             @noRoot="checkRoot"
         />
-        <pos-edit v-else-if="selectedTab == 2" @showPosModal="posModal" />
-        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" />
+        <pos-edit v-else-if="selectedTab == 2" @showPosModal="posModal" @sendID="addToID" />
+        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" />
     </div>
 </template>
 
@@ -284,6 +285,7 @@ export default {
             arrPos: 0,
             ready: false,
             loadBtn: false,
+            idList: '',
         }
     },
     created() {
@@ -348,6 +350,38 @@ export default {
         }
     },
     methods: {
+        addToID(ids) {
+            var idArr = []
+            if (this.idList != '') {
+                idArr = this.idList.split(',')
+            }
+            //insert the parameter in the variable
+            if (ids[1] == 'check' && ids[2] == false) {
+                for (let i = 0; i < idArr.length; i++) {
+                    if (idArr[i] == ids[0].toString()) {
+                        idArr.splice(i, 1)
+                    }
+                }
+            } else {
+                idArr.push(ids[0])
+            }
+            //parse all strings to int numbers
+            for (let i = 0; i < idArr.length; i++) {
+                idArr[i] = parseInt(idArr[i])
+            }
+            //order elements
+            idArr.sort(function(a, b) {
+                return a - b
+            })
+            //remove double elements
+            var noDbl = [idArr[0]]
+            for (var i = 1; i < idArr.length; i++) {
+                if (idArr[i] != idArr[i - 1]) noDbl.push(idArr[i])
+            }
+            //parse array to string and assign back to variable
+            this.idList = noDbl.toString()
+            this.isEdited = true
+        },
         multiwordModal(arrPos) {
             this.arrPos = arrPos
             this.showMwModal = true
@@ -398,12 +432,7 @@ export default {
                     ind += this.sentenceIndex
                 } else {
                     type = this.type
-                    for (let i = 0; i < sen.sentences.length; i++) {
-                        ind += sen.sentences[i].index
-                        if (i < sen.sentences.length - 1) {
-                            ind += ','
-                        }
-                    }
+                    ind = this.idList
                 }
                 let toSend = { user: '', sentences: sentences }
                 console.log(toSend, ind)
@@ -464,7 +493,7 @@ export default {
                 case 'pos':
                     if (this.selectedTab != 2) {
                         this.selectedTab = 2
-                        this.type = 'ner'
+                        this.type = 'pos'
                     }
                     break
                 case 'ner':

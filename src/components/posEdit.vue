@@ -1,50 +1,5 @@
 <template>
     <div class="mt-4">
-        <!--
-        <span class="mt-2 mb-4 inline-block w-full">
-            <div
-                class="flex flex-row content-center items-center justify-center"
-                v-if="this.$store.state.editableData.sentences.length > 10"
-            >
-                <button
-                    class="rounded flex items-center content-center mr-1 px-2 py-1 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
-                    :class="
-                        page == 1
-                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
-                    "
-                    @click="page > 1 ? page-- : (page = page)"
-                >
-                    Prev.
-                </button>
-                <span class="mx-2">{{ page }}/{{ totalPages }}</span>
-                <button
-                    class="rounded flex items-center content-center mr-1 px-2 py-1 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
-                    :class="
-                        page == totalPages
-                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
-                    "
-                    @click="page < totalPages ? page++ : (page = page)"
-                >
-                    Next
-                </button>
-            </div>
-            Sentences:<br />
-            <span class="font-bold" v-for="(sen, n) in sentencesToShow" :key="n">
-                {{ n + 1 + (page - 1) * senPerPage }}. {{ sen }}<br />
-            </span>
-        </span>
-        -->
-        <!-- <div class="font-bold text-lg">Legend</div> -->
-        <!-- <div :class="'grid grid-rows-' + nerDesc.length + 'grid-flow-col mb-6'">
-            <div v-for="type in nerDesc" :key="type">
-                <div v-if="type != 'O'">
-                    <div class="h-3 w-3 rounded-full inline-block" :class="'bg-' + type"></div>
-                    {{ type }}
-                </div>
-            </div>
-        </div> -->
         <div class="font-bold text-lg">Legend</div>
         <div class="grid grid-rows-4 grid-flow-col gap-x-1 auto-cols-auto mb-6 max-w-max">
             <div v-for="(i, x) in Object.keys(legend)" :key="x">
@@ -52,27 +7,46 @@
                 {{ i }}{{ posDesc[i] ? ': ' + posDesc[i] : ': Other' }}
             </div>
         </div>
+        <p class="font-bold text-primary dark:text-primaryLight">Already<br />correct</p>
         <div class="divide-y divide-primary divide-opacity-75">
-            <div v-for="sen in localData.sentences" :key="sen.index" class="">
-                <p class="mt-3 mb-1">{{sen.text}}</p>
-                <div class="flex flex-row flex-wrap">
-                    <span
-                        @dblclick="openModal(sen.index, i)"
-                        v-for="(token, i) in sen.tokens"
-                        :key="i"
-                        class="flex flex-col place-items-center my-2 cursor-pointer"
+            <div v-for="sen in localData.sentences" :key="sen.index" class="flex">
+                <div
+                    class="mt-4 flex items-center content-center flex-shrink-0 justify-center bg-white dark:bg-gray-800 border-2 rounded border-gray-400 w-6 h-6 focus-within:border-blue-500 mx-4"
+                >
+                    <input type="checkbox" class="opacity-0 absolute w-6 h-6" v-model="checked[sen.index]" />
+                    <svg
+                        class="fill-current hidden w-4 h-4 text-primary dark:text-primaryLight pointer-events-none"
+                        viewBox="0 0 20 20"
                     >
+                        <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="mt-3 mb-1">{{ sen.text }}</p>
+                    <div class="flex flex-row flex-wrap">
                         <span
-                            class="rounded px-1 text-sm text-black max-w-min mx-1 mb-1"
-                            :style="{ background: legend[token.pos[0]] }"
-                            >{{ token.pos }}
-                        </span>
-                        <span
-                            class="mx-1 px-1 rounded select-none bg-gray-350 dark:bg-gray-600 text-black dark:text-white"
+                            @dblclick="openModal(sen.index, i)"
+                            v-for="(token, i) in sen.tokens"
+                            :key="i"
+                            class="flex flex-col place-items-center my-2 cursor-pointer"
                         >
-                            {{ token.word }}
+                            <span
+                                class="rounded px-1 text-sm text-black max-w-min mx-1 mb-1"
+                                :style="{ background: legend[token.pos[0]] }"
+                                >{{ token.pos }}
+                            </span>
+                            <span
+                                :class="
+                                    checked[sen.index]
+                                        ? 'bg-gray-900 text-white'
+                                        : 'bg-gray-350 dark:bg-gray-600 text-black dark:text-white'
+                                "
+                                class="mx-1 px-1 rounded select-none"
+                            >
+                                {{ token.word }}
+                            </span>
                         </span>
-                    </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,6 +123,8 @@ export default {
             senPerPage: 10,
             sentencesToShow: [],
             posDesc: [],
+            checked: [],
+            backup: JSON.parse(localStorage.getItem('processedText')),
         }
     },
     created() {
@@ -157,14 +133,15 @@ export default {
             this.legend[this.poses[i]] = this.colors[i]
         }
         this.totalPages = Math.ceil(this.localData.sentences.length / this.senPerPage)
+        /*
         for (let i = 0; i < this.senPerPage; i++) {
             if (this.localData.sentences[i] != undefined) {
                 this.sentencesToShow.push(this.localData.sentences[i].text)
             }
-
-            //console.log(i)
         }
+        */
         for (var i = 0; i < this.localData.sentences.length; i++) {
+            this.checked[i] = false
             for (var x = 0; x < this.localData.sentences[i].tokens.length; x++) {
                 this.poses.includes(this.localData.sentences[i].tokens[x].pos[0])
                     ? ''
@@ -175,57 +152,39 @@ export default {
         for (let i = 0; i < this.poses.length; i++) {
             this.legend[this.poses[i]] = this.colors[i]
         }
-        // for (var i = 0; i < this.$store.state.editableData.sentences.length; i++) {
-        //     this.ner.i = {}
-
-        //     for (var x = 0; x < this.$store.state.editableData.sentences[i].tokens.length; x++) {
-        //         this.ner.i.x = this.$store.state.editableData.sentences[i].tokens[x].ner
-        //     }
-        // }
     },
     methods: {
         openModal(senIndex, tokenIndex) {
-            console.log(senIndex, tokenIndex, this.localData.sentences[senIndex].tokens[tokenIndex])
-
             this.$emit('showPosModal', { senIndex: senIndex, tokenIndex: tokenIndex })
-            console.log('open modal!')
         },
-        // changeNer(i, cont) {
-        //     switch (this.$store.state.editableData.sentences[i].tokens[cont].ner) {
-        //         case 'O':
-        //             this.$store.state.editableData.sentences[i].tokens[cont].ner = 'PER'
-        //             this.$emit('edited')
-        //             break
-        //         case 'PER':
-        //             this.$store.state.editableData.sentences[i].tokens[cont].ner = 'ORG'
-        //             this.$emit('edited')
-        //             break
-        //         case 'ORG':
-        //             this.$store.state.editableData.sentences[i].tokens[cont].ner = 'LOC'
-        //             this.$emit('edited')
-        //             break
-        //         case 'LOC':
-        //             this.$store.state.editableData.sentences[i].tokens[cont].ner = 'O'
-        //             this.$emit('edited')
-        //             break
-        //     }
-        //     this.localData.sentences[i].tokens[cont].ner = this.$store.state.editableData.sentences[i].tokens[cont].ner
-        // },
     },
     watch: {
         page() {
             this.sentencesToShow = []
-
             for (let i = (this.page - 1) * this.senPerPage; i < (this.page - 1) * this.senPerPage + 10; i++) {
-                //console.log(i)
-
                 if (this.localData.sentences[i] != undefined) {
                     this.sentencesToShow.push(this.localData.sentences[i].text)
                 }
+            }
+        },
+        checked() {
+            for (let i = 0; i < this.checked.length; i++) {
+                if (this.checked[i] == true) {
+                    for (let x = 0; x < this.$store.state.editableData.sentences[i].tokens.length; x++) {
+                        this.$store.state.editableData.sentences[i].tokens[x].pos = this.backup.sentences[i].tokens[
+                            x
+                        ].pos
+                    }
+                }
+                this.$emit('sendID', [i, 'check', this.checked[i]])
             }
         },
     },
 }
 </script>
 
-<style></style>
+<style scoped>
+input:checked + svg {
+    display: block;
+}
+</style>

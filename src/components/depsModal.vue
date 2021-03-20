@@ -37,19 +37,35 @@
                                 Head: <span class="font-medium mr-4">{{ dep.governor }}</span> Dependent:
                                 <span class="font-medium mr-4">{{ dep.dependent }}</span
                                 ><br />
-                                from: <span class="font-medium mr-4">{{ originalDep }}</span> to:</span
-                            >
-                            <select
-                                class="appearance-none font-medium h-full border-b inline-block bg-white border-gray-400 text-gray-700 py-1 pl-2 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                name="depsSelect"
-                                id="depsSelect"
-                                @change="edit()"
-                                v-model="selectedDep"
-                            >
-                                <option v-for="(dep, i) in depsList" :key="i" :value="dep" class="font-medium">
-                                    {{ dep }}
-                                </option>
-                            </select>
+                                from: <span class="font-medium mr-4">{{ originalDep }}</span>
+                            </span>
+                            <div class="relative flex w-full">
+                                <span class="font-medium mr-4">to:</span>
+                                <select
+                                    name="depsSelect"
+                                    id="depsSelect"
+                                    @change="edit()"
+                                    v-model="selectedDep"
+                                    class="w-full block border border-primary appearance-none px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                >
+                                    <option v-for="(dep, i) in depsList" :key="i" :value="dep">
+                                        {{ dep }}
+                                    </option>
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900"
+                                >
+                                    <svg
+                                        class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                         <div class="float-right pb-4">
                             <button

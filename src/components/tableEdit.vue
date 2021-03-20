@@ -170,7 +170,9 @@
                             </svg>
                         </div>
                     </td>
+                    <!--
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">-</td>
+                    -->
                     <td class="p-1 px-2">
                         <input
                             :name="'space' + d.index"
@@ -195,7 +197,7 @@ export default {
     },
     data() {
         return {
-            headers: ['id', 'form', 'lemma', 'upos', 'xpos', 'feats', 'head', 'deprel', 'deps', 'misc'],
+            headers: ['id', 'form', 'lemma', 'upos', 'xpos', 'feats', 'head', 'deprel', /*'deps',*/ 'misc'],
             upos: {
                 A: 'adjective',
                 AP: 'possessive adjective',
@@ -578,14 +580,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-.pin-r {
-    right: 0;
-}
-
-.pin-y {
-    top: 0;
-    bottom: 0;
-}
-</style>

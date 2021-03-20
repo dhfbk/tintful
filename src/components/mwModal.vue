@@ -325,11 +325,4 @@ export default {
 .dark .dark\:bg-black {
     background-color: rgba(0, 0, 0, 0.5);
 }
-.pin-r {
-    right: 0;
-}
-.pin-y {
-    top: 0;
-    bottom: 0;
-}
 </style>
