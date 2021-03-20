@@ -563,11 +563,13 @@ export default {
         },
     },
     created() {
-        if (this.featsToEdit.misc.spaceAfter != undefined) {
-            this.misc = this.objToStr(this.featsToEdit.misc.spaceAfter)
-        }
-        if (this.featsToEdit.misc.misc != undefined) {
-            this.misc += this.objToStr(this.featsToEdit.misc.misc)
+        if (this.featsToEdit.misc != undefined) {
+            if (this.featsToEdit.misc.spaceAfter != undefined) {
+                this.misc = this.objToStr(this.featsToEdit.misc.spaceAfter)
+            }
+            if (this.featsToEdit.misc.misc != undefined) {
+                this.misc += this.objToStr(this.featsToEdit.misc.misc)
+            }
         }
         this.pos = this.featsToEdit.pos
         this.word = this.featsToEdit.word

@@ -435,7 +435,7 @@ export default {
                     ind = this.idList
                 }
                 let toSend = { user: '', sentences: sentences }
-                console.log(toSend, ind)
+                //console.log(toSend, ind)
                 let sessID = ''
                 if (sessionStorage.getItem('session_id') != undefined) {
                     sessID = sessionStorage.getItem('session_id')
@@ -612,7 +612,7 @@ export default {
                 tokenIndex: info.tokenIndex,
                 token: this.$store.state.editableData.sentences[info.senIndex].tokens[info.tokenIndex],
             }
-            console.log(this.$store.state.editableData.sentences[info.senIndex].tokens[info.tokenIndex])
+            //console.log(this.$store.state.editableData.sentences[info.senIndex].tokens[info.tokenIndex])
             this.showPosModal = true
         },
     },

@@ -346,7 +346,7 @@ export default {
             if (feat.spaceAfter) infoToEdit.misc.spaceAfter = feat.spaceAfter
             if (feat.misc) infoToEdit.misc.misc = feat.misc
             this.$emit('showFeatsModal', infoToEdit, 'brat')
-            console.log(feat)
+            //console.log(feat)
         },
         dblRoot(e) {
             var i = e.target

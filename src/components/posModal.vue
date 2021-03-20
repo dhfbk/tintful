@@ -79,7 +79,7 @@ export default {
     },
     created() {
         this.pos = this.posToEdit.token.pos
-        console.log(this.posToEdit)
+        //console.log(this.posToEdit)
     },
     data() {
         return {
