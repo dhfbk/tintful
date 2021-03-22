@@ -66,7 +66,7 @@
                         <div class="flex content-center items-center h-full w-max">
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
-                                @click="editFeats(d, 'upos')"
+                                @click="editFeats(d.index, 'upos')"
                                 v-if="d.upos != '_'"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -90,7 +90,7 @@
                         <div class="flex content-center items-center h-full">
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
-                                @click="editFeats(d, 'feats')"
+                                @click="editFeats(d.index, 'feats')"
                                 v-if="d.pos != '_'"
                             >
                                 <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -398,10 +398,9 @@ export default {
             }
             return str
         },
-        editFeats(token, mode) {
-            var index = token.index - 1
+        editFeats(index, mode) {
             var d = this.$store.state.tableData
-            var feat = d.sentences[this.sentenceIndex].tokens[index]
+            var feat = d.sentences[this.sentenceIndex].tokens.find(x => x.index === index)
 
             //console.log(token)
             let infoToEdit = {}
