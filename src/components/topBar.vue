@@ -3,11 +3,14 @@
         class="w-full md:w-1/12 md:h-full flex flex-col sm:flex-row md:flex-col content-center items-center py-6 md:mx-2"
     >
         <router-link to="/">
-            <img
-                src="../assets/logoTint.webp"
-                alt="Logo Tint"
-                class="inline md:block w-24 sm:w-36 md:w-2/3 mx-2 md:mx-auto"
-            />
+            <picture>
+                <source type="image/webp" srcset="../assets/logoTint.webp" />
+                <img
+                    src="../assets/logoTint.png"
+                    alt="Logo Tint"
+                    class="inline md:block w-24 sm:w-36 md:w-2/3 mx-2 md:mx-auto"
+                />
+            </picture>
         </router-link>
         <div
             class="flex md:flex-col w-full sm:w-max content-center items-center flex-grow justify-center sm:justify-end md:flex-grow-0"
@@ -144,7 +147,10 @@ export default {
     },
     methods: {
         goTo(route) {
-            if (localStorage.getItem('text') !== '' && localStorage.getItem('text') !== undefined) {
+            if (
+                (localStorage.getItem('text') !== '' && localStorage.getItem('text') !== undefined) ||
+                route == '/account'
+            ) {
                 this.$router.push({ path: route }).catch(() => {})
             } else {
                 this.$emit('snack', 'No text to analyse')

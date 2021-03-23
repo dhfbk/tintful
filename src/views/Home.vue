@@ -63,12 +63,8 @@
                         v-model="exampleChoice"
                     >
                         <option value="" disabled selected hidden>Choose example...</option>
-                        <option value="1">
-                            Difficult - Appostamenti di caccia realizzati secondo [...]
-                        </option>
-                        <option value="2">
-                            Easy - Un picchio e una pallina si trovavano in un cassetto [...]
-                        </option>
+                        <option value="1">Difficult - Appostamenti di caccia realizzati secondo [...]</option>
+                        <option value="2">Easy - Un picchio e una pallina si trovavano in un cassetto [...]</option>
                     </select>
                     <div
                         class="pointer-events-none absolute pin-y pin-r flex items-center px-2 mr-2 text-gray-800 dark:text-white"
@@ -102,6 +98,7 @@
 import axios from 'axios'
 //import json from '../assets/test.json'
 const { required } = require('vuelidate/lib/validators')
+const md5 = require('md5')
 export default {
     name: 'home',
     data() {
@@ -142,6 +139,7 @@ export default {
                         localStorage.setItem('text', this.text)
                         localStorage.setItem('processedText', JSON.stringify(res.data))
                         this.$store.state.editableData = res.data
+                        this.$store.state.hash = md5(this.text)
                         this.$store.state.tableData = JSON.parse(JSON.stringify(res.data))
                         let mt = {}
                         let cont = 0

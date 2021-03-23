@@ -7,7 +7,10 @@
                 {{ i }}{{ posDesc[i] ? ': ' + posDesc[i] : ': Other' }}
             </div>
         </div>
-        <p class="font-bold text-primary dark:text-primaryLight">Already<br />correct</p>
+        <p class="font-bold text-primary dark:text-primaryLight">
+            Check<br />
+            to save
+        </p>
         <div class="divide-y divide-primary divide-opacity-75">
             <div v-for="sen in localData.sentences" :key="sen.index" class="flex">
                 <div
@@ -36,12 +39,7 @@
                                 >{{ token.pos }}
                             </span>
                             <span
-                                :class="
-                                    checked[sen.index]
-                                        ? 'bg-gray-900 text-white'
-                                        : 'bg-gray-350 dark:bg-gray-600 text-black dark:text-white'
-                                "
-                                class="mx-1 px-1 rounded select-none"
+                                class="mx-1 px-1 rounded select-none bg-gray-350 dark:bg-gray-600 text-black dark:text-white"
                             >
                                 {{ token.word }}
                             </span>
@@ -55,7 +53,8 @@
 
 <script>
 export default {
-    name: 'ner',
+    name: 'posEdit',
+    props: { checkProp: Array },
     data() {
         return {
             keys: [],
@@ -168,15 +167,12 @@ export default {
             }
         },
         checked() {
-            for (let i = 0; i < this.checked.length; i++) {
-                if (this.checked[i] == true) {
-                    for (let x = 0; x < this.$store.state.editableData.sentences[i].tokens.length; x++) {
-                        this.$store.state.editableData.sentences[i].tokens[x].pos = this.backup.sentences[i].tokens[
-                            x
-                        ].pos
-                    }
-                }
-                this.$emit('sendID', [i, 'check', this.checked[i]])
+            this.$emit('sendID', this.checked)
+        },
+        checkProp() {
+            if (this.checkProp[1] == 'token') {
+                this.checked[this.checkProp[0]] = true
+                this.$emit('sendID', this.checked)
             }
         },
     },

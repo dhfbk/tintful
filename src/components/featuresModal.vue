@@ -12,7 +12,12 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary dark:text-primaryLight font-bold text-lg">Edit token features</div>
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg" v-if="mode != 'upos'">
+                                Edit token features
+                            </div>
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg" v-else>
+                                Edit token POS
+                            </div>
                             <button
                                 class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-600 p-1 focus:outline-none"
                                 @click="toggleModal()"
@@ -29,7 +34,7 @@
                                 <span class="sr-only">Close dialog</span>
                             </button>
                         </div>
-                        <div class="flex content-center items-center justify-between my-2">
+                        <div class="flex content-center items-center justify-between my-2" v-if="mode != 'upos'">
                             Form:
                             <form class="w-full max-w-xs">
                                 <input
@@ -39,7 +44,7 @@
                                 />
                             </form>
                         </div>
-                        <div class="flex content-center items-center justify-between my-2">
+                        <div class="flex content-center items-center justify-between my-2" v-if="mode != 'upos'">
                             Lemma:
                             <form class="w-full max-w-xs">
                                 <input
@@ -186,7 +191,7 @@
                                 />
                             </transition-group>
                         </div>
-                        <div class="flex flex-row justify-between content-center items-center">
+                        <div class="flex flex-row justify-between content-center items-center" v-if="mode != 'upos'">
                             <span>Miscellaneous: </span>
                             <input
                                 name="misc"

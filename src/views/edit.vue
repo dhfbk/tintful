@@ -5,7 +5,7 @@
             @closePosModal="showPosModal = false"
             :posToEdit="posToEdit"
             @edited="editedPos"
-            @sendID="addToID"
+            @sendID="addToCheck"
         />
         <deps-modal
             @closeDepsModal="showDepsModal = false"
@@ -23,6 +23,7 @@
             :mode="featsMode"
         />
         <modalInfo v-if="modalInfo" @modal="modalInfo = !modalInfo" :type="type" />
+        <!--
         <confirmationModal
             v-if="confirmation"
             @close="confirmation = !confirmation"
@@ -30,6 +31,7 @@
             @confirm="confirmAction"
             :mode="confirmationMode"
         />
+        -->
         <mwModal
             v-if="showMwModal"
             :arrPos="arrPos"
@@ -47,7 +49,7 @@
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-4 text-center min-w-max py-2">
                 <div
-                    @click="confirmModal('graph')"
+                    @click="confirmAction('graph')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
                     :class="
                         selectedTab == 0 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
@@ -56,7 +58,7 @@
                     Flat graph
                 </div>
                 <div
-                    @click="confirmModal('table')"
+                    @click="confirmAction('table')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
                     :class="
                         selectedTab == 1 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
@@ -65,7 +67,7 @@
                     Table
                 </div>
                 <div
-                    @click="confirmModal('pos')"
+                    @click="confirmAction('pos')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
                     :class="
                         selectedTab == 2 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
@@ -74,7 +76,7 @@
                     Part of Speech
                 </div>
                 <div
-                    @click="confirmModal('ner')"
+                    @click="confirmAction('ner')"
                     class="transition-colors rounded-t duration-100 cursor-pointer py-2 min-w-max px-2 hover:bg-gray-200 dark:hover:bg-gray-600"
                     :class="
                         selectedTab == 3 ? 'text-primary dark:text-primaryLight' : 'dark:text-gray-300 text-gray-500'
@@ -111,7 +113,7 @@
                 class="flex content-center items-center col-span-2 sm:col-span-1 justify-end sm:justify-center"
             >
                 <button
-                    @click="confirmModal('prev')"
+                    @click="confirmAction('prev')"
                     class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out focus:outline-none select-none"
                     :class="
                         sentenceIndex == 0
@@ -123,7 +125,7 @@
                 </button>
                 <span class="mx-2">{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
                 <button
-                    @click="confirmModal('next')"
+                    @click="confirmAction('next')"
                     class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                     :class="
                         sentenceIndex == sentencesNum - 1
@@ -140,14 +142,16 @@
             >
                 <button
                     :class="
-                        isEdited && !noRoot
-                            ? 'bg-green-400 dark:bg-green-400 dark:hover:bg-green-600 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
-                            : 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                        loadBtn
+                            ? 'bg-gray-500 dark:bg-gray-400 hover:bg-gray-600 dark:hover:bg-gray-500 text-white dark:text-black hover:text-white dark:hover:text-white cursor-pointer'
+                            : isEdited
+                            ? 'bg-yellow-500 dark:bg-yellow-400 hover:bg-yellow-600 dark:hover:bg-yellow-600 text-black hover:text-white cursor-pointer'
+                            : 'bg-green-500 dark:bg-green-400 hover:bg-green-600 dark:hover:bg-green-600 text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
-                    @click="confirmModal('save')"
+                    @click="confirmAction('save')"
                     class="flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                 >
-                    Save changes
+                    {{ loadBtn ? 'Wait...' : isEdited ? 'Save changes' : 'Mark as correct' }}
                     <svg
                         :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
                         style="width: 24px; height: 24px"
@@ -229,8 +233,8 @@
             @misc="setMisc"
             @noRoot="checkRoot"
         />
-        <pos-edit v-else-if="selectedTab == 2" @showPosModal="posModal" @sendID="addToID" />
-        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" />
+        <pos-edit v-else-if="selectedTab == 2" @showPosModal="posModal" @sendID="addToID" :checkProp="checkProp" />
+        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" :checkProp="checkProp" />
     </div>
 </template>
 
@@ -244,11 +248,9 @@ import mwModal from '../components/mwModal.vue'
 import FeaturesModal from '../components/featuresModal.vue'
 import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
-import confirmationModal from '../components/confirmationModal.vue'
+//import confirmationModal from '../components/confirmationModal.vue'
 import manageMultiword from '../components/manageMultiword.vue'
 import axios from 'axios'
-
-const md5 = require('md5')
 export default {
     props: {
         sheetMode: String,
@@ -286,6 +288,7 @@ export default {
             ready: false,
             loadBtn: false,
             idList: '',
+            checkProp: [],
         }
     },
     created() {
@@ -316,7 +319,7 @@ export default {
         FeaturesModal,
         nerEdit,
         modalInfo,
-        confirmationModal,
+        //confirmationModal,
         posModal,
         mwModal,
         manageMultiword,
@@ -335,51 +338,22 @@ export default {
             this.$router.replace({ name: 'home' })
         }
     },
-    beforeRouteLeave(to, from, next) {
-        if (this.isEdited) {
-            const answer = window.confirm('Do you really want to leave? Your changes will be discarded!')
-            if (answer) {
-                this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
-                this.$store.state.tableData = JSON.parse(localStorage.getItem('tableData'))
-                next()
-            } else {
-                next(false)
-            }
-        } else {
-            next()
-        }
+    async beforeRouteLeave(to, from, next) {
+        await this.confirmAction('save')
+        next()
     },
     methods: {
+        addToCheck(arr) {
+            this.checkProp = arr
+        },
         addToID(ids) {
-            var idArr = []
-            if (this.idList != '') {
-                idArr = this.idList.split(',')
-            }
-            //insert the parameter in the variable
-            if (ids[1] == 'check' && ids[2] == false) {
-                for (let i = 0; i < idArr.length; i++) {
-                    if (idArr[i] == ids[0].toString()) {
-                        idArr.splice(i, 1)
-                    }
+            this.idList = ''
+            for (let i = 0; i < ids.length; i++) {
+                if (ids[i] == true) {
+                    this.idList += i + ','
                 }
-            } else {
-                idArr.push(ids[0])
             }
-            //parse all strings to int numbers
-            for (let i = 0; i < idArr.length; i++) {
-                idArr[i] = parseInt(idArr[i])
-            }
-            //order elements
-            idArr.sort(function(a, b) {
-                return a - b
-            })
-            //remove double elements
-            var noDbl = [idArr[0]]
-            for (var i = 1; i < idArr.length; i++) {
-                if (idArr[i] != idArr[i - 1]) noDbl.push(idArr[i])
-            }
-            //parse array to string and assign back to variable
-            this.idList = noDbl.toString()
+            this.idList != '' ? (this.idList = this.idList.substring(0, this.idList.length - 1)) : ''
             this.isEdited = true
         },
         multiwordModal(arrPos) {
@@ -396,6 +370,7 @@ export default {
         snack(msg) {
             this.$emit('snack', msg)
         },
+        /*
         confirmModal(mode) {
             this.action = mode
             if (this.isEdited && !this.noRoot) {
@@ -414,69 +389,65 @@ export default {
                 this.confirmAction()
             }
         },
-        confirmAction(mode) {
-            this.isEdited = false
-            this.confirmation ? (this.confirmation = !this.confirmation) : ''
-            if (mode == 'save') {
-                this.loadBtn = true
-                let sen = this.$store.state.editableData
-                let senMt = this.$store.state.tableData
-                let sentences = []
-                let ind = ''
-                let type = ''
-                for (let i = 0; i < sen.sentences.length; i++) {
-                    this.createData(sen, senMt, sentences, i)
-                }
-                if (this.type == 'graph' || this.type == 'table') {
-                    type = 'dep'
-                    ind += this.sentenceIndex
-                } else {
-                    type = this.type
-                    ind = this.idList
-                }
-                let toSend = { user: '', sentences: sentences }
-                //console.log(toSend, ind)
-                let sessID = ''
-                if (sessionStorage.getItem('session_id') != undefined) {
-                    sessID = sessionStorage.getItem('session_id')
-                }
-                let hashTxt = md5(localStorage.getItem('text'))
-                axios({
-                    method: 'post',
-                    url: 'https://dh-server.fbk.eu/tint-w/api/?action=submit',
-                    data: {
-                        session_id: sessID,
-                        type: type,
-                        hash: hashTxt,
-                        sentences: ind,
-                        data: JSON.stringify(toSend),
-                    },
-                })
-                    .then(res => {
-                        if (res.data.result == 'ERR') {
-                            this.$emit('snack', res.data.error)
-                        } else {
-                            this.$emit('snack', 'Login successful')
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
-                    .then(() => {
-                        this.loadBtn = false
-                    })
-                this.snack('Edited succesfully')
-                localStorage.setItem('processedText', '')
-                localStorage.setItem('processedText', JSON.stringify(sen))
-                localStorage.setItem('tableData', '')
-                localStorage.setItem('tableData', JSON.stringify(senMt))
-            } else if (!this.noRoot) {
-                this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
-                this.$store.state.tableData = JSON.parse(localStorage.getItem('tableData'))
+        */
+        async save(senInd) {
+            this.loadBtn = true
+            let sen = this.$store.state.editableData
+            let senMt = this.$store.state.tableData
+            let sentences = []
+            let ind = ''
+            let type = ''
+            for (let i = 0; i < sen.sentences.length; i++) {
+                this.createData(sen, senMt, sentences, i)
             }
-            this.tableMisc = false
-            this.misc = {}
+            if (this.type == 'graph' || this.type == 'table') {
+                type = 'dep'
+                ind += senInd
+            } else {
+                type = this.type
+                ind = this.idList
+            }
+            let toSend = { user: '', sentences: sentences }
+            //console.log(toSend, ind)
+            let sessID = ''
+            if (sessionStorage.getItem('session_id') != undefined) {
+                sessID = sessionStorage.getItem('session_id')
+            }
+            let hashTxt = this.$store.state.hash
+            await axios({
+                method: 'post',
+                url: 'https://dh-server.fbk.eu/tint-w/api/?action=submit',
+                data: {
+                    session_id: sessID,
+                    type: type,
+                    hash: hashTxt,
+                    sentences: ind,
+                    data: JSON.stringify(toSend),
+                },
+            })
+                .then(res => {
+                    if (res.data.result == 'ERR') {
+                        this.snack(res.data.error)
+                    } else {
+                        this.snack('Saved successfully')
+                        localStorage.setItem('processedText', '')
+                        localStorage.setItem('processedText', JSON.stringify(sen))
+                        localStorage.setItem('tableData', '')
+                        localStorage.setItem('tableData', JSON.stringify(senMt))
+                    }
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+                .then(() => {
+                    this.loadBtn = false
+                })
+        },
+        confirmAction(mode) {
+            this.action = mode
+            this.isEdited = false
             this.noRoot = false
+            let senInd = this.sentenceIndex
             switch (this.action) {
                 case 'graph':
                     if (this.selectedTab != 0) {
@@ -509,6 +480,11 @@ export default {
                     this.sentenceIndex > 0 ? this.sentenceIndex-- : false
                     break
             }
+            if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == 0)) {
+                this.save(senInd)
+            }
+            this.tableMisc = false
+            this.misc = {}
         },
         createData(sen, senMt, sentences, index) {
             let mT = {}
@@ -569,9 +545,7 @@ export default {
             }, 200)
         },
         editedFeat(feats) {
-            if (feats == 'noBrat') {
-                this.isEdited = true
-            } else {
+            if (feats != 'noBrat') {
                 var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
                 //console.log(feats)
                 x.features = feats.newFeats
@@ -583,6 +557,7 @@ export default {
                     this.refresh = false
                 }, 200)
             }
+            this.isEdited = true
         },
         editedPos() {
             this.isEdited = true

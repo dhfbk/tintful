@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <p class="font-bold text-primary dark:text-primaryLight">Already<br />correct</p>
+        <p class="font-bold text-primary dark:text-primaryLight">Check<br /> to save</p>
         <div class="divide-y divide-primary divide-opacity-75">
             <div v-for="sen in localData.sentences" :key="sen.index" class="flex">
                 <!--TOGGLE-->
