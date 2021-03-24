@@ -1,7 +1,7 @@
 <template>
     <div class="shadow-md rounded-lg dark:bg-dark01dp p-3 md:p-4 flex flex-col w-full h-full">
         <div class="w-full flex flex-row content-center items-center mb-4">
-            <div class="text-primary dark:text-primaryLight text-xl tracking-wide w-full">{{title}}</div>
+            <div class="text-primary dark:text-primaryLight text-xl tracking-wide w-full">{{ title }}</div>
             <button
                 @click="$emit('modal', title)"
                 class="ripple p-2 bg-transparent hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full focus:outline-none transition-colors duration-100 ease-out"
@@ -22,10 +22,10 @@
         <div class="flex flex-row my-auto">
             <div class="w-1/3 flex flex-col place-items-center mx-2" v-for="(i, x) in series" :key="x">
                 <div class="inline-block h-40 w-4 sm:w-6 relative rounded-lg dark:bg-dark02dp bg-gray-200">
-                    <div :style="{ height: i + '%' }" class="absolute bottom-0 w-4 sm:w-6">
+                    <div :style="'height:' + (i > 100 ? 100 : i) + '%'" class="absolute bottom-0 w-4 sm:w-6">
                         <div
-                            class="heightTrns h-full  bg-gradient-to-tl w-full absolute bottom-0 rounded-lg	"
-                            style="border-radius:10px"
+                            class="heightTrns h-full bg-gradient-to-tl w-full absolute bottom-0 rounded-lg"
+                            style="border-radius: 10px"
                             :class="options.colors[x]"
                         ></div>
                     </div>
@@ -39,7 +39,7 @@
                     class="w-2/3 text-center tracking-widest dark:text-gray-300 inline mt-1 text-lg font-semibold"
                     style="font-family: 'Barlow', sans-serif"
                 >
-                    {{ i.toFixed(2) }}
+                    {{ i > 100 ? '100.00' : i.toFixed(2) }}
                 </p>
             </div>
         </div>
@@ -48,12 +48,12 @@
 
 <script>
 export default {
-    name: "levelsCard",
-    props:{
+    name: 'levelsCard',
+    props: {
         series: Array,
         options: Object,
-        title: String
-    }
+        title: String,
+    },
 }
 </script>
 
