@@ -1,9 +1,9 @@
 <template>
-    <div id="app" class="relative mx-auto antialiased  bg-white dark:bg-bgDark min-h-screen dark:text-gray-200">
+    <div id="app" class="relative mx-auto antialiased bg-white dark:bg-bgDark min-h-screen dark:text-gray-200">
         <div class="flex flex-col md:flex-row">
             <topBar @changeMode="changeMode" @snack="snack" />
-            <div class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full" style="height:min-content">
-                <router-view @snack="snack" :sheetMode="sheetMode" />
+            <div class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full" style="height: min-content">
+                <router-view @snack="snack" :sheetMode="sheetMode" @hash="hashText" />
                 <footerCustom :mode="sheetMode" />
             </div>
         </div>
@@ -15,6 +15,7 @@
 import footerCustom from './components/footer.vue'
 import snackbar from './components/snackbar.vue'
 import topBar from './components/topBar.vue'
+const md5 = require('md5')
 export default {
     components: {
         footerCustom,
@@ -55,8 +56,14 @@ export default {
             this.$store.state.editableData = JSON.parse(localStorage.getItem('processedText'))
             this.$store.state.tableData = JSON.parse(localStorage.getItem('tableData'))
         }
+        if (localStorage.getItem('text') != undefined && localStorage.getItem('text') != '') {
+            this.hashText()
+        }
     },
     methods: {
+        hashText() {
+            this.$store.state.hash = md5(localStorage.getItem('text'))
+        },
         changeMode() {
             if (localStorage.theme === 'dark') {
                 localStorage.theme = 'light'

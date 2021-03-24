@@ -98,7 +98,6 @@
 import axios from 'axios'
 //import json from '../assets/test.json'
 const { required } = require('vuelidate/lib/validators')
-const md5 = require('md5')
 export default {
     name: 'home',
     data() {
@@ -139,7 +138,7 @@ export default {
                         localStorage.setItem('text', this.text)
                         localStorage.setItem('processedText', JSON.stringify(res.data))
                         this.$store.state.editableData = res.data
-                        this.$store.state.hash = md5(this.text)
+                        this.$emit('hash')
                         this.$store.state.tableData = JSON.parse(JSON.stringify(res.data))
                         let mt = {}
                         let cont = 0

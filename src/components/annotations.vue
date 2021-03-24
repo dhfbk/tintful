@@ -103,7 +103,7 @@ export default {
             this.refreshBrat = true
             setTimeout(() => {
                 this.refreshBrat = false
-            }, 200)
+            }, 100)
         },
     },
 }

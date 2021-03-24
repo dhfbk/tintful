@@ -390,63 +390,66 @@ export default {
             }
         },
         */
-        async save(senInd) {
-            this.loadBtn = true
-            let sen = this.$store.state.editableData
-            let senMt = this.$store.state.tableData
-            let sentences = []
+        async save(senInd, prevType) {
             let ind = ''
             let type = ''
-            for (let i = 0; i < sen.sentences.length; i++) {
-                this.createData(sen, senMt, sentences, i)
-            }
-            if (this.type == 'graph' || this.type == 'table') {
+            if (prevType == 'graph' || prevType == 'table') {
                 type = 'dep'
                 ind += senInd
             } else {
-                type = this.type
+                type = prevType
                 ind = this.idList
             }
-            let toSend = { user: '', sentences: sentences }
-            //console.log(toSend, ind)
-            let sessID = ''
-            if (sessionStorage.getItem('session_id') != undefined) {
-                sessID = sessionStorage.getItem('session_id')
+            if (ind != '') {
+                this.loadBtn = true
+                let sen = this.$store.state.editableData
+                let senMt = this.$store.state.tableData
+                let sentences = []
+                for (let i = 0; i < sen.sentences.length; i++) {
+                    this.createData(sen, senMt, sentences, i)
+                }
+                let toSend = { user: '', sentences: sentences }
+                //console.log(toSend, senInd)
+                let sessID = ''
+                if (sessionStorage.getItem('session_id') != undefined) {
+                    sessID = sessionStorage.getItem('session_id')
+                }
+                let hashTxt = this.$store.state.hash
+                await axios({
+                    method: 'post',
+                    url: 'https://dh-server.fbk.eu/tint-w/api/?action=submit',
+                    data: {
+                        session_id: sessID,
+                        type: type,
+                        hash: hashTxt,
+                        sentences: ind,
+                        data: JSON.stringify(toSend),
+                    },
+                })
+                    .then(res => {
+                        if (res.data.result == 'ERR') {
+                            this.snack(res.data.error)
+                        } else {
+                            this.snack('Saved successfully')
+                            localStorage.setItem('processedText', '')
+                            localStorage.setItem('processedText', JSON.stringify(sen))
+                            localStorage.setItem('tableData', '')
+                            localStorage.setItem('tableData', JSON.stringify(senMt))
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+                    .then(() => {
+                        this.loadBtn = false
+                    })
             }
-            let hashTxt = this.$store.state.hash
-            await axios({
-                method: 'post',
-                url: 'https://dh-server.fbk.eu/tint-w/api/?action=submit',
-                data: {
-                    session_id: sessID,
-                    type: type,
-                    hash: hashTxt,
-                    sentences: ind,
-                    data: JSON.stringify(toSend),
-                },
-            })
-                .then(res => {
-                    if (res.data.result == 'ERR') {
-                        this.snack(res.data.error)
-                    } else {
-                        this.snack('Saved successfully')
-                        localStorage.setItem('processedText', '')
-                        localStorage.setItem('processedText', JSON.stringify(sen))
-                        localStorage.setItem('tableData', '')
-                        localStorage.setItem('tableData', JSON.stringify(senMt))
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                })
-                .then(() => {
-                    this.loadBtn = false
-                })
         },
         confirmAction(mode) {
             this.action = mode
             this.isEdited = false
             this.noRoot = false
+            let prevType = this.type
             let senInd = this.sentenceIndex
             switch (this.action) {
                 case 'graph':
@@ -480,8 +483,8 @@ export default {
                     this.sentenceIndex > 0 ? this.sentenceIndex-- : false
                     break
             }
-            if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == 0)) {
-                this.save(senInd)
+            if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == senInd)) {
+                this.save(senInd, prevType)
             }
             this.tableMisc = false
             this.misc = {}
@@ -527,7 +530,7 @@ export default {
             this.refresh = true
             setTimeout(() => {
                 this.refresh = false
-            }, 200)
+            }, 100)
         },
         editedDep(dep) {
             var x = this.$store.state.editableData.sentences[this.sentenceIndex]['basic-dependencies']
@@ -542,12 +545,27 @@ export default {
             this.refresh = true
             setTimeout(() => {
                 this.refresh = false
-            }, 200)
+            }, 100)
         },
         editedFeat(feats) {
             if (feats != 'noBrat') {
-                var x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
-                //console.log(feats)
+                var x = {}
+                var y = []
+                if (this.type == 'graph') {
+                    x = this.$store.state.editableData.sentences[feats.senIndex].tokens[feats.tokIndex]
+                    y = this.$store.state.tableData.sentences[feats.senIndex].tokens
+                } else {
+                    x = this.$store.state.tableData.sentences[feats.senIndex].tokens[feats.tokIndex]
+                    y = this.$store.state.editableData.sentences[feats.senIndex].tokens
+                }
+                for (let i = 0; i < y.length; i++) {
+                    if (y[i].index == x.index) {
+                        y[i].features = feats.newFeats
+                        y[i].pos = feats.newPos
+                        y[i].word = feats.newWord
+                        y[i].lemma = feats.newLemma
+                    }
+                }
                 x.features = feats.newFeats
                 x.pos = feats.newPos
                 x.word = feats.newWord
@@ -555,7 +573,7 @@ export default {
                 this.refresh = true
                 setTimeout(() => {
                     this.refresh = false
-                }, 200)
+                }, 100)
             }
             this.isEdited = true
         },
@@ -606,7 +624,7 @@ export default {
             this.refresh = true
             setTimeout(() => {
                 this.refresh = false
-            }, 200)
+            }, 100)
         },
         // startNerPages() {
         //     this.nerPhrases = {}

@@ -62,30 +62,22 @@
                             :class="d.lemma == '_' ? 'cursor-not-allowed' : ''"
                         />
                     </td>
-                    <td class="p-1 px-2 border-r border-gray-300 uppercase dark:border-gray-500">
+                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <div class="flex content-center items-center h-full w-max">
                             <button
                                 class="mr-1 text-primary dark:text-primaryLight bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-colors duration-100 ease-out ripple py-1 px-1 rounded focus:outline-none w-max"
-                                @click="editFeats(d.index, 'upos')"
-                                v-if="d.upos != '_'"
+                                @click="editFeats(d.index, 'pos')"
+                                v-if="d.pos != '_'"
                             >
-                                <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <svg class="fill-current" style="width: 24px; height: 24px" viewBox="0 0 24 24">
                                     <path
-                                        fill="currentColor"
                                         d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
                                     />
                                 </svg>
                             </button>
-                            {{
-                                d.pos.indexOf('+') == -1
-                                    ? d.upos == '_'
-                                        ? d.upos
-                                        : upos[d.pos]
-                                    : upos[d.pos.split('+')[0]] + ' + ' + upos[d.pos.split('+')[1]]
-                            }}
+                            {{ d.pos }}
                         </div>
                     </td>
-                    <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500" v-html="d.pos"></td>
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <div class="flex content-center items-center h-full">
                             <button
@@ -93,7 +85,7 @@
                                 @click="editFeats(d.index, 'feats')"
                                 v-if="d.pos != '_'"
                             >
-                                <svg class="fill-current" style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <svg class="fill-current" style="width: 24px; height: 24px" viewBox="0 0 24 24">
                                     <path
                                         fill="currentColor"
                                         d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
@@ -197,46 +189,7 @@ export default {
     },
     data() {
         return {
-            headers: ['id', 'form', 'lemma', 'upos', 'xpos', 'feats', 'head', 'deprel', /*'deps',*/ 'misc'],
-            upos: {
-                A: 'adjective',
-                AP: 'possessive adjective',
-                B: 'adverb',
-                BN: 'negation adverb',
-                CC: 'coordinative conjunction',
-                CS: 'subordinative conjunction',
-                DE: 'exclamative determiner',
-                DI: 'indefinite determiner',
-                DQ: 'interrogative determiner',
-                DR: 'relative determiner',
-                DD: 'demonstrative determiner',
-                E: 'preposition',
-                EA: 'articulated preposition',
-                FB: '“balanced” punctuation',
-                FC: 'clause boundary punctuation',
-                FF: 'comma, hyphen',
-                FS: 'sentence boundary punctuation',
-                I: 'interjection',
-                N: 'cardinal number',
-                NO: 'ordinal number',
-                PD: 'demonstrative pronoun',
-                PE: 'personal pronoun',
-                PI: 'indefinite pronoun',
-                PP: 'possessive pronoun',
-                PQ: 'interrogative pronoun',
-                PR: 'relative pronoun',
-                PC: 'clitic pronoun',
-                RD: 'determinative article',
-                RI: 'indeterminative article',
-                S: 'common noun',
-                SA: 'abbreviation',
-                SP: 'proper noun',
-                T: 'predeterminer',
-                VA: 'auxiliary verb',
-                VM: 'modal verb',
-                V: 'main verb',
-                X: 'residual class',
-            },
+            headers: ['id', 'form', 'lemma', 'pos', 'feats', 'head', 'deprel', /*'deps',*/ 'misc'],
             headsRef: {}, //object with the index of the token as the key and the head as the values
             headsEditable: {},
             deprelsRef: {}, //object with the index of the token as the key and the deprel as the value

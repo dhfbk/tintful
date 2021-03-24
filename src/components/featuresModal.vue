@@ -12,7 +12,7 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full">
-                            <div class="text-primary dark:text-primaryLight font-bold text-lg" v-if="mode != 'upos'">
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg" v-if="mode != 'pos'">
                                 Edit token features
                             </div>
                             <div class="text-primary dark:text-primaryLight font-bold text-lg" v-else>
@@ -34,7 +34,7 @@
                                 <span class="sr-only">Close dialog</span>
                             </button>
                         </div>
-                        <div class="flex content-center items-center justify-between my-2" v-if="mode != 'upos'">
+                        <div class="flex content-center items-center justify-between my-2" v-if="mode != 'pos'">
                             Form:
                             <form class="w-full max-w-xs">
                                 <input
@@ -44,7 +44,7 @@
                                 />
                             </form>
                         </div>
-                        <div class="flex content-center items-center justify-between my-2" v-if="mode != 'upos'">
+                        <div class="flex content-center items-center justify-between my-2" v-if="mode != 'pos'">
                             Lemma:
                             <form class="w-full max-w-xs">
                                 <input
@@ -56,7 +56,7 @@
                         </div>
                         <div
                             class="flex content-center items-center justify-between my-2"
-                            v-if="mode == 'brat' || mode == 'upos'"
+                            v-if="mode == 'brat' || mode == 'pos'"
                         >
                             <span>POS: </span>
                             <div class="relative flex content-center items-center justify-between my-2">
@@ -191,7 +191,7 @@
                                 />
                             </transition-group>
                         </div>
-                        <div class="flex flex-row justify-between content-center items-center" v-if="mode != 'upos'">
+                        <div class="flex flex-row justify-between content-center items-center" v-if="mode != 'pos'">
                             <span>Miscellaneous: </span>
                             <input
                                 name="misc"
