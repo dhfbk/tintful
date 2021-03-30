@@ -1,41 +1,5 @@
 <template>
     <div class="mt-4">
-        <!--
-        <span class="mt-2 mb-4 inline-block w-full">
-            <div
-                class="flex flex-row content-center items-center justify-center"
-                v-if="this.$store.state.editableData.sentences.length > 10"
-            >
-                <button
-                    class="rounded flex items-center content-center mr-1 px-2 py-1 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
-                    :class="
-                        page == 1
-                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
-                    "
-                    @click="page > 1 ? page-- : (page = page)"
-                >
-                    Prev.
-                </button>
-                <span class="mx-2">{{ page }}/{{ totalPages }}</span>
-                <button
-                    class="rounded flex items-center content-center mr-1 px-2 py-1 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
-                    :class="
-                        page == totalPages
-                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
-                            : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
-                    "
-                    @click="page < totalPages ? page++ : (page = page)"
-                >
-                    Next
-                </button>
-            </div>
-            Sentences:<br />
-            <span class="font-bold" v-for="(sen, n) in sentencesToShow" :key="n">
-                {{ n + 1 + (page - 1) * senPerPage }}. {{ sen }}<br />
-            </span>
-        </span>
-        -->
         <div class="font-bold text-lg">Legend</div>
         <div :class="'grid grid-rows-' + nerDesc.length + 'grid-flow-col mb-6'">
             <div v-for="type in nerDesc" :key="type">
@@ -45,7 +9,10 @@
                 </div>
             </div>
         </div>
-        <p class="font-bold text-primary dark:text-primaryLight">Check<br /> to save</p>
+        <p class="font-bold text-primary dark:text-primaryLight">
+            Check<br />
+            to save
+        </p>
         <div class="divide-y divide-primary divide-opacity-75">
             <div v-for="sen in localData.sentences" :key="sen.index" class="flex">
                 <!--TOGGLE-->
@@ -87,7 +54,6 @@
                                         : token.ner == 'ORG' || token.ner == 'LOC'
                                         ? 'text-white bg-' + token.ner
                                         : 'bg-gray-350 dark:bg-gray-600 text-black dark:text-white',
-                                    checked[sen.index] ? 'ring-1 ring-green-400' : '',
                                 ]"
                             >
                                 {{ token.word }}
@@ -136,27 +102,24 @@ export default {
     },
     methods: {
         changeNer(i, cont) {
-            if (!this.checked[i]) {
-                switch (this.$store.state.editableData.sentences[i].tokens[cont].ner) {
-                    case 'O':
-                        this.$store.state.editableData.sentences[i].tokens[cont].ner = 'PER'
-                        break
-                    case 'PER':
-                        this.$store.state.editableData.sentences[i].tokens[cont].ner = 'ORG'
-                        break
-                    case 'ORG':
-                        this.$store.state.editableData.sentences[i].tokens[cont].ner = 'LOC'
-                        break
-                    case 'LOC':
-                        this.$store.state.editableData.sentences[i].tokens[cont].ner = 'O'
-                        break
-                }
-                this.$emit('edited')
-                this.$emit('sendID', [i, 'token'])
-                this.localData.sentences[i].tokens[cont].ner = this.$store.state.editableData.sentences[i].tokens[
-                    cont
-                ].ner
+            switch (this.$store.state.editableData.sentences[i].tokens[cont].ner) {
+                case 'O':
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'PER'
+                    break
+                case 'PER':
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'ORG'
+                    break
+                case 'ORG':
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'LOC'
+                    break
+                case 'LOC':
+                    this.$store.state.editableData.sentences[i].tokens[cont].ner = 'O'
+                    break
             }
+            this.$emit('edited')
+            this.checked[i] = true
+            this.$emit('sendID', this.checked)
+            this.localData.sentences[i].tokens[cont].ner = this.$store.state.editableData.sentences[i].tokens[cont].ner
         },
     },
     watch: {
@@ -169,14 +132,7 @@ export default {
             }
         },
         checked() {
-            for (let i = 0; i < this.checked.length; i++) {
-                if (this.checked[i] == true) {
-                    for (let x = 0; x < this.$store.state.editableData.sentences[i].tokens.length; x++) {
-                        this.$store.state.editableData.sentences[i].tokens[x].ner = this.backup.sentences[i].tokens[x].ner
-                    }
-                }
-                this.$emit('sendID', [i, 'check', this.checked[i]])
-            }
+            this.$emit('sendID', this.checked)
         },
     },
 }

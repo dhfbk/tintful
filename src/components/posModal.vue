@@ -133,7 +133,7 @@ export default {
                 this.posToEdit.tokenIndex
             ].pos = this.pos
             this.$emit('edited')
-            this.$emit('sendID', [this.posToEdit.senIndex, 'token'])
+            this.$emit('sendID', this.posToEdit.senIndex)
             this.modal()
         },
     },

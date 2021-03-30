@@ -54,7 +54,7 @@
 <script>
 export default {
     name: 'posEdit',
-    props: { checkProp: Array },
+    props: { checkProp: Array, refresh: Boolean },
     data() {
         return {
             keys: [],
@@ -166,14 +166,13 @@ export default {
                 }
             }
         },
+        refresh() {
+            if (this.refresh) {
+                this.checked = this.checkProp
+            }
+        },
         checked() {
             this.$emit('sendID', this.checked)
-        },
-        checkProp() {
-            if (this.checkProp[1] == 'token') {
-                this.checked[this.checkProp[0]] = true
-                this.$emit('sendID', this.checked)
-            }
         },
     },
 }

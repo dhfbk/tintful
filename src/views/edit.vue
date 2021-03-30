@@ -117,7 +117,7 @@
                     class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out focus:outline-none select-none"
                     :class="
                         sentenceIndex == 0
-                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                            ? 'bg-gray-500 dark:bg-gray-400 hover:bg-gray-600 dark:hover:bg-gray-500 text-white dark:text-black hover:text-white dark:hover:text-white cursor-not-allowed'
                             : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
@@ -129,7 +129,7 @@
                     class="rounded h-5/6 flex items-center content-center mr-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                     :class="
                         sentenceIndex == sentencesNum - 1
-                            ? 'bg-gray-400 text-black hover:text-white hover:bg-gray-600 cursor-not-allowed'
+                            ? 'bg-gray-500 dark:bg-gray-400 hover:bg-gray-600 dark:hover:bg-gray-500 text-white dark:text-black hover:text-white dark:hover:text-white cursor-not-allowed'
                             : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
@@ -140,6 +140,29 @@
                 class="w-full mt-1 sm:mt-0 col-span-3 sm:col-span-1 justify-self-end flex content-center items-center justify-start sm:justify-end"
                 :class="selectedTab == 2 || selectedTab == 3 ? 'sm:col-span-2' : ''"
             >
+                <div class="tooltip mr-2 relative">
+                    <button
+                        :class="
+                            editedBtn
+                                ? 'bg-red-500 dark:bg-red-400 hover:bg-red-600 dark:hover:bg-red-600 text-white dark:text-black dark:hover:text-white cursor-pointer'
+                                : 'bg-gray-500 dark:bg-gray-400 hover:bg-gray-600 dark:hover:bg-gray-500 text-white dark:text-black hover:text-white dark:hover:text-white cursor-not-allowed'
+                        "
+                        class="flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
+                        @click="confirmAction('restoreSen')"
+                    >
+                        <svg style="width: 24px; height: 24px" class="fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M13,3A9,9 0 0,0 4,12H1L4.89,15.89L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"
+                            />
+                        </svg>
+                        <span class="sr-only">Restore from last save</span>
+                    </button>
+                    <span
+                        class="tooltip-text bg-gray-900 absolute rounded whitespace-no-wrap max-w-48 text-gray-100 text-sm font-light mt-1"
+                    >
+                        Restore from last save
+                    </span>
+                </div>
                 <button
                     :class="
                         loadBtn
@@ -233,8 +256,14 @@
             @misc="setMisc"
             @noRoot="checkRoot"
         />
-        <pos-edit v-else-if="selectedTab == 2" @showPosModal="posModal" @sendID="addToID" :checkProp="checkProp" />
-        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" :checkProp="checkProp" />
+        <pos-edit
+            v-else-if="selectedTab == 2"
+            @showPosModal="posModal"
+            @sendID="addToID"
+            :refresh="refresh"
+            :checkProp="checkProp"
+        />
+        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" />
     </div>
 </template>
 
@@ -288,6 +317,7 @@ export default {
             ready: false,
             loadBtn: false,
             idList: '',
+            editedBtn: false,
             checkProp: [],
         }
     },
@@ -343,8 +373,22 @@ export default {
         next()
     },
     methods: {
-        addToCheck(arr) {
+        addToCheck(ind) {
+            let arr = []
+            for (let i = 0; i < this.sentencesNum; i++) {
+                if (this.idList.indexOf(i.toString()) == -1) {
+                    arr.push(false)
+                } else {
+                    arr.push(true)
+                }
+            }
+            arr[ind] = true
             this.checkProp = arr
+            this.refresh = true
+            setTimeout(() => {
+                this.refresh = false
+            }, 100)
+            this.addToID(arr)
         },
         addToID(ids) {
             this.idList = ''
@@ -447,45 +491,81 @@ export default {
         },
         confirmAction(mode) {
             this.action = mode
-            this.isEdited = false
-            this.noRoot = false
-            let prevType = this.type
             let senInd = this.sentenceIndex
-            switch (this.action) {
-                case 'graph':
-                    if (this.selectedTab != 0) {
-                        this.selectedTab = 0
-                        this.type = 'graph'
+            if (mode == 'restoreSen' && this.editedBtn) {
+                let senPiece, senMtPiece
+                if (this.selectedTab == 0 || this.selectedTab == 1) {
+                    senPiece = JSON.parse(localStorage.getItem('processedText')).sentences[senInd]
+                    senMtPiece = JSON.parse(localStorage.getItem('processedText')).sentences[senInd]
+                    this.$store.state.editableData.sentences[senInd] = senPiece
+                    this.$store.state.tableData.sentences[senInd] = senMtPiece
+                    this.refresh = true
+                    setTimeout(() => {
+                        this.refresh = false
+                    }, 100)
+                } else {
+                    senPiece = JSON.parse(localStorage.getItem('processedText'))
+                    senMtPiece = JSON.parse(localStorage.getItem('processedText'))
+                    let property = ''
+                    this.selectedTab == 2 ? (property = 'pos') : (property = 'ner')
+                    this.idList = ''
+                    for (let i = 0; i < senPiece.sentences.length; i++) {
+                        this.idList += i + ','
+                        for (let x = 0; x < senPiece.sentences[i].tokens.length; x++) {
+                            this.$store.state.editableData.sentences[i].tokens[x][property] =
+                                senPiece.sentences[i].tokens[x][property]
+                        }
+                        for (let x = 0; x < senMtPiece.sentences[i].tokens.length; x++) {
+                            this.$store.state.tableData.sentences[i].tokens[x][property] =
+                                senMtPiece.sentences[i].tokens[x][property]
+                        }
                     }
-                    break
-                case 'table':
-                    if (this.selectedTab != 1) {
-                        this.selectedTab = 1
-                        this.type = 'table'
-                    }
-                    break
-                case 'pos':
-                    if (this.selectedTab != 2) {
-                        this.selectedTab = 2
-                        this.type = 'pos'
-                    }
-                    break
-                case 'ner':
-                    if (this.selectedTab != 3) {
-                        this.selectedTab = 3
-                        this.type = 'ner'
-                    }
-                    break
-                case 'next':
-                    this.sentenceIndex < this.sentencesNum - 1 ? this.sentenceIndex++ : false
-                    break
-                case 'prev':
-                    this.sentenceIndex > 0 ? this.sentenceIndex-- : false
-                    break
+                    this.idList != '' ? (this.idList = this.idList.substring(0, this.idList.length - 1)) : ''
+                }
+
+                this.isEdited = true
+                this.editedBtn = false
+            } else if (mode != 'restoreSen') {
+                this.isEdited = false
+                mode == 'save' ? null : (this.editedBtn = false)
+                let prevType = this.type
+                switch (this.action) {
+                    case 'graph':
+                        if (this.selectedTab != 0) {
+                            this.selectedTab = 0
+                            this.type = 'graph'
+                        }
+                        break
+                    case 'table':
+                        if (this.selectedTab != 1) {
+                            this.selectedTab = 1
+                            this.type = 'table'
+                        }
+                        break
+                    case 'pos':
+                        if (this.selectedTab != 2) {
+                            this.selectedTab = 2
+                            this.type = 'pos'
+                        }
+                        break
+                    case 'ner':
+                        if (this.selectedTab != 3) {
+                            this.selectedTab = 3
+                            this.type = 'ner'
+                        }
+                        break
+                    case 'next':
+                        this.sentenceIndex < this.sentencesNum - 1 ? this.sentenceIndex++ : false
+                        break
+                    case 'prev':
+                        this.sentenceIndex > 0 ? this.sentenceIndex-- : false
+                        break
+                }
+                if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == senInd)) {
+                    this.save(senInd, prevType)
+                }
             }
-            if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == senInd)) {
-                this.save(senInd, prevType)
-            }
+            this.noRoot = false
             this.tableMisc = false
             this.misc = {}
         },
@@ -626,6 +706,9 @@ export default {
                 this.refresh = false
             }, 100)
         },
+        isEdited() {
+            this.isEdited ? (this.editedBtn = true) : null
+        },
         // startNerPages() {
         //     this.nerPhrases = {}
         //     for (let i = ((this.startNerPages + 1) * 10) - 10; i < (this.startNerPages + 1) * 10; i++) {
@@ -638,4 +721,39 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.tooltip .tooltip-text {
+    visibility: hidden;
+    text-align: center;
+    padding: 4px 8px;
+    z-index: 100;
+    left: 0;
+    transition: opacity 0.15s ease-out !important;
+    opacity: 0;
+    transition-delay: 0.15s;
+}
+
+.dark .tooltip-text {
+    background-color: white;
+    color: #000;
+}
+
+.tooltip-text {
+    font-weight: 500;
+    width: max-content;
+    left: 50% !important;
+    -webkit-transform: translateX(-50%) !important;
+    transform: translateX(-50%) !important;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    transition: opacity 0.2s ease-out !important;
+    opacity: 85%;
+}
+@media (max-width: 460px) {
+    .tooltip-text {
+        visibility: hidden !important;
+    }
+}
+</style>
