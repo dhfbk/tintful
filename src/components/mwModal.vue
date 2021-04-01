@@ -235,7 +235,7 @@ export default {
         save() {
             let phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
             let phraseMisc = this.$store.state.tableData.sentences[this.sentenceIndex]
-            let len = parseInt(this.newEnd.split('-')[0]) - parseInt(this.start.split('-')[0])
+            let len = parseInt(this.newEnd.split('-')[0]) - parseInt(this.start.split('-')[0]) + 1
             let startMisc = 0
             for (let i = 0; i < phraseMisc.tokens.length; i++) {
                 if (phraseMisc.tokens[i].index == parseInt(this.start.split('-')[0])) {
@@ -243,6 +243,7 @@ export default {
                 }
             }
             //check if the form has changed apply changes in both the objects
+            console.log(len)
             if (this.newForm != this.form) {
                 for (let i = this.arrPos; i < this.arrPos + len; i++) {
                     phrase.tokens[i].originalText = this.newForm

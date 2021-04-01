@@ -3,6 +3,7 @@ module.exports = {
     darkMode: 'class', // or 'media' or 'class'
     theme: {
         extend: {
+            ringWidth: ['hover', 'active'],
             colors: {
                 primary: '#0068b4',
                 primaryGradient: 'linear-gradient(145deg, #23acff, #1e91e4)',

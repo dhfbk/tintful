@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4">
+    <div class="mt-4" v-if="!loading">
         <div class="font-bold text-lg">Legend</div>
         <div :class="'grid grid-rows-' + nerDesc.length + 'grid-flow-col mb-6'">
             <div v-for="type in nerDesc" :key="type">
@@ -69,6 +69,7 @@
 <script>
 export default {
     name: 'ner',
+    props: { refresh: Boolean },
     data() {
         return {
             keys: [],
@@ -82,6 +83,7 @@ export default {
             senPerPage: 10,
             sentencesToShow: [],
             checked: [],
+            loading: false,
         }
     },
     created() {
@@ -133,6 +135,17 @@ export default {
         },
         checked() {
             this.$emit('sendID', this.checked)
+        },
+        refresh() {
+            if (this.refresh == true) {
+                this.loading = true
+                this.localData = this.$store.state.editableData
+                for (let i = 0; i < this.checked.length; i++) {
+                    this.checked[i] = false
+                }
+            } else {
+                this.loading = false
+            }
         },
     },
 }

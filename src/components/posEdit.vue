@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4">
+    <div class="mt-4" v-if="!loading">
         <div class="font-bold text-lg">Legend</div>
         <div class="grid grid-rows-4 grid-flow-col gap-x-1 auto-cols-auto mb-6 max-w-max">
             <div v-for="(i, x) in Object.keys(legend)" :key="x">
@@ -54,7 +54,7 @@
 <script>
 export default {
     name: 'posEdit',
-    props: { checkProp: Array, refresh: Boolean },
+    props: { checkProp: Array, refresh: Boolean, reset: Boolean },
     data() {
         return {
             keys: [],
@@ -124,6 +124,7 @@ export default {
             posDesc: [],
             checked: [],
             backup: JSON.parse(localStorage.getItem('processedText')),
+            loading: false,
         }
     },
     created() {
@@ -169,6 +170,17 @@ export default {
         refresh() {
             if (this.refresh) {
                 this.checked = this.checkProp
+            }
+        },
+        reset() {
+            if (this.reset) {
+                this.loading = true
+                this.localData = this.$store.state.editableData
+                for (let i = 0; i < this.checked.length; i++) {
+                    this.checked[i] = false
+                }
+            } else {
+                this.loading = false
             }
         },
         checked() {

@@ -35,36 +35,36 @@
                             </button>
                         </div>
                         <div class="flex content-center items-center justify-between my-2" v-if="mode != 'pos'">
-                            Form:
+                            <span class="mr-2">Form:</span>
                             <form class="w-full max-w-xs">
                                 <input
                                     type="text"
-                                    class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                                    class="px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                                     v-model="word"
                                 />
                             </form>
                         </div>
                         <div class="flex content-center items-center justify-between my-2" v-if="mode != 'pos'">
-                            Lemma:
+                            <span class="mr-2">Lemma:</span>
                             <form class="w-full max-w-xs">
                                 <input
                                     type="text"
-                                    class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                                    class="px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                                     v-model="lemma"
                                 />
                             </form>
                         </div>
                         <div
-                            class="flex content-center items-center justify-between my-2"
+                            class="flex content-center items-center justify-between"
                             v-if="mode == 'brat' || mode == 'pos'"
                         >
-                            <span>POS: </span>
-                            <div class="relative flex content-center items-center justify-between my-2">
+                            <span class="mr-2">POS: </span>
+                            <div class="relative flex content-center items-center justify-between">
                                 <select
                                     name="posSelect"
                                     id="posSelect"
                                     v-model="pos"
-                                    class="w-full block border border-primary appearance-none px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                    class="w-full block border border-primary appearance-none px-1 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                 >
                                     <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
                                         {{ i.abbr }} ({{ i.full }})
@@ -192,11 +192,11 @@
                             </transition-group>
                         </div>
                         <div class="flex flex-row justify-between content-center items-center" v-if="mode != 'pos'">
-                            <span>Miscellaneous: </span>
+                            <span class="mr-2">Miscellaneous:</span>
                             <input
                                 name="misc"
                                 id="misc"
-                                class="p-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full max-w-xs"
+                                class="px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full max-w-xs"
                                 v-model="misc"
                             />
                         </div>

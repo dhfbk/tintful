@@ -46,6 +46,24 @@
             @snack="snack"
             @edited="editedMW"
         />
+        <div class="tooltip relative w-max float-right">
+            <button
+                class="bg-red-500 dark:bg-red-400 hover:bg-red-600 dark:hover:bg-red-600 text-white dark:text-black dark:hover:text-white cursor-pointer flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
+                @click="confirmAction('restoreAll')"
+            >
+                <svg style="width: 24px; height: 24px" class="fill-current" viewBox="0 0 24 24">
+                    <path
+                        d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2M18 20H6V4H13L18 9V20M17 13.24C17 15.86 14.87 18 12.24 18C10.29 18 8.61 16.82 7.88 15.14H9.5C10.11 16 11.11 16.57 12.24 16.57C14.08 16.57 15.57 15.07 15.57 13.24S14.08 9.9 12.24 9.9C10.95 9.9 9.86 10.65 9.29 11.71L10.81 13.24H7V9.43L8.24 10.67C9.09 9.35 10.55 8.5 12.24 8.5C14.87 8.47 17 10.61 17 13.24Z"
+                    />
+                </svg>
+                <span class="sr-only">Restore everything</span>
+            </button>
+            <span
+                class="tooltip-text-right bg-gray-900 absolute rounded whitespace-no-wrap max-w-48 text-gray-100 text-sm font-light mt-1"
+            >
+                Restore everything
+            </span>
+        </div>
         <div class="overflow-x-auto w-full">
             <div class="w-full grid grid-cols-4 text-center min-w-max py-2">
                 <div
@@ -121,7 +139,10 @@
                             : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
-                    Prev.
+                    <svg class="fill-current" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+                        <path d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+                    </svg>
+                    <span class="sr-only">Previous phrase</span>
                 </button>
                 <span class="mx-2">{{ sentenceIndex + 1 }}/{{ sentencesNum }}</span>
                 <button
@@ -133,7 +154,10 @@
                             : 'bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white cursor-pointer'
                     "
                 >
-                    Next
+                    <svg class="fill-current" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+                        <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+                    </svg>
+                    <span class="sr-only">Next phrase</span>
                 </button>
             </div>
             <div
@@ -163,26 +187,50 @@
                         Restore from last save
                     </span>
                 </div>
-                <button
-                    :class="
-                        loadBtn
-                            ? 'bg-gray-500 dark:bg-gray-400 hover:bg-gray-600 dark:hover:bg-gray-500 text-white dark:text-black hover:text-white dark:hover:text-white cursor-pointer'
-                            : isEdited
-                            ? 'bg-yellow-500 dark:bg-yellow-400 hover:bg-yellow-600 dark:hover:bg-yellow-600 text-black hover:text-white cursor-pointer'
-                            : 'bg-green-500 dark:bg-green-400 hover:bg-green-600 dark:hover:bg-green-600 text-white dark:text-black dark:hover:text-white cursor-pointer'
-                    "
-                    @click="confirmAction('save')"
-                    class="flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
-                >
-                    {{ loadBtn ? 'Wait...' : isEdited ? 'Save changes' : 'Mark as correct' }}
-                    <svg
-                        :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
-                        style="width: 24px; height: 24px"
-                        viewBox="0 0 24 24"
+                <div class="tooltip relative">
+                    <button
+                        :class="
+                            loadBtn
+                                ? 'bg-gray-500 dark:bg-gray-400 hover:bg-gray-600 dark:hover:bg-gray-500 text-white dark:text-black hover:text-white dark:hover:text-white cursor-pointer'
+                                : isEdited
+                                ? 'bg-yellow-500 dark:bg-yellow-400 hover:bg-yellow-600 dark:hover:bg-yellow-600 text-black hover:text-white cursor-pointer'
+                                : 'bg-green-500 dark:bg-green-400 hover:bg-green-600 dark:hover:bg-green-600 text-white dark:text-black dark:hover:text-white cursor-pointer'
+                        "
+                        @click="confirmAction('save')"
+                        class="flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
                     >
-                        <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
-                    </svg>
-                </button>
+                        <span v-if="loadBtn">Wait...</span>
+                        <span v-else-if="isEdited">
+                            <svg class="fill-current" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+                                <path
+                                    d="M17 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.1 21 21 20.1 21 19V7L17 3M19 19H5V5H16.17L19 7.83V19M12 12C10.34 12 9 13.34 9 15S10.34 18 12 18 15 16.66 15 15 13.66 12 12 12M6 6H15V10H6V6Z"
+                                />
+                            </svg>
+                            <span class="sr-only">Save changes</span>
+                        </span>
+                        <span v-else>
+                            <svg class="fill-current" style="width: 24px; height: 24px" viewBox="0 0 24 24">
+                                <path
+                                    d="M19.78,2.2L24,6.42L8.44,22L0,13.55L4.22,9.33L8.44,13.55L19.78,2.2M19.78,5L8.44,16.36L4.22,12.19L2.81,13.55L8.44,19.17L21.19,6.42L19.78,5Z"
+                                />
+                            </svg>
+                            <span class="sr-only">Mark as correct</span>
+                        </span>
+                        <svg
+                            :class="loadBtn ? 'animate-spin ml-1 fill-current block' : 'hidden'"
+                            style="width: 24px; height: 24px"
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                        </svg>
+                    </button>
+                    <span
+                        v-if="!loadBtn"
+                        class="tooltip-text-right bg-gray-900 absolute rounded whitespace-no-wrap max-w-48 text-gray-100 text-sm font-light mt-1"
+                    >
+                        {{ isEdited ? 'Save changes' : 'Mark as correct' }}
+                    </span>
+                </div>
             </div>
         </div>
         <span class="my-2 inline-block" v-if="selectedTab != 2 && selectedTab != 3">
@@ -195,6 +243,11 @@
                 class="bg-primary dark:bg-primaryLight dark:hover:bg-blue-500 hover:bg-primaryDark text-white dark:text-black dark:hover:text-white rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none"
             >
                 Edit multiwords
+            </button>
+            <button
+                class="ml-2 bg-transparent dark:hover:bg-gray-600 hover:bg-gray-200 text-primary dark:text-primaryLight rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none border-2 border-primary dark:border-primaryLight"
+            >
+                Edit root
             </button>
         </div>
         <!--inserire paginazione-->
@@ -261,9 +314,10 @@
             @showPosModal="posModal"
             @sendID="addToID"
             :refresh="refresh"
+            :reset="reset"
             :checkProp="checkProp"
         />
-        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" />
+        <nerEdit v-else-if="selectedTab == 3" @edited="isEdited = true" @sendID="addToID" :refresh="refresh" />
     </div>
 </template>
 
@@ -304,6 +358,7 @@ export default {
             featsToEdit: {},
             posToEdit: {},
             refresh: false,
+            reset: false,
             type: 'graph',
             modalInfo: false,
             confirmText: '',
@@ -496,7 +551,7 @@ export default {
                 let senPiece, senMtPiece
                 if (this.selectedTab == 0 || this.selectedTab == 1) {
                     senPiece = JSON.parse(localStorage.getItem('processedText')).sentences[senInd]
-                    senMtPiece = JSON.parse(localStorage.getItem('processedText')).sentences[senInd]
+                    senMtPiece = JSON.parse(localStorage.getItem('tableData')).sentences[senInd]
                     this.$store.state.editableData.sentences[senInd] = senPiece
                     this.$store.state.tableData.sentences[senInd] = senMtPiece
                     this.refresh = true
@@ -505,7 +560,7 @@ export default {
                     }, 100)
                 } else {
                     senPiece = JSON.parse(localStorage.getItem('processedText'))
-                    senMtPiece = JSON.parse(localStorage.getItem('processedText'))
+                    senMtPiece = JSON.parse(localStorage.getItem('tableData'))
                     let property = ''
                     this.selectedTab == 2 ? (property = 'pos') : (property = 'ner')
                     this.idList = ''
@@ -526,43 +581,56 @@ export default {
                 this.isEdited = true
                 this.editedBtn = false
             } else if (mode != 'restoreSen') {
-                this.isEdited = false
-                mode == 'save' ? null : (this.editedBtn = false)
-                let prevType = this.type
-                switch (this.action) {
-                    case 'graph':
-                        if (this.selectedTab != 0) {
-                            this.selectedTab = 0
-                            this.type = 'graph'
-                        }
-                        break
-                    case 'table':
-                        if (this.selectedTab != 1) {
-                            this.selectedTab = 1
-                            this.type = 'table'
-                        }
-                        break
-                    case 'pos':
-                        if (this.selectedTab != 2) {
-                            this.selectedTab = 2
-                            this.type = 'pos'
-                        }
-                        break
-                    case 'ner':
-                        if (this.selectedTab != 3) {
-                            this.selectedTab = 3
-                            this.type = 'ner'
-                        }
-                        break
-                    case 'next':
-                        this.sentenceIndex < this.sentencesNum - 1 ? this.sentenceIndex++ : false
-                        break
-                    case 'prev':
-                        this.sentenceIndex > 0 ? this.sentenceIndex-- : false
-                        break
-                }
-                if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == senInd)) {
-                    this.save(senInd, prevType)
+                if (mode == 'restoreAll') {
+                    let senPiece = JSON.parse(localStorage.getItem('processedText'))
+                    let senMtPiece = JSON.parse(localStorage.getItem('tableData'))
+                    this.$store.state.editableData = senPiece
+                    this.$store.state.tableData = senMtPiece
+                    this.selectedTab != 2 ? (this.refresh = true) : (this.reset = true)
+                    setTimeout(() => {
+                        this.selectedTab != 2 ? (this.refresh = false) : (this.reset = false)
+                    }, 100)
+                    this.save(senInd, this.type)
+                    this.isEdited = false
+                } else {
+                    mode == 'save' ? null : (this.editedBtn = false)
+                    let prevType = this.type
+                    switch (this.action) {
+                        case 'graph':
+                            if (this.selectedTab != 0) {
+                                this.selectedTab = 0
+                                this.type = 'graph'
+                            }
+                            break
+                        case 'table':
+                            if (this.selectedTab != 1) {
+                                this.selectedTab = 1
+                                this.type = 'table'
+                            }
+                            break
+                        case 'pos':
+                            if (this.selectedTab != 2) {
+                                this.selectedTab = 2
+                                this.type = 'pos'
+                            }
+                            break
+                        case 'ner':
+                            if (this.selectedTab != 3) {
+                                this.selectedTab = 3
+                                this.type = 'ner'
+                            }
+                            break
+                        case 'next':
+                            this.sentenceIndex < this.sentencesNum - 1 ? this.sentenceIndex++ : false
+                            break
+                        case 'prev':
+                            this.sentenceIndex > 0 ? this.sentenceIndex-- : false
+                            break
+                    }
+                    if (!((this.action == 'next' || this.action == 'prev') && this.sentenceIndex == senInd)) {
+                        this.isEdited ? this.save(senInd, prevType) : null
+                    }
+                    this.isEdited = false
                 }
             }
             this.noRoot = false
@@ -722,7 +790,8 @@ export default {
 </script>
 
 <style scoped>
-.tooltip .tooltip-text {
+.tooltip .tooltip-text,
+.tooltip .tooltip-text-right {
     visibility: hidden;
     text-align: center;
     padding: 4px 8px;
@@ -733,7 +802,8 @@ export default {
     transition-delay: 0.15s;
 }
 
-.dark .tooltip-text {
+.dark .tooltip-text,
+.dark .tooltip-text-right {
     background-color: white;
     color: #000;
 }
@@ -746,13 +816,23 @@ export default {
     transform: translateX(-50%) !important;
 }
 
-.tooltip:hover .tooltip-text {
+.tooltip-text-right {
+    font-weight: 500;
+    width: max-content;
+    left: 100% !important;
+    -webkit-transform: translateX(-100%) !important;
+    transform: translateX(-100%) !important;
+}
+
+.tooltip:hover .tooltip-text,
+.tooltip:hover .tooltip-text-right {
     visibility: visible;
     transition: opacity 0.2s ease-out !important;
-    opacity: 85%;
+    opacity: 100%;
 }
 @media (max-width: 460px) {
-    .tooltip-text {
+    .tooltip-text,
+    .tooltip-text-right {
         visibility: hidden !important;
     }
 }

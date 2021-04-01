@@ -6,7 +6,7 @@
         >
             <transition name="fade" appear>
                 <div
-                    class="bg-white dark:bg-bgDark rounded-lg w-1/2 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none p-4"
+                    class="bg-white dark:bg-bgDark rounded-lg w-5/6 max-w-3xl max-h-96 h-auto overflow-y-auto overscroll-none p-4"
                     @click.stop
                 >
                     <div class="flex w-full">
@@ -28,13 +28,13 @@
                         </button>
                     </div>
                     <div>Word: "{{ posToEdit.token.word }}"</div>
-                    <span>POS: </span>
+                    <span class="mr-2">POS: </span>
                     <div class="relative">
                         <select
                             name="depsSelect"
                             id="depsSelect"
                             v-model="pos"
-                            class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="w-full block border border-primary appearance-none mr-24 px-1 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option v-for="(i, x) in posList" :key="x" :value="i.abbr" class="">
                                 {{ i.abbr }} ({{ i.full }})

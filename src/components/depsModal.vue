@@ -39,14 +39,14 @@
                                 ><br />
                                 from: <span class="font-medium mr-4">{{ originalDep }}</span>
                             </span>
-                            <div class="relative flex w-full">
-                                <span class="font-medium mr-4">to:</span>
+                            <div class="relative flex w-full content-center items-center mt-1">
+                                <span class="font-medium mr-2">to:</span>
                                 <select
                                     name="depsSelect"
                                     id="depsSelect"
                                     @change="edit()"
                                     v-model="selectedDep"
-                                    class="w-full block border border-primary appearance-none px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                    class="w-full block border border-primary appearance-none px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                 >
                                     <option v-for="(dep, i) in depsList" :key="i" :value="dep">
                                         {{ dep }}

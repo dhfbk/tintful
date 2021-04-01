@@ -25,11 +25,11 @@
                                 :id="'end' + d.index"
                                 v-model="end[d.index]"
                                 @change="editData('end', d.index)"
-                                class="w-14 inline-block border border-primary appearance-none px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                class="w-16 inline-block border border-primary appearance-none px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                             >
                                 <option v-for="i in endRef[d.index]" :key="i" :value="i">{{ i }}</option>
                             </select>
-                            <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900">
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center p-2 text-gray-900">
                                 <svg
                                     class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
                         <input
                             v-else
                             type="text"
-                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
+                            class="px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-full"
                             v-model="d.word"
                             @keyup="changeForm(d.word, d.index, index)"
                         />
@@ -55,7 +55,7 @@
                     <td class="p-1 px-2 border-r border-gray-300 dark:border-gray-500">
                         <input
                             type="text"
-                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-max"
+                            class="px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-max"
                             v-model="d.lemma"
                             @change="$emit('edited')"
                             :disabled="d.lemma == '_'"
@@ -101,7 +101,7 @@
                             :name="'head' + d.index"
                             :id="'head' + d.index"
                             disabled
-                            class="cursor-not-allowed w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="cursor-not-allowed w-full block border border-primary appearance-none mr-8 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option value="_" selected>_</option>
                         </select>
@@ -111,7 +111,7 @@
                             :id="'head' + d.index"
                             v-model="headsEditable[d.index]"
                             @change="editData('heads', d.index)"
-                            class="w-full block border border-primary appearance-none mr-8 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="w-16 inline-block border border-primary appearance-none px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option
                                 v-for="(n, c) in $store.state.tableData.sentences[sentenceIndex]['basic-dependencies']
@@ -122,7 +122,7 @@
                                 {{ c }}
                             </option>
                         </select>
-                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
+                        <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 pr-4 text-gray-900">
                             <svg
                                 class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +138,7 @@
                             :name="'dep' + d.index"
                             :id="'dep' + d.index"
                             disabled
-                            class="cursor-not-allowed w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="cursor-not-allowed w-full block border border-primary appearance-none mr-24 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option value="_" selected>_</option>
                         </select>
@@ -148,11 +148,11 @@
                             :id="'dep' + d.index"
                             v-model="deprelsEditable[d.index]"
                             @change="editData('deprels', d.index, d.word)"
-                            class="w-full block border border-primary appearance-none mr-24 px-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                            class="w-max inline-block border border-primary appearance-none px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                         >
                             <option v-for="i in deps" :key="i" :value="i">{{ i }}</option>
                         </select>
-                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-gray-900">
+                        <div class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 pr-4 text-gray-900">
                             <svg
                                 class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +169,7 @@
                         <input
                             :name="'space' + d.index"
                             :id="'space' + d.index"
-                            class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-max"
+                            class="w-max inline-block border border-primary appearance-none px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                             @blur="editData('spaceAfter', d.index)"
                             :value="miscInitial[d.index]"
                         />
