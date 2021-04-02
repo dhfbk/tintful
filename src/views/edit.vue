@@ -46,6 +46,13 @@
             @snack="snack"
             @edited="editedMW"
         />
+        <manageRoot
+            v-if="manageRootModal"
+            :sentenceIndex="sentenceIndex"
+            @close="manageRootModal = false"
+            @snack="snack"
+            @edited="editedRoot"
+        />
         <div class="tooltip relative w-max float-right">
             <button
                 class="bg-red-500 dark:bg-red-400 hover:bg-red-600 dark:hover:bg-red-600 text-white dark:text-black dark:hover:text-white cursor-pointer flex rounded py-1 px-2 ripple transition-colors duration-100 ease-out select-none focus:outline-none"
@@ -245,6 +252,7 @@
                 Edit multiwords
             </button>
             <button
+                @click="manageRootModal = !manageRootModal"
                 class="ml-2 bg-transparent dark:hover:bg-gray-600 hover:bg-gray-200 text-primary dark:text-primaryLight rounded py-1 px-2 ripple transition-colors duration-100 ease-out inline-block select-none focus:outline-none border-2 border-primary dark:border-primaryLight"
             >
                 Edit root
@@ -333,6 +341,7 @@ import nerEdit from '../components/nerEdit.vue'
 import modalInfo from '../components/modalInfo.vue'
 //import confirmationModal from '../components/confirmationModal.vue'
 import manageMultiword from '../components/manageMultiword.vue'
+import manageRoot from '../components/manageRoot.vue'
 import axios from 'axios'
 export default {
     props: {
@@ -349,6 +358,7 @@ export default {
             showPosModal: false,
             showMwModal: false,
             manageMW: false,
+            manageRootModal: false,
             sentenceIndex: 0,
             sentencesNum: 0,
             selectedTab: 0,
@@ -408,6 +418,7 @@ export default {
         posModal,
         mwModal,
         manageMultiword,
+        manageRoot,
     },
     mounted() {
         if (
@@ -672,6 +683,13 @@ export default {
                     sentences[index].multiTokens.push(mT)
                 }
             }
+        },
+        editedRoot() {
+            this.isEdited = true
+            this.refresh = true
+            setTimeout(() => {
+                this.refresh = false
+            }, 100)
         },
         editedMW() {
             this.isEdited = true

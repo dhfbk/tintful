@@ -12,9 +12,7 @@
                 >
                     <div class="p-4">
                         <div class="flex w-full mb-2">
-                            <div class="text-primary dark:text-primaryLight font-bold text-lg">
-                                Manage multiword tokens
-                            </div>
+                            <div class="text-primary dark:text-primaryLight font-bold text-lg">Manage root tokens</div>
                             <button
                                 class="ripple ml-auto rounded hover:bg-gray-200 dark:hover:bg-gray-600 p-1 focus:outline-none"
                                 @click="toggleModal()"
@@ -34,7 +32,7 @@
                         <div v-if="current.length != 0">
                             <div
                                 class="flex flex-col sm:flex-row items-center content-center mb-1 justify-between"
-                                v-for="(mw, i) in current"
+                                v-for="(root, i) in current"
                                 :key="i"
                             >
                                 <div
@@ -44,25 +42,28 @@
                                         class="flex flex-row items-center content-center gap-1 flex-wrap justify-center md:justify-start mx-auto md:mx-0"
                                     >
                                         <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
-                                            <p>Start</p>
-                                            <div class="relative" v-if="mw.start == '' || mw.start == undefined">
+                                            <p>Root {{ i + 1 }}</p>
+                                            <div
+                                                class="relative"
+                                                v-if="root.dependent == -1 || root.dependent == undefined"
+                                            >
                                                 <select
-                                                    :name="'start' + mw.start"
-                                                    :id="'start' + mw.start"
-                                                    v-model="mw.start"
-                                                    @change="editData('start', mw.start)"
-                                                    class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                    :name="'gloss' + root.dependent"
+                                                    :id="'gloss' + root.dependent"
+                                                    v-model="root.dependent"
+                                                    @change="editData(i)"
+                                                    class="w-full inline-block border border-primary appearance-none pl-1 pr-4 py-1 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                                 >
                                                     <option
-                                                        v-for="(s, i) in availableStarts"
-                                                        :key="'start' + i"
-                                                        :value="s"
+                                                        v-for="(r, i) in availableRoots"
+                                                        :key="'root' + i"
+                                                        :value="r.dependent"
                                                     >
-                                                        {{ s }}
+                                                        {{ r.dependentGloss }}
                                                     </option>
                                                 </select>
                                                 <div
-                                                    class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                                    class="pointer-events-none absolute pin-y pin-r flex items-center p-1 text-gray-900"
                                                 >
                                                     <svg
                                                         class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
@@ -78,60 +79,16 @@
                                             <div v-else>
                                                 <input
                                                     type="text"
-                                                    class="w-28 cursor-not-allowed px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                                    v-model="mw.start"
+                                                    class="w-full cursor-not-allowed px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                    :value="root.dependentGloss"
                                                     disabled
-                                                />
-                                            </div>
-                                        </span>
-                                        <span class="flex flex-row items-center content-center gap-1 mt-1 sm:mt-0">
-                                            <p>End</p>
-                                            <div class="relative">
-                                                <select
-                                                    :name="'end' + mw.end"
-                                                    :id="'end' + mw.end"
-                                                    v-model="mw.end"
-                                                    @change="editData('end')"
-                                                    class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
-                                                >
-                                                    <option
-                                                        v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
-                                                        :key="'end' + i"
-                                                        :value="e"
-                                                    >
-                                                        {{ e }}
-                                                    </option>
-                                                </select>
-                                                <div
-                                                    class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
-                                                >
-                                                    <svg
-                                                        class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20"
-                                                    >
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                                                        />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </span>
-                                        <span class="flex flex-row items-center content-center gap-1 sm:mt-0">
-                                            <p>Form</p>
-                                            <div class="relative">
-                                                <input
-                                                    :name="'form' + mw.start"
-                                                    :id="'form' + mw.start"
-                                                    class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
-                                                    v-model="mw.word"
-                                                    @keydown="checkWords"
                                                 />
                                             </div>
                                         </span>
                                     </span>
                                     <span class="flex flex-row ml-2 mt-1 sm:mt-0" v-if="!invalid">
                                         <button
+                                            v-if="current.length != 1"
                                             class="p-2 ripple rounded-full focus:outline-none text-red-500 transition duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
                                             @click="removeElement(i)"
                                         >
@@ -145,7 +102,7 @@
                                                     d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
                                                 />
                                             </svg>
-                                            <span class="sr-only">Remove multiword</span>
+                                            <span class="sr-only">Remove root</span>
                                         </button>
                                         <button
                                             v-if="i == current.length - 1"
@@ -159,7 +116,7 @@
                                             >
                                                 <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                             </svg>
-                                            <span class="sr-only">Add multiword</span>
+                                            <span class="sr-only">Add root</span>
                                         </button>
                                     </span>
                                 </div>
@@ -180,7 +137,7 @@
                             </div>
                         </div>
                         <div v-else>
-                            <p class="text-center italic">No multiword token found</p>
+                            <p class="text-center italic">No root token found</p>
                             <div class="flex items-center justify-center content-center">
                                 <button
                                     class="p-2 ripple rounded-full transition text-primary dark:text-primaryLight duration-100 ease-out focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600"
@@ -189,7 +146,7 @@
                                     <svg style="width: 24px; height: 24px" viewBox="0 0 24 24" class="fill-current">
                                         <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                     </svg>
-                                    <span class="sr-only">Add multiword</span>
+                                    <span class="sr-only">Add root</span>
                                 </button>
                             </div>
                             <div class="float-right pb-4">
@@ -221,14 +178,74 @@ export default {
         }
     },
     created() {
-        //incomplete
+        var phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+        for (let i = 0; i < phrase['basic-dependencies'].length; i++) {
+            if (phrase['basic-dependencies'][i].dep == 'ROOT') {
+                this.current.push(phrase['basic-dependencies'][i])
+            } else {
+                this.availableRoots.push(phrase['basic-dependencies'][i])
+            }
+        }
         this.wait = false
     },
     methods: {
-        //incomplete
         toggleModal() {
             this.$emit('close')
             this.wait = true
+        },
+        newElement() {
+            this.invalid = true
+            this.current.push({ dep: '', dependent: -1, dependentGloss: '', governor: -1, governorGloss: '' })
+        },
+        removeElement(arrInd) {
+            var phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+            this.current.splice(arrInd, 1)
+            for (let i = 0; i < phrase['basic-dependencies'].length; i++) {
+                for (let x = 0; x < this.current.length; x++) {
+                    if (this.current[x].dependent != phrase['basic-dependencies'][i].dependent) {
+                        this.availableRoots.push(phrase['basic-dependencies'][i])
+                    } else {
+                        break
+                    }
+                }
+            }
+        },
+        editData(index) {
+            let dependentGloss = ''
+            for (let i = 0; i < this.availableRoots.length; i++) {
+                if (this.availableRoots[i].dependent == this.current[index].dependent) {
+                    dependentGloss = this.availableRoots[i].dependentGloss
+                    break
+                }
+            }
+            this.current[index] = {
+                dep: 'ROOT',
+                dependent: this.current[index].dependent,
+                dependentGloss: dependentGloss,
+                governor: 0,
+                governorGloss: 'ROOT',
+            }
+            this.invalid = false
+        },
+        save() {
+            var phrase = this.$store.state.editableData.sentences[this.sentenceIndex]
+            for (let i = 0; i < phrase['basic-dependencies'].length; i++) {
+                if (phrase['basic-dependencies'][i].dep == 'ROOT') {
+                    phrase['basic-dependencies'].splice(i, 1)
+                    i--
+                } else {
+                    for (let x = 0; x < this.current.length; x++) {
+                        if (phrase['basic-dependencies'][i].dependent == this.current[x].dependent) {
+                            phrase['basic-dependencies'].splice(i, 1)
+                            i--
+                            break
+                        }
+                    }
+                }
+            }
+            phrase['basic-dependencies'].splice(0, 0, ...this.current)
+            this.$emit('edited')
+            this.toggleModal()
         },
     },
 }

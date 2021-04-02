@@ -51,7 +51,7 @@
                                                     :id="'start' + mw.start"
                                                     v-model="mw.start"
                                                     @change="editData('start', mw.start)"
-                                                    class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                    class="w-max inline-block border border-primary appearance-none pl-2 py-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                                 >
                                                     <option
                                                         v-for="(s, i) in availableStarts"
@@ -61,7 +61,7 @@
                                                     >
                                                 </select>
                                                 <div
-                                                    class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                                    class="pointer-events-none absolute pin-y pin-r flex items-center p-1 text-gray-900"
                                                 >
                                                     <svg
                                                         class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
@@ -77,7 +77,7 @@
                                             <div v-else>
                                                 <input
                                                     type="text"
-                                                    class="w-28 cursor-not-allowed px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                    class="w-28 cursor-not-allowed px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                                     v-model="mw.start"
                                                     disabled
                                                 />
@@ -91,7 +91,7 @@
                                                     :id="'end' + mw.end"
                                                     v-model="mw.end"
                                                     @change="editData('end')"
-                                                    class="w-max inline-block border border-primary appearance-none pl-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
+                                                    class="w-max inline-block border border-primary appearance-none pl-2 py-1 pr-4 rounded bg-gray-100 dark:bg-gray-700 transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none"
                                                 >
                                                     <option
                                                         v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
@@ -101,7 +101,7 @@
                                                     >
                                                 </select>
                                                 <div
-                                                    class="pointer-events-none absolute pin-y pin-r flex items-center pl-2 text-gray-900"
+                                                    class="pointer-events-none absolute pin-y pin-r flex items-center p-1 text-gray-900"
                                                 >
                                                     <svg
                                                         class="h-4 w-4 fill-current text-gray-900 dark:text-gray-200"
@@ -121,7 +121,7 @@
                                                 <input
                                                     :name="'form' + mw.start"
                                                     :id="'form' + mw.start"
-                                                    class="px-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
+                                                    class="px-2 py-1 border border-primary bg-gray-100 dark:bg-gray-700 rounded transition-colors duration-150 hover:border-blue-500 focus:border-blue-500 ease-out focus:outline-none w-28"
                                                     v-model="mw.word"
                                                     @keydown="checkWords"
                                                 />

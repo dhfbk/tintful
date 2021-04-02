@@ -348,6 +348,7 @@ export default {
             this.$emit('showFeatsModal', infoToEdit, 'brat')
             //console.log(feat)
         },
+        /*
         dblRoot(e) {
             var i = e.target
             var infos = parseInt(i.getAttribute('data-chunk-id'))
@@ -381,6 +382,7 @@ export default {
             this.$emit('edited')
             this.$emit('noRoot', 'false')
         },
+        */
         handleRight(e) {
             if (!this.isEditMode) {
                 let i = e.target
@@ -543,7 +545,7 @@ export default {
             var x = document.getElementById('deps')
             var pos = x.getElementsByClassName('span_default')
             var depend = x.getElementsByClassName('arcs')
-            var words = x.getElementsByTagName('tspan')
+            //var words = x.getElementsByTagName('tspan')
 
             x.addEventListener(
                 'contextmenu',
@@ -558,9 +560,11 @@ export default {
                     el.oncontextmenu = this.handleRight
                     el.ondblclick = this.handleDbl
                 })
+                /*
                 words.forEach(el => {
                     el.ondblclick = this.dblRoot
                 })
+                */
                 //console.log(depend);
                 depend.forEach(el => {
                     //console.log(el.children);
