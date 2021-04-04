@@ -57,8 +57,9 @@
                                                         v-for="(s, i) in availableStarts"
                                                         :key="'start' + i"
                                                         :value="s"
-                                                        >{{ s }}</option
                                                     >
+                                                        {{ s }}
+                                                    </option>
                                                 </select>
                                                 <div
                                                     class="pointer-events-none absolute pin-y pin-r flex items-center p-1 text-gray-900"
@@ -97,8 +98,9 @@
                                                         v-for="(e, i) in availableEnds[mw.start.split('-')[0]]"
                                                         :key="'end' + i"
                                                         :value="e"
-                                                        >{{ e }}</option
                                                     >
+                                                        {{ e }}
+                                                    </option>
                                                 </select>
                                                 <div
                                                     class="pointer-events-none absolute pin-y pin-r flex items-center p-1 text-gray-900"
@@ -134,7 +136,7 @@
                                             @click="removeElement(i)"
                                         >
                                             <svg
-                                                style="width:24px;height:24px"
+                                                style="width: 24px; height: 24px"
                                                 viewBox="0 0 24 24"
                                                 class="fill-current"
                                             >
@@ -151,7 +153,7 @@
                                             @click="newElement()"
                                         >
                                             <svg
-                                                style="width:24px;height:24px"
+                                                style="width: 24px; height: 24px"
                                                 viewBox="0 0 24 24"
                                                 class="fill-current"
                                             >
@@ -170,6 +172,7 @@
                                     CANCEL
                                 </button>
                                 <button
+                                    :class="invalid ? 'cursor-not-allowed' : ''"
                                     class="font-medium text-primary dark:text-primaryLight ripple transition-colors duration-100 ease-out hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none bg-transparent py-2 px-4 rounded"
                                     @click="save()"
                                 >
@@ -184,7 +187,7 @@
                                     class="p-2 ripple rounded-full transition text-primary dark:text-primaryLight duration-100 ease-out focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600"
                                     @click="newElement()"
                                 >
-                                    <svg style="width:24px;height:24px" viewBox="0 0 24 24" class="fill-current">
+                                    <svg style="width: 24px; height: 24px" viewBox="0 0 24 24" class="fill-current">
                                         <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                     </svg>
                                     <span class="sr-only">Add multiword</span>
@@ -439,149 +442,151 @@ export default {
             })
         },
         save() {
-            var phrase1 = this.$store.state.tableData.sentences[this.sentenceIndex]
-            var phrase2 = this.$store.state.editableData.sentences[this.sentenceIndex]
-            let valid = true
-            for (let i = 0; i < this.current.length; i++) {
-                if (this.current[i].start == '' || this.current[i].end == '' || this.current[i].word == '') {
-                    valid = false
+            if (!this.invalid) {
+                var phrase1 = this.$store.state.tableData.sentences[this.sentenceIndex]
+                var phrase2 = this.$store.state.editableData.sentences[this.sentenceIndex]
+                let valid = true
+                for (let i = 0; i < this.current.length; i++) {
+                    if (this.current[i].start == '' || this.current[i].end == '' || this.current[i].word == '') {
+                        valid = false
+                    }
                 }
-            }
-            if (valid) {
-                for (let i = 0; i < phrase1.tokens.length; i++) {
-                    for (let x = 0; x < this.current.length; x++) {
-                        if (
-                            typeof phrase1.tokens[i].index != 'string' &&
-                            phrase1.tokens[i].index >= parseInt(this.current[x].start.split('-')[0]) &&
-                            phrase1.tokens[i].index <= parseInt(this.current[x].end.split('-')[0])
-                        ) {
-                            phrase1.tokens[i].originalText = this.current[x].word
-                            if (phrase1.tokens[i].index == parseInt(this.current[x].start.split('-')[0])) {
-                                phrase1.tokens[i].isMultiwordFirstToken = true
-                                if (
-                                    phrase1.tokens[i - 1] != undefined &&
-                                    typeof phrase1.tokens[i - 1].index != 'string'
-                                ) {
-                                    phrase1.tokens.splice(i, 0, {
-                                        index:
-                                            this.current[x].start.split('-')[0] +
-                                            '-' +
-                                            this.current[x].end.split('-')[0],
-                                        word: this.current[x].word,
-                                        lemma: '_',
-                                        upos: '_',
-                                        pos: '_',
-                                        featuresText: '_',
-                                        head: '_',
-                                        deprel: '_',
-                                        deps: '_',
-                                    })
-                                    i++
-                                } else if (
-                                    phrase1.tokens[i - 1] != undefined &&
-                                    typeof phrase1.tokens[i - 1].index == 'string'
-                                ) {
-                                    phrase1.tokens.splice(i - 1, 1)
-                                    phrase1.tokens.splice(i - 1, 0, {
-                                        index:
-                                            this.current[x].start.split('-')[0] +
-                                            '-' +
-                                            this.current[x].end.split('-')[0],
-                                        word: this.current[x].word,
-                                        lemma: '_',
-                                        upos: '_',
-                                        pos: '_',
-                                        featuresText: '_',
-                                        head: '_',
-                                        deprel: '_',
-                                        deps: '_',
-                                    })
-                                } else {
-                                    phrase1.tokens.splice(i, 0, {
-                                        index:
-                                            this.current[x].start.split('-')[0] +
-                                            '-' +
-                                            this.current[x].end.split('-')[0],
-                                        word: this.current[x].word,
-                                        lemma: '_',
-                                        upos: '_',
-                                        pos: '_',
-                                        featuresText: '_',
-                                        head: '_',
-                                        deprel: '_',
-                                        deps: '_',
-                                    })
-                                    i++
+                if (valid) {
+                    for (let i = 0; i < phrase1.tokens.length; i++) {
+                        for (let x = 0; x < this.current.length; x++) {
+                            if (
+                                typeof phrase1.tokens[i].index != 'string' &&
+                                phrase1.tokens[i].index >= parseInt(this.current[x].start.split('-')[0]) &&
+                                phrase1.tokens[i].index <= parseInt(this.current[x].end.split('-')[0])
+                            ) {
+                                phrase1.tokens[i].originalText = this.current[x].word
+                                if (phrase1.tokens[i].index == parseInt(this.current[x].start.split('-')[0])) {
+                                    phrase1.tokens[i].isMultiwordFirstToken = true
+                                    if (
+                                        phrase1.tokens[i - 1] != undefined &&
+                                        typeof phrase1.tokens[i - 1].index != 'string'
+                                    ) {
+                                        phrase1.tokens.splice(i, 0, {
+                                            index:
+                                                this.current[x].start.split('-')[0] +
+                                                '-' +
+                                                this.current[x].end.split('-')[0],
+                                            word: this.current[x].word,
+                                            lemma: '_',
+                                            upos: '_',
+                                            pos: '_',
+                                            featuresText: '_',
+                                            head: '_',
+                                            deprel: '_',
+                                            deps: '_',
+                                        })
+                                        i++
+                                    } else if (
+                                        phrase1.tokens[i - 1] != undefined &&
+                                        typeof phrase1.tokens[i - 1].index == 'string'
+                                    ) {
+                                        phrase1.tokens.splice(i - 1, 1)
+                                        phrase1.tokens.splice(i - 1, 0, {
+                                            index:
+                                                this.current[x].start.split('-')[0] +
+                                                '-' +
+                                                this.current[x].end.split('-')[0],
+                                            word: this.current[x].word,
+                                            lemma: '_',
+                                            upos: '_',
+                                            pos: '_',
+                                            featuresText: '_',
+                                            head: '_',
+                                            deprel: '_',
+                                            deps: '_',
+                                        })
+                                    } else {
+                                        phrase1.tokens.splice(i, 0, {
+                                            index:
+                                                this.current[x].start.split('-')[0] +
+                                                '-' +
+                                                this.current[x].end.split('-')[0],
+                                            word: this.current[x].word,
+                                            lemma: '_',
+                                            upos: '_',
+                                            pos: '_',
+                                            featuresText: '_',
+                                            head: '_',
+                                            deprel: '_',
+                                            deps: '_',
+                                        })
+                                        i++
+                                    }
                                 }
-                            }
-                            phrase1.tokens[i].isMultiwordToken = true
-                            if (phrase1.tokens[i].isMultiwordFirstToken) {
-                                phrase1.tokens[i].multiwordSpan =
-                                    this.current[x].start.split('-')[0] + '-' + this.current[x].end.split('-')[0]
-                            }
-                            break
-                        } else {
-                            phrase1.tokens[i].originalText = phrase1.tokens[i].word
-                            phrase1.tokens[i].isMultiwordToken = false
-                            phrase1.tokens[i].isMultiwordFirstToken = false
-                            if (phrase1.tokens[i].multiwordSpan != undefined) {
-                                phrase1.tokens[i].multiwordSpan = ''
+                                phrase1.tokens[i].isMultiwordToken = true
+                                if (phrase1.tokens[i].isMultiwordFirstToken) {
+                                    phrase1.tokens[i].multiwordSpan =
+                                        this.current[x].start.split('-')[0] + '-' + this.current[x].end.split('-')[0]
+                                }
+                                break
+                            } else {
+                                phrase1.tokens[i].originalText = phrase1.tokens[i].word
+                                phrase1.tokens[i].isMultiwordToken = false
+                                phrase1.tokens[i].isMultiwordFirstToken = false
+                                if (phrase1.tokens[i].multiwordSpan != undefined) {
+                                    phrase1.tokens[i].multiwordSpan = ''
+                                }
                             }
                         }
                     }
-                }
-                let found = false
-                for (let i = 0; i < phrase1.tokens.length; i++) {
-                    if (typeof phrase1.tokens[i].index == 'string') {
-                        if (this.current.length == 0) {
-                            phrase1.tokens.splice(i, 1)
-                            i--
-                        } else {
-                            for (let x = 0; x < this.current.length; x++) {
-                                if (
-                                    phrase1.tokens[i].index ==
-                                    this.current[x].start.split('-')[0] + '-' + this.current[x].end.split('-')[0]
-                                ) {
-                                    found = true
-                                }
-                            }
-                            if (!found) {
+                    let found = false
+                    for (let i = 0; i < phrase1.tokens.length; i++) {
+                        if (typeof phrase1.tokens[i].index == 'string') {
+                            if (this.current.length == 0) {
                                 phrase1.tokens.splice(i, 1)
                                 i--
+                            } else {
+                                for (let x = 0; x < this.current.length; x++) {
+                                    if (
+                                        phrase1.tokens[i].index ==
+                                        this.current[x].start.split('-')[0] + '-' + this.current[x].end.split('-')[0]
+                                    ) {
+                                        found = true
+                                    }
+                                }
+                                if (!found) {
+                                    phrase1.tokens.splice(i, 1)
+                                    i--
+                                }
                             }
                         }
                     }
-                }
-                for (let i = 0; i < phrase2.tokens.length; i++) {
-                    for (let x = 0; x < this.current.length; x++) {
-                        if (
-                            phrase2.tokens[i].index >= parseInt(this.current[x].start.split('-')[0]) &&
-                            phrase2.tokens[i].index <= parseInt(this.current[x].end.split('-')[0])
-                        ) {
-                            phrase2.tokens[i].originalText = this.current[x].word
-                            if (phrase2.tokens[i].index == parseInt(this.current[x].start.split('-')[0])) {
-                                phrase2.tokens[i].isMultiwordFirstToken = true
-                            }
-                            phrase2.tokens[i].isMultiwordToken = true
-                            if (phrase2.tokens[i].isMultiwordFirstToken) {
-                                phrase2.tokens[i].multiwordSpan =
-                                    this.current[x].start.split('-')[0] + '-' + this.current[x].end.split('-')[0]
-                            }
-                            break
-                        } else {
-                            phrase2.tokens[i].originalText = phrase2.tokens[i].word
-                            phrase2.tokens[i].isMultiwordToken = false
-                            phrase2.tokens[i].isMultiwordFirstToken = false
-                            if (phrase2.tokens[i].multiwordSpan != undefined) {
-                                phrase2.tokens[i].multiwordSpan = ''
+                    for (let i = 0; i < phrase2.tokens.length; i++) {
+                        for (let x = 0; x < this.current.length; x++) {
+                            if (
+                                phrase2.tokens[i].index >= parseInt(this.current[x].start.split('-')[0]) &&
+                                phrase2.tokens[i].index <= parseInt(this.current[x].end.split('-')[0])
+                            ) {
+                                phrase2.tokens[i].originalText = this.current[x].word
+                                if (phrase2.tokens[i].index == parseInt(this.current[x].start.split('-')[0])) {
+                                    phrase2.tokens[i].isMultiwordFirstToken = true
+                                }
+                                phrase2.tokens[i].isMultiwordToken = true
+                                if (phrase2.tokens[i].isMultiwordFirstToken) {
+                                    phrase2.tokens[i].multiwordSpan =
+                                        this.current[x].start.split('-')[0] + '-' + this.current[x].end.split('-')[0]
+                                }
+                                break
+                            } else {
+                                phrase2.tokens[i].originalText = phrase2.tokens[i].word
+                                phrase2.tokens[i].isMultiwordToken = false
+                                phrase2.tokens[i].isMultiwordFirstToken = false
+                                if (phrase2.tokens[i].multiwordSpan != undefined) {
+                                    phrase2.tokens[i].multiwordSpan = ''
+                                }
                             }
                         }
                     }
+                    this.$emit('edited')
+                    this.toggleModal()
+                } else {
+                    this.$emit('snack', 'One or more fields are empty')
                 }
-                this.$emit('edited')
-                this.toggleModal()
-            } else {
-                this.$emit('snack', 'One or more fields are empty')
             }
         },
         toggleModal() {
