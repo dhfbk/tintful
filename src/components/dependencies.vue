@@ -210,8 +210,8 @@ export default {
                                 x: x[0],
                                 y: y[0],
                                 width: length[0],
-                                height: 5,
-                                fill: 'red',
+                                height: 4,
+                                fill: 'rgba(99, 189, 253, 1)',
                             })
                         )
                         //word under the red line
@@ -229,8 +229,8 @@ export default {
                                     x: 21,
                                     y: y[y.length - 1],
                                     width: length[1] - 40,
-                                    height: 5,
-                                    fill: 'red',
+                                    height: 4,
+                                    fill: 'rgba(99, 189, 253, 1)',
                                 })
                             )
                             g[1].appendChild(rect[1])
@@ -254,6 +254,24 @@ export default {
             }
             return el
         },
+        editAppearance() {
+            let d = document
+                .getElementById('deps')
+                .getElementsByClassName('highlight')[0]
+                .getElementsByTagName('rect')
+            for (let i = 0; i < d.length; i++) {
+                d[i].setAttribute('fill', 'rgba(75, 85, 99, 1)')
+            }
+            let t = document
+                .getElementById('deps')
+                .getElementsByClassName('text')[0]
+                .getElementsByTagName('tspan')
+            for (let i = 0; i < d.length; i++) {
+                t[i].setAttribute('fill', '#e5e7eb')
+                // t[i].setAttribute('font-size', '16px')
+            }
+            console.log(t)
+        },
         loadBrat() {
             if (this.currentText.length == 0) {
                 /**
@@ -274,6 +292,7 @@ export default {
                 }, 50)
             }
             setTimeout(() => {
+                if (this.$store.state.theme == 'dark') this.editAppearance()
                 this.addMultiWord()
                 this.addRoot()
             }, 200)

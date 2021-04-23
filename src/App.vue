@@ -4,10 +4,10 @@
             <topBar @changeMode="changeMode" @snack="snack" />
             <div class="w-full md:w-11/12 p-3 md:p-4 md:pl-0 mx-auto min-h-full" style="height: min-content">
                 <router-view @snack="snack" :sheetMode="sheetMode" @hash="hashText" />
-                <footerCustom :mode="sheetMode" />
             </div>
         </div>
         <snackbar :msg="msg" v-if="notify" @close="notify = false" />
+        <footerCustom :mode="sheetMode" />
     </div>
 </template>
 
@@ -91,4 +91,10 @@ export default {
 
 <style>
 @import url('./css/style.css');
+
+#app::after {
+    content: '';
+    display: block;
+    height: 4rem; /* Set same as footer's height */
+}
 </style>

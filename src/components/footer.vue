@@ -1,5 +1,5 @@
 <template>
-    <footer class="flex flex-col mt-6 justify-center">
+    <footer class="flex flex-col justify-center absolute bottom-0 w-full z-10 h-16">
         <div class="flex flex-row flew-wrap content-center items-center justify-center">
             <a href="https://simpatico-project.com/" target="_blank" rel="noopener">
                 <picture v-if="mode == 'dark'">

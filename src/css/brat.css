@@ -1,8 +1,8 @@
 #deps svg {
-    width       : 100%;
-    height      : 1px;
-    border      : 1px solid #7fa2ff;
-    font-size   : 15px;
+    width: 100%;
+    height: 1px;
+    border: 1px solid #7fa2ff;
+    font-size: 15px;
     /* font-size: 14px; */
 }
 
@@ -12,10 +12,9 @@
 
 /* "basic" font */
 #deps text {
-    font-size  : 13px;
+    font-size: 14px;
     font-family: 'Roboto Condensed', Verdana, Arial, Helvetica, sans-serif;
 }
-
 
 #deps path {
     pointer-events: none;
@@ -24,26 +23,26 @@
 /* "basic" font */
 .span text {
     /*  font-size: 10.5px; */
-    font-size     : 10px;
-    text-anchor   : middle;
-    font-family   : 'Roboto Mono', sans-serif;
+    font-size: 10px;
+    text-anchor: middle;
+    font-family: 'Roboto Mono', sans-serif;
     pointer-events: none;
 }
 
 /* this should likely match span font */
 .span_type_label {
-    font-size  : 11px;
+    font-size: 11px;
     font-family: 'Roboto Mono', sans-serif;
 }
 
 /* this should likely match arc font */
 .arc_type_label {
-    font-size  : 11px;
+    font-size: 11px;
     font-family: 'Roboto Mono', sans-serif;
 }
 
 .attribute_type_label .ui-button-text {
-    font-size  : 11px;
+    font-size: 11px;
     font-family: 'Roboto Mono', sans-serif;
 }
 
@@ -52,7 +51,7 @@
 }
 
 .glyph {
-    fill       : #444444;
+    fill: #444444;
     font-family: sans-serif;
     font-weight: bold;
 }
@@ -62,7 +61,7 @@
 }
 
 .span rect.False_positive {
-    stroke      : #ff4141;
+    stroke: #ff4141;
     stroke-width: 2;
 }
 
@@ -79,8 +78,8 @@
 }
 
 .span rect.False_negative {
-    stroke      : #c20000;
-    fill        : #ffffff;
+    stroke: #c20000;
+    fill: #ffffff;
     stroke-width: 2;
 }
 
@@ -147,9 +146,9 @@ rect.Normalized {
 }
 
 .span rect.AnnotationIncomplete {
-    stroke      : #002200;
+    stroke: #002200;
     stroke-width: 0.5;
-    fill        : #ffffff;
+    fill: #ffffff;
 }
 
 #commentpopup.comment_AnnotationIncomplete {
@@ -161,9 +160,9 @@ rect.Normalized {
 }
 
 .span rect.AnnotationUnconfirmed {
-    stroke      : #002200;
+    stroke: #002200;
     stroke-width: 0.5;
-    opacity     : 0.5;
+    opacity: 0.5;
 }
 
 #commentpopup.comment_AnnotationUnconfirmed {
@@ -193,40 +192,40 @@ rect.shadow_EditHighlight {
 }
 
 .dark .span path.curly {
-    stroke      : white;
+    stroke: white;
     stroke-width: 1;
 }
 
 .span path.boxcross {
-    stroke : black;
+    stroke: black;
     opacity: 0.5;
 }
 
 .arcs path {
-    stroke      : #989898;
-    fill        : none;
+    stroke: #989898;
+    fill: none;
     stroke-width: 1;
 }
 
 .arcs .highlight path {
-    stroke      : #000000;
+    stroke: #000000;
     stroke-width: 1.5;
-    opacity     : 1;
+    opacity: 1;
 }
 
 .dark .arcs .highlight path {
-    stroke: #FFFFFF !important;
+    stroke: #ffffff !important;
 }
 
 .arcs .highlight text {
-    stroke      : black;
-    fill        : black;
+    stroke: black;
+    fill: black;
     stroke-width: 0.5;
 }
 
 .dark .arcs .highlight text {
     stroke: white !important;
-    fill  : white !important;
+    fill: white !important;
 }
 
 .span.highlight rect {
@@ -243,7 +242,7 @@ rect.shadow_EditHighlight {
 
 .arcs .reselect path {
     stroke-width: 2px;
-    stroke      : #ff0000 !important;
+    stroke: #ff0000 !important;
 }
 
 .arcs .reselect text {
@@ -255,12 +254,12 @@ rect.shadow_EditHighlight {
 }
 
 .arcs text {
-    font-size           : 9px;
-    text-anchor         : middle;
-    font-family         : 'Roboto Mono', sans-serif;
+    font-size: 9px;
+    text-anchor: middle;
+    font-family: 'Roboto Mono', sans-serif;
     /* dominant-baseline: central; */
-    cursor              : default;
-    fill                : black;
+    cursor: default;
+    fill: black;
 }
 
 .dark .arcs text {
@@ -268,51 +267,51 @@ rect.shadow_EditHighlight {
 }
 
 .arcs path {
-    stroke: black !important
+    stroke: black !important;
 }
 
 .dark .arcs path {
-    stroke: rgb(192, 192, 192) !important
+    stroke: rgb(192, 192, 192) !important;
 }
 
 .background0 {
     stroke: none;
-    fill  : #ffffff;
+    fill: #ffffff;
 }
 
 .dark .background0 {
     stroke: none;
-    fill  : #33333d;
+    fill: #33333d;
 }
 
 .dark .background1 {
     stroke: none;
-    fill  : #3d3d47;
+    fill: #3d3d47;
 }
 
 .background1 {
     stroke: none;
-    fill  : #eeeeee;
+    fill: #eeeeee;
 }
 
 .backgroundHighlight {
     stroke: none;
-    fill  : #ffff99;
+    fill: #ffff99;
 }
 
 .sentnum text {
-    fill       : #999999;
+    fill: #999999;
     text-anchor: end;
 }
 
 .dark .sentnum text,
 .dark .sentnum path {
     stroke: white;
-    fill  : white;
+    fill: white;
 }
 
 .sentnum path {
-    stroke      : #999999;
+    stroke: #999999;
     stroke-width: 1px;
 }
 
@@ -339,25 +338,25 @@ rect.shadow_EditHighlight {
 
 fieldset {
     /* match relevant parts of jQuery UI .ui-widget-content */
-    border               : 1px solid #a6c9e2;
+    border: 1px solid #a6c9e2;
     /* round corners, same as jQuery UI .ui-corner-all */
-    -moz-border-radius   : 5px;
+    -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    border-radius        : 5px;
+    border-radius: 5px;
     /* to prevent border from running into legend */
-    margin-top           : 5px;
+    margin-top: 5px;
 }
 
 fieldset legend {
-    font-weight          : bold;
-    font-size            : 90%;
-    -moz-border-radius   : 3px;
+    font-weight: bold;
+    font-size: 90%;
+    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    border-radius        : 3px;
-    background-color     : #70a8d2;
-    color                : white;
-    padding-left         : 0.5em;
-    padding-right        : 0.5em;
+    border-radius: 3px;
+    background-color: #70a8d2;
+    color: white;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .label-like {
@@ -365,9 +364,9 @@ fieldset legend {
        sorry about the duplication. */
     font-family: monospace;
     font-weight: bold;
-    font-size  : 90%;
+    font-size: 90%;
     /* match jQuery UI .ui-widget-content color */
-    color      : #2e6e9e;
+    color: #2e6e9e;
 }
 
 .accesskey {
@@ -375,9 +374,9 @@ fieldset legend {
 }
 
 .shadow {
-    -moz-box-shadow   : 5px 5px 5px #444444;
+    -moz-box-shadow: 5px 5px 5px #444444;
     -webkit-box-shadow: 5px 5px 5px #444444;
-    box-shadow        : 5px 5px 5px #444444;
+    box-shadow: 5px 5px 5px #444444;
 }
 
 #span_selected,
@@ -387,26 +386,26 @@ fieldset legend {
 }
 
 #commentpopup {
-    font-family          : 'Roboto Condensed', Verdana, Arial, Helvetica, sans-serif;
-    position             : fixed;
-    top                  : 0;
-    left                 : 0;
-    opacity              : 0.95;
-    padding              : 10px;
-    display              : none;
-    border               : 1px outset #000000;
-    background-color     : #f5f5f9;
+    font-family: 'Roboto Condensed', Verdana, Arial, Helvetica, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.95;
+    padding: 10px;
+    display: none;
+    border: 1px outset #000000;
+    background-color: #f5f5f9;
     /* background-color  : #d7e7ee; */
     /* background-color  : #eeeeee; */
-    color                : #000000;
-    z-index              : 20;
-    -moz-box-shadow      : 5px 5px 5px #aaaaaa;
-    -webkit-box-shadow   : 5px 5px 5px #aaaaaa;
-    box-shadow           : 5px 5px 5px #aaaaaa;
-    -moz-border-radius   : 3px;
+    color: #000000;
+    z-index: 20;
+    -moz-box-shadow: 5px 5px 5px #aaaaaa;
+    -webkit-box-shadow: 5px 5px 5px #aaaaaa;
+    box-shadow: 5px 5px 5px #aaaaaa;
+    -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    border-radius        : 3px;
-    max-width            : 80%;
+    border-radius: 3px;
+    max-width: 80%;
 }
 
 #more_info_readme {
@@ -418,18 +417,18 @@ fieldset legend {
 }
 
 #more_readme_button {
-    padding : 2px 5px;
+    padding: 2px 5px;
     position: absolute;
-    top     : -2px;
-    right   : -2px;
+    top: -2px;
+    right: -2px;
 }
 
 .comment_id {
     vertical-align: top;
-    float         : right;
-    font-size     : 75%;
-    font-family   : monospace;
-    color         : #333333;
+    float: right;
+    font-size: 75%;
+    font-family: monospace;
+    color: #333333;
 }
 
 /*.comment_type {
@@ -447,7 +446,7 @@ fieldset legend {
 
 .norm_info_label {
     font-weight: bold;
-    font-size  : 80%;
+    font-size: 80%;
 }
 
 .norm_info_value {
@@ -455,7 +454,7 @@ fieldset legend {
 }
 
 .norm_info_img {
-    float      : right;
+    float: right;
     margin-left: 1em;
 }
 
@@ -469,7 +468,7 @@ fieldset legend {
 }
 
 .scroll_fset fieldset {
-    height    : 100%;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
 }
@@ -486,8 +485,8 @@ fieldset legend {
 /* end HACK */
 .scroll_fset div.scroller {
     overflow: auto;
-    width   : 100%;
-    height  : 100%;
+    width: 100%;
+    height: 100%;
 }
 
 #span_highlight_link,
@@ -497,24 +496,24 @@ fieldset legend {
 }
 
 .unselectable {
-    -moz-user-select   : -moz-none;
-    -khtml-user-select : none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
     -webkit-user-select: none;
-    -o-user-select     : none;
-    user-select        : none;
-    cursor             : default;
+    -o-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 /* Apple iPad, iPhone, iPod */
 
 * {
-    -webkit-tap-highlight-color  : rgba(0, 0, 0, 0);
-    -webkit-text-size-adjust     : none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-text-size-adjust: none;
     /*select                     : none;*/
 }
 
 .span rect.AddedAnnotation {
-    stroke      : #ff4141;
+    stroke: #ff4141;
     stroke-width: 2;
 }
 
@@ -527,12 +526,12 @@ fieldset legend {
 }
 
 .span rect.MissingAnnotation {
-    stroke      : #ffffff;
+    stroke: #ffffff;
     stroke-width: 2;
 }
 
 .shadow_MissingAnnotation {
-    fill   : #ff4141;
+    fill: #ff4141;
     opacity: 0.3;
 }
 
@@ -540,12 +539,12 @@ fieldset legend {
     background-color: #ffcccc;
 }
 
-.span rect.MissingAnnotation+text {
+.span rect.MissingAnnotation + text {
     opacity: 0.5;
 }
 
 .span rect.ChangedAnnotation {
-    stroke      : #ffff99;
+    stroke: #ffff99;
     stroke-width: 2;
 }
 
