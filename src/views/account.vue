@@ -1,6 +1,10 @@
 <template>
-    <div class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 pb-4 md:p-4 md:pb-5" v-if="!wait">
-        <div class="max-w-xs">
+    <div
+        class="dark:bg-dark01dp shadow-md rounded-lg col-span-8 p-3 pb-4 md:p-4 md:pb-5"
+        :class="id == '' ? 'w-2/5 m-auto mt-4' : ''"
+        v-if="!wait"
+    >
+        <div class="w-full">
             <div class="text-primary dark:text-primaryLight font-bold text-lg">{{ title }}</div>
             <div class="py-2">
                 <form v-if="id == ''" action="" @submit.prevent="login" class="w-full flex flex-col">
@@ -48,21 +52,25 @@
         </div>
         <div class="mt-4" v-if="id != ''">
             <p class="text-primary dark:text-primaryLight font-bold text-lg">Edits history</p>
-            <div class="divide-y-2" v-if="records.length != ''">
+            <div class="grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2" v-if="records.length != ''">
                 <div
                     v-for="(row, n) in records"
                     :key="n"
-                    class="flex gap-y-2 flex-col flex-nowrap pt-2"
+                    class="dark:bg-dark02dp shadow-md rounded-lg p-2 m-2 flex flex-col justify-between"
                     :class="n != records.length - 1 ? 'mb-2' : ''"
                 >
-                    <p class="w-full overflow-ellipsis overflow-hidden"><b>Sentence:</b> {{ row.sentence }}</p>
-                    <p class="w-full overflow-ellipsis overflow-hidden"><b>Timestamp:</b> {{ row.ts }}</p>
-                    <p class="w-full overflow-ellipsis overflow-hidden"><b>Hash:</b> {{ row.hash }}</p>
+                    <span class="flex flex-col h-full justify-between">
+                        <p class="w-full overflow-ellipsis overflow-hidden"><b>Text:</b> {{ row.sentence }}</p>
+                        <span>
+                            <p class="w-full overflow-ellipsis overflow-hidden"><b>Last saved:</b> {{ row.ts }}</p>
+                            <p class="w-full overflow-ellipsis overflow-hidden"><b>Hash:</b> {{ row.hash }}</p>
+                        </span>
+                    </span>
                     <div class="flex gap-x-2">
                         <button
                             class="bg-transparent ripple py-1 px-1 rounded focus:outline-none w-max flex flex-row content-center items-center text-primary dark:text-primaryLight transition-colors duration-150 ease-out hover:bg-gray-200 dark:hover:bg-gray-600"
                         >
-                            Load data
+                            Load
                             <svg class="fill-current ml-2" style="width: 24px; height: 24px" viewBox="0 0 24 24">
                                 <path
                                     d="M8,13H10.55V10H13.45V13H16L12,17L8,13M19.35,10.04C21.95,10.22 24,12.36 24,15A5,5 0 0,1 19,20H6A6,6 0 0,1 0,14C0,10.91 2.34,8.36 5.35,8.04C6.6,5.64 9.11,4 12,4C15.64,4 18.67,6.59 19.35,10.04M19,18A3,3 0 0,0 22,15C22,13.45 20.78,12.14 19.22,12.04L17.69,11.93L17.39,10.43C16.88,7.86 14.62,6 12,6C9.94,6 8.08,7.14 7.13,8.97L6.63,9.92L5.56,10.03C3.53,10.24 2,11.95 2,14A4,4 0 0,0 6,18H19Z"

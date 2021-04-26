@@ -22,7 +22,7 @@
                     General Information
                 </div>
 
-                <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default select-none flex flex-col">
+                <span v-for="(i, x) in infoMiniCards.values" :key="x" class="cursor-default  flex flex-col">
                     <span class="flex flex-row justify-between w-full items-center">
                         <p class="dark:text-gray-300 text-gray-600 text-md overflow-ellipsis overflow-hidden">
                             {{ infoMiniCards.keys[x] }}

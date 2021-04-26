@@ -11,7 +11,7 @@
                             class="flex flex-col place-items-center my-2 cursor-pointer"
                         >
                             <span
-                                class="mx-1 px-1 bg-gray-300 dark:bg-gray-600 rounded ripple select-none"
+                                class="mx-1 px-1 bg-gray-300 dark:bg-gray-600 rounded ripple"
                                 :class="
                                     selected == token.characterOffsetBegin
                                         ? 'bg-primary dark:bg-primaryLight dark:text-black text-white'
@@ -22,7 +22,7 @@
                         </span>
                     </div>
                     <div
-                        class="px-1 mx-1 my-2 bg-gray-300 dark:bg-gray-600 rounded select-none text-black dark:text-white flex flex-row flex-wrap"
+                        class="px-1 mx-1 my-2 bg-gray-300 dark:bg-gray-600 rounded text-black dark:text-white flex flex-row flex-wrap"
                     >
                         <span class="p-1 mr-2">
                             Length:
@@ -173,10 +173,8 @@
                     "
                 </div>
                 <span v-for="(i, x) in keys" :key="x">
-                    <span class="font-medium dark:text-primaryLight text-primary">
-                        {{ i }}
-                    </span>
-                    :
+                    <span class="font-medium dark:text-primaryLight text-primary"> {{ i }}: </span>
+
                     <span style="font-family: 'Barlow', sans serif">
                         {{ values[x] }}
                     </span>

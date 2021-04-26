@@ -15,8 +15,8 @@
                     <span class="col-span-4 w-auto grid text-center self-center">Facebook Login</span>
                 </button> -->
         <div class="">
-            <span class="font-medium text-red-500">Tint (The Italian NLP Tool)</span> is a Java-based pipeline for
-            Natural Language Processing (NLP) in Italian.
+            <span class="font-medium text-red-500">Tintful </span> is a Java-based pipeline for Natural Language
+            Processing (NLP) in Italian.
             <p>
                 It implements most of the common linguistic tools, such as part-of-speech tagging, dependency parsing,
                 entity linking.
