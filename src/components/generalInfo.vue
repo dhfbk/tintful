@@ -22,9 +22,9 @@
                         </span>
                     </div>
                     <div
-                        class="px-1 mx-1 my-2 bg-gray-300 dark:bg-gray-600 rounded text-black dark:text-white flex flex-row flex-wrap"
+                        class="px-1 mx-1 my-2 bg-gray-300 dark:bg-gray-600 rounded text-black dark:text-white text-sm grid lg:grid-cols-3 grid-cols-2 xl:grid-cols-4"
                     >
-                        <span class="p-1 mr-2">
+                        <span class="p-1">
                             Length:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -38,7 +38,7 @@
                                 {{ infoData.length[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1">
                             Level 1:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -54,7 +54,7 @@
                                 {{ infoData.level_1[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1">
                             Level 2:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -70,7 +70,7 @@
                                 {{ infoData.level_2[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1">
                             Level 3:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -86,7 +86,7 @@
                                 {{ infoData.level_3[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1 ">
                             Sentences:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -104,7 +104,7 @@
                                 {{ infoData.sentences[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1 ">
                             Lexical density:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -122,7 +122,7 @@
                                 {{ infoData.lexical_density[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1 ">
                             Words per sentence:
                             <span
                                 style="font-family: 'Barlow', sans-serif"
@@ -140,7 +140,7 @@
                                 {{ infoData.words_per_sentence[sen.index] }}
                             </span>
                         </span>
-                        <span class="p-1 mr-2">
+                        <span class="p-1 ">
                             Syntactic depth:
                             <span
                                 style="font-family: 'Barlow', sans-serif"

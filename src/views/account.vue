@@ -52,7 +52,10 @@
         </div>
         <div class="mt-4" v-if="id != ''">
             <p class="text-primary dark:text-primaryLight font-bold text-lg">Edits history</p>
-            <div class="grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2" v-if="records.length != ''">
+            <div
+                class="grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2"
+                v-if="records.length != 0 && typeof records == 'object'"
+            >
                 <div
                     v-for="(row, n) in records"
                     :key="n"
@@ -90,7 +93,10 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="w-full">
+            <div v-else-if="typeof records == 'object'" class="w-full">
+                <div>No saved history</div>
+            </div>
+            <div v-else-if="records == 'loading'" class="w-full">
                 <svg
                     class="animate-spin fill-current text-primary dark:text-primaryLight block mx-auto"
                     style="width: 5rem; height: 5rem"
@@ -114,7 +120,7 @@ export default {
             id: '',
             wait: true,
             loadBtn: false,
-            records: [],
+            records: 'loading',
         }
     },
     created() {
@@ -142,11 +148,15 @@ export default {
             })
                 .then(res => {
                     if (res.data.result == 'ERR') {
+                        console.log('error')
                         setTimeout(() => {
                             this.$emit('snack', res.data.error)
                         }, 4000)
                     } else {
+                        console.log(res.data.records)
+
                         this.records = res.data.records
+                        console.log(typeof this.records)
                     }
                 })
                 .catch(err => {
