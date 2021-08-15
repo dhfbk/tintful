@@ -1,7 +1,7 @@
 <template>
     <div v-if="show" class="grid grid-cols-8 gap-x-6">
         <modalInfo v-if="modal" @modal="modal = !modal" :mode="modalMode" :type="'results'" />
-        <rawData />
+        <!-- <rawData /> -->
         <!-- <infoCard :jsonData="processedData" /> -->
         <!--
         <div class="col-span-8 mb-4  text-primary dark:text-primaryLightDark text-xl tracking-wide">General Information</div>
@@ -106,7 +106,7 @@
 import annotations from '../components/annotations.vue'
 //import statsCard from '../components/statsCard.vue'
 //import infoCard from '../components/infoCard.vue'
-import rawData from '../components/rawData.vue'
+//import rawData from '../components/rawData.vue'
 import modalInfo from '../components/modalInfo.vue'
 import levelsCard from '../components/levelsCard.vue'
 import { SwipeableBottomSheet } from 'vue-swipeable-bottom-sheet'
@@ -119,7 +119,7 @@ export default {
         annotations,
         //statsCard,
         //infoCard,
-        rawData,
+        //rawData,
         modalInfo,
         SwipeableBottomSheet,
         levelsCard,

@@ -15,11 +15,11 @@
                     <span class="col-span-4 w-auto grid text-center self-center">Facebook Login</span>
                 </button> -->
         <div class="">
-            <span class="font-medium text-primaryLight">Tintful </span> is a Java-based pipeline for Natural Language
-            Processing (NLP) in Italian.
+            <span class="font-medium text-primaryLight">Tintful </span> is a visualization and annotation tool based on
+            Tint, a Java-based pipeline for Natural Language Processing (NLP) in Italian.
             <p>
-                It implements most of the common linguistic tools, such as part-of-speech tagging, dependency parsing,
-                entity linking.
+                It allows to visualize, annotate and correct most common linguistic tasks, such as part-of-speech
+                tagging, dependency parsing, entity linking.
             </p>
         </div>
         <div class="h-full my-2">
